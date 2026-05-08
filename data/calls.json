@@ -1,1 +1,15 @@
-
+{
+  "generatedAt": "2026-05-08T22:12:35.456Z",
+  "source": "HubSpot Calls Full Daily Sync",
+  "objectType": "calls",
+  "totalRecords": 0,
+  "totalPages": 0,
+  "records": [],
+  "debug": {
+    "startedAt": null,
+    "finishedAt": "2026-05-08T22:12:35.456Z",
+    "lastAfter": null,
+    "hasMore": false,
+    "lastDebug": null
+  }
+}

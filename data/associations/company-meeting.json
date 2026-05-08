@@ -1,1 +1,525 @@
-
+{
+  "generatedAt": "2026-05-08T23:21:58.443Z",
+  "source": "HubSpot Associations companies to meetings",
+  "associationKey": "company-meeting",
+  "fromObjectType": "companies",
+  "toObjectType": "meetings",
+  "totalRecords": 0,
+  "records": [],
+  "debug": {
+    "sourceKey": "companies",
+    "sourceCount": 7933,
+    "warnings": [
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 8,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 9,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 10,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 11,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 12,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 13,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 14,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 15,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 16,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 17,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-company",
+        "batchIndex": 18,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 8,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 9,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 10,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 11,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 12,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 13,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 14,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 15,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 16,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 17,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-deal",
+        "batchIndex": 18,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 8,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 9,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 10,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 11,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 12,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 13,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 14,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 15,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 16,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 17,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-call",
+        "batchIndex": 18,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "deal-call",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "deal-call",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 8,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 9,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 10,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 11,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 12,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 13,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 14,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 15,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 16,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 17,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "contact-meeting",
+        "batchIndex": 18,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 0,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 1,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 2,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 3,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 4,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 5,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 6,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 7,
+        "message": "Association batch request failed."
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T17:54:57.065Z",
+  "generatedAt": "2026-05-08T22:15:45.937Z",
   "source": "HubSpot Owners Full Daily Sync",
   "objectType": "owners",
   "totalRecords": 26,
@@ -953,8 +953,8 @@
     }
   ],
   "debug": {
-    "startedAt": "2026-05-08T17:54:56.786Z",
-    "finishedAt": "2026-05-08T17:54:57.065Z",
+    "startedAt": "2026-05-08T22:15:45.702Z",
+    "finishedAt": "2026-05-08T22:15:45.937Z",
     "lastAfter": null,
     "hasMore": false,
     "lastDebug": {

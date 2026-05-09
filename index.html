@@ -59,6 +59,20 @@
     .status,.team-tag{display:inline-flex;align-items:center;border-radius:5px;padding:3px 8px;font-size:11px;font-weight:800;gap:4px;white-space:nowrap}
     .status.green,.team-sales{background:var(--green-soft);color:#065f46}.status.orange,.team-gcc{background:var(--orange-soft);color:#78350f}.status.red{background:var(--red-soft);color:#7f1d1d}.status.blue,.team-egypt{background:var(--primary-soft);color:#1e3a8a}.status.purple,.team-bdr{background:var(--purple-soft);color:#4c1d95}.status.gray,.team-other{background:var(--gray-soft);color:#334155}.team-sa{background:#fce7f3;color:#9d174d}
     .empty{padding:30px;text-align:center;color:var(--muted);background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;line-height:1.5}.loader{width:16px;height:16px;border:2px solid #dbeafe;border-top-color:#2563eb;border-radius:50%;display:inline-block;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:7px}@keyframes spin{to{transform:rotate(360deg)}}canvas{max-height:290px}
+
+    .report{cursor:pointer;transition:.14s}
+    .report:hover{transform:translateY(-1px);box-shadow:0 10px 34px rgba(15,23,42,.10);border-color:#cbd5e1}
+    .report-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}
+    .see-more-btn{border:1px solid var(--line);background:#fff;color:var(--primary);border-radius:7px;padding:6px 10px;font:800 11.5px "IBM Plex Sans";cursor:pointer}
+    .see-more-btn:hover{background:var(--primary-soft)}
+    .details-list{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+    .details-list.open{display:block}
+    .mini-list{display:grid;gap:7px;max-height:360px;overflow:auto}
+    .mini-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:8px 10px;border:1px solid #edf2f8;background:#f8fafc;border-radius:9px;font-size:12.5px}
+    .mini-item strong{font-weight:800;color:var(--text)}
+    .mini-item span{color:var(--muted);font-size:11.5px;text-align:right}
+    .click-hint{font-size:10.5px;color:var(--muted);font-weight:800;margin-top:8px;text-transform:uppercase;letter-spacing:.05em}
+
     @media(max-width:1200px){.report-grid,.report-grid.three,.kpi-row{grid-template-columns:repeat(2,1fr)}}@media(max-width:860px){:root{--sidebar-w:0}.sidebar{display:none}.main{margin-left:0}.report-grid,.report-grid.three,.kpi-row{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.content{padding:18px 14px 36px}}
   </style>
 </head>
@@ -455,15 +469,67 @@ function makeChart(id,type,labels,values,label){
   if(state.charts[id]) state.charts[id].destroy();
   state.charts[id]=new Chart(el,{type,data:{labels,datasets:[{label,data:values,backgroundColor:type==="bar"?"#2563eb":CHART_COLORS,borderWidth:0,borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:type!=="bar",position:"bottom"}},indexAxis:type==="barh"?"y":"x",scales:type==="bar"||type==="barh"?{x:{beginAtZero:true,grid:{color:"#f1f5f9"}},y:{grid:{display:false}}}:undefined,cutout:type==="doughnut"?"64%":undefined}});
 }
-function report(title, shape, metric, inner, wide=false){
-  return `<div class="report ${wide?'wide':''}"><div class="report-header"><div><div class="report-title">${esc(title)}</div><div class="report-sub">${esc(metric)}</div></div><span class="shape ${shape.includes('KPI')?'kpi':shape.includes('Table')?'table':''}">${esc(shape)}</span></div>${inner}</div>`;
+function report(title, shape, metric, inner, wide=false, details=[]){
+  const id = `details-${Math.random().toString(36).slice(2)}`;
+  const hasDetails = Array.isArray(details) && details.length > 0;
+  const detailsHtml = hasDetails ? `
+    <div class="report-actions">
+      <div class="click-hint">Click report or use See more</div>
+      <button class="see-more-btn" onclick="event.stopPropagation(); toggleDetails('${id}', this)">See more</button>
+    </div>
+    <div class="details-list" id="${id}">
+      <div class="mini-list">
+        ${details.slice(0,80).map(item => `<div class="mini-item"><strong>${esc(item.title || item.name || item.label || 'Record')}</strong><span>${esc(item.meta || item.value || item.note || '')}</span></div>`).join("")}
+      </div>
+    </div>` : `<div class="click-hint">Click to focus this report</div>`;
+
+  return `<div class="report ${wide?'wide':''}" onclick="${hasDetails ? `toggleDetails('${id}')` : ''}">
+    <div class="report-header"><div><div class="report-title">${esc(title)}</div><div class="report-sub">${esc(metric)}</div></div><span class="shape ${shape.includes('KPI')?'kpi':shape.includes('Table')?'table':''}">${esc(shape)}</span></div>
+    ${inner}
+    ${detailsHtml}
+  </div>`;
+}
+
+function toggleDetails(id, btn=null){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("open");
+  if (btn) btn.textContent = el.classList.contains("open") ? "Show less" : "See more";
+}
+
+function stripHtml(v){
+  return String(v ?? '').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+}
+
+function detailsFromRows(rows, titleIndex=0, metaIndex=1, limit=80){
+  return (rows || []).slice(0,limit).map(r => ({
+    title: String(Array.isArray(r) ? stripHtml(r[titleIndex] || '') : r?.title || ''),
+    meta: String(Array.isArray(r) ? stripHtml(r[metaIndex] || '') : r?.meta || '')
+  }));
 }
 function kpi(value, note=""){ return `<div class="kpi-value">${value}</div>${note?`<div class="kpi-note">${esc(note)}</div>`:""}`; }
 function needsProperty(text){ return `<div class="empty"><strong>Needs property</strong><br>${esc(text)}</div>`; }
-function table(headers, rows){
+function table(headers, rows, initialLimit=10){
   state.currentRows = rows.__raw || rows;
-  const body = rows.length ? rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${headers.length}"><div class="empty">No records match current filters.</div></td></tr>`;
-  return `<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+  const tableId = `tbl-${Math.random().toString(36).slice(2)}`;
+  const safeRows = Array.isArray(rows) ? rows : [];
+  const visibleRows = safeRows.slice(0, initialLimit);
+  const hiddenRows = safeRows.slice(initialLimit);
+  const rowHtml = r => `<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`;
+  const body = safeRows.length
+    ? `${visibleRows.map(rowHtml).join("")}${hiddenRows.map(r => rowHtml(r).replace("<tr>", `<tr class="extra-row ${tableId}" style="display:none">`)).join("")}`
+    : `<tr><td colspan="${headers.length}"><div class="empty">No records match current filters.</div></td></tr>`;
+  const btn = hiddenRows.length
+    ? `<div class="report-actions"><span class="click-hint">Showing ${visibleRows.length} of ${safeRows.length}</span><button class="see-more-btn" onclick="event.stopPropagation(); toggleRows('${tableId}', this)">See more</button></div>`
+    : "";
+  return `<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>${btn}`;
+}
+
+function toggleRows(className, btn){
+  const rows = document.querySelectorAll(`.${className}`);
+  const isHidden = [...rows].some(r => r.style.display === "none");
+  rows.forEach(r => r.style.display = isHidden ? "table-row" : "none");
+  if (btn) btn.textContent = isHidden ? "Show less" : "See more";
 }
 function renderReportGrid(containerId, page, html){ $(containerId).innerHTML = html; }
 
@@ -501,8 +567,8 @@ function renderContacts(){
       ${report("Online Contact Created","Stacked Vertical Bar Chart","Monthly Contacts by Stage",`<canvas id="ct-online-month"></canvas>`)}
       ${report("Monthly Created Contacts by Won Deals","Column Chart","Won Deals Count + Revenue",`<canvas id="ct-won-month"></canvas>`)}
       ${report("Monthly Contacts by Offline Sources","Stacked Vertical Bar Chart","Offline Source Contacts",`<canvas id="ct-offline"></canvas>`)}
-      ${report("Online Contact Created - by Owners","Data Table","Owner, Company, Stage, Associated Deals",table(["Owner","Contacts","Company","Associated Deals"],ownerRows),true)}
-      ${report("Contacts Details Table","Paginated Table","Contact Info, Owner, Engagement Data",table(["Contact","Email","Company","Owner","Stage","Country","Deals","Created","ID"],rows),true)}
+      ${report("Online Contact Created - by Owners","Data Table","Owner, Company, Stage, Associated Deals",table(["Owner","Contacts","Company","Associated Deals"],ownerRows),true,detailsFromRows(ownerRows,0,1))}
+      ${report("Contacts Details Table","Paginated Table","Contact Info, Owner, Engagement Data",table(["Contact","Email","Company","Owner","Stage","Country","Deals","Created","ID"],rows),true,detailsFromRows(rows,0,1))}
     </div>`;
   renderReportGrid("reports-contacts","contacts",html);
   makeChart("ct-life","doughnut",...chartData(life,10),"Contacts");
@@ -531,7 +597,7 @@ function renderFollowup(){
     ${report("Deals with ZERO Connected Calls - Chart","Stacked Column Chart","Connected vs Non-Connected",`<canvas id="fu-zero"></canvas>`)}
     ${report("Activities on Open Deals During Last 30 Days","Stacked Column Chart","Calls, Emails, Meetings, WhatsApp",`<canvas id="fu-act30"></canvas>`)}
     ${report("Activities on Open Deals During Last 30 Days (Count)","Column Chart","Activities Count",kpi(fmt(last30Calls.length+last30Meetings.length),"Calls + Meetings available"))}
-    ${report("Activities on Open Deals During Last 90 Days","Wide Table","Calls, Meetings, Emails per Company",table(["Owner","Activities","Emails","WhatsApp"],last90Rows),true)}
+    ${report("Activities on Open Deals During Last 90 Days","Wide Table","Calls, Meetings, Emails per Company",table(["Owner","Activities","Emails","WhatsApp"],last90Rows),true,detailsFromRows(last90Rows,0,1))}
     ${report("Average Time in Stage","Multi-Series Stacked Column Chart","Average Days / Months in Stage",`<canvas id="fu-stage"></canvas>`)}
   </div>`;
   renderReportGrid("reports-followup","followup",html);
@@ -689,13 +755,13 @@ function renderPipeline(){
     ${report("Count of Deals in Pipeline - Teams","Stacked Column Chart","Deals per Team",`<canvas id="pl-team"></canvas>`)}
     ${report("New Deals Added to Pipeline Last 30 Days","Column Chart","New Pipeline Amount",`<canvas id="pl-new30"></canvas>`)}
     ${report("Latest Deals Added to Pipeline by Weighted Value","Stacked Column Chart","Weighted Value by Owner",`<canvas id="pl-weight-owner"></canvas>`)}
-    ${report("Count of Deals in Pipeline","Table","Deals Count + Amount",table(["Deal","Amount","Owner","Team","Pipeline","Stage","Created","Close Date","ID"],rows),true)}
+    ${report("Count of Deals in Pipeline","Table","Deals Count + Amount",table(["Deal","Amount","Owner","Team","Pipeline","Stage","Created","Close Date","ID"],rows),true,detailsFromRows(rows,0,1))}
     ${report("Count of Deals in Pipeline - Chart","Column Chart","Pipeline Count",`<canvas id="pl-stage"></canvas>`)}
     ${report("Deals Moved to Next Stage During Last 30 Days","Table","Stage Movement",needsProperty("Need stage movement/change history property."),true)}
-    ${report("Deals Not Calling Old Pipeline","Table","Missing Activities",table(["Deal","Amount","Owner","Team","Pipeline","Stage","Created","Close Date","ID"],rows.slice(0,50)),true)}
+    ${report("Deals Not Calling Old Pipeline","Table","Missing Activities",table(["Deal","Amount","Owner","Team","Pipeline","Stage","Created","Close Date","ID"],rows.slice(0,50)),true,detailsFromRows(rows,0,1))}
     ${report("Deals Stuck in One Stage (+14 Days)","Stacked Column Chart","Stuck Deals",`<canvas id="pl-stuck"></canvas>`)}
     ${report("Deals Not Calling Old Pipeline - Owner Source","Stacked Column Chart","Source vs Inactivity",`<canvas id="pl-old-owner"></canvas>`)}
-    ${report("Lost Reason Analysis","Table","Lost Reason Count",table(["Lost Reason","Count"],lostRows),true)}
+    ${report("Lost Reason Analysis","Table","Lost Reason Count",table(["Lost Reason","Count"],lostRows),true,detailsFromRows(lostRows,0,1))}
     ${report("Lead Sources Pie Chart / Table","Table / Pie Chart","Lead Source Distribution",`<canvas id="pl-lead-source"></canvas>`)}
   </div>`;
   renderReportGrid("reports-pipeline","pipeline",html);

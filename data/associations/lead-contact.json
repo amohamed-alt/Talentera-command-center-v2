@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T23:56:44.408Z",
+  "generatedAt": "2026-05-10T18:35:01.467Z",
   "source": "HubSpot Associations leads to contacts",
   "associationKey": "lead-contact",
   "fromObjectType": "leads",
@@ -8,7 +8,7 @@
   "records": [],
   "debug": {
     "sourceKey": "leads",
-    "sourceCount": 435,
+    "sourceCount": 440,
     "warnings": [
       {
         "pairKey": "contact-company",
@@ -106,6 +106,11 @@
         "message": "Association batch request failed."
       },
       {
+        "pairKey": "contact-company",
+        "batchIndex": 19,
+        "message": "Association batch request failed."
+      },
+      {
         "pairKey": "contact-deal",
         "batchIndex": 0,
         "message": "Association batch request failed."
@@ -201,6 +206,11 @@
         "message": "Association batch request failed."
       },
       {
+        "pairKey": "contact-deal",
+        "batchIndex": 19,
+        "message": "Association batch request failed."
+      },
+      {
         "pairKey": "company-deal",
         "batchIndex": 0,
         "message": "Association batch request failed."
@@ -238,6 +248,11 @@
       {
         "pairKey": "company-deal",
         "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-deal",
+        "batchIndex": 8,
         "message": "Association batch request failed."
       },
       {
@@ -336,6 +351,11 @@
         "message": "Association batch request failed."
       },
       {
+        "pairKey": "contact-call",
+        "batchIndex": 19,
+        "message": "Association batch request failed."
+      },
+      {
         "pairKey": "company-call",
         "batchIndex": 0,
         "message": "Association batch request failed."
@@ -373,6 +393,11 @@
       {
         "pairKey": "company-call",
         "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-call",
+        "batchIndex": 8,
         "message": "Association batch request failed."
       },
       {
@@ -481,6 +506,11 @@
         "message": "Association batch request failed."
       },
       {
+        "pairKey": "contact-meeting",
+        "batchIndex": 19,
+        "message": "Association batch request failed."
+      },
+      {
         "pairKey": "company-meeting",
         "batchIndex": 0,
         "message": "Association batch request failed."
@@ -518,6 +548,11 @@
       {
         "pairKey": "company-meeting",
         "batchIndex": 7,
+        "message": "Association batch request failed."
+      },
+      {
+        "pairKey": "company-meeting",
+        "batchIndex": 8,
         "message": "Association batch request failed."
       },
       {

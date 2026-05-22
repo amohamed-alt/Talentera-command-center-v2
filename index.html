@@ -1,1 +1,382 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Talentera Command Center</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=DM+Mono:wght@400;600&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>:root{--g:#16a34a;--g2:#0f7a3c;--c:#0891b2;--b:#2563eb;--p:#7c3aed;--a:#d97706;--r:#dc2626;--t:#0b1f16;--t2:#263c31;--m:#6e8378;--line:rgba(22,64,42,.12);--side:292px;--font:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'DM Mono',monospace}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);color:var(--t);background:radial-gradient(circle at 10% 8%,rgba(22,163,74,.16),transparent 28%),radial-gradient(circle at 86% 14%,rgba(8,145,178,.13),transparent 28%),linear-gradient(135deg,#f8fcfa,#eef6f1 48%,#e7f1ec);min-height:100vh}button,select,input{font-family:inherit}button{cursor:pointer}.app{display:flex}.sidebar{position:fixed;inset:0 auto 0 0;width:var(--side);height:100vh;padding:14px 12px;overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.38));border-right:1px solid var(--line);backdrop-filter:blur(26px)}.brand{display:flex;gap:12px;align-items:center;padding:12px 10px 16px;border-bottom:1px solid var(--line)}.mark{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;color:#fff;font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--g),var(--c))}.brand b{display:block;font-size:16px}.brand span{font-size:10px;color:var(--m);font-weight:800;text-transform:uppercase;letter-spacing:.09em}.sec{padding:14px 10px 4px;font-size:9px;font-weight:900;color:rgba(38,60,49,.48);text-transform:uppercase;letter-spacing:.16em}.nav{display:flex;align-items:center;gap:10px;width:100%;min-height:39px;border:1px solid transparent;border-radius:15px;background:transparent;color:var(--t2);font-size:12px;font-weight:850;text-align:left;padding:8px 10px}.nav:hover{background:rgba(255,255,255,.65);border-color:var(--line)}.nav.active{color:var(--g2);background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.58));border-color:rgba(22,163,74,.22);box-shadow:0 10px 24px rgba(17,47,31,.08)}.nav small{display:block;font-size:9px;color:var(--m);font-weight:800;max-width:162px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.badge{margin-left:auto;min-width:22px;text-align:center;font:600 10px var(--mono);border-radius:999px;padding:3px 7px;color:var(--g2);background:rgba(22,163,74,.09);border:1px solid rgba(22,163,74,.18)}.foot{margin-top:18px;padding:10px;border-top:1px solid var(--line);font-size:10px;color:var(--m);font-weight:800;line-height:1.6}.main{margin-left:var(--side);width:calc(100% - var(--side));padding:14px 18px 60px}.top{position:sticky;top:14px;z-index:50;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 18px;margin-bottom:14px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.50));box-shadow:0 10px 30px rgba(17,47,31,.08);backdrop-filter:blur(18px)}.title{font-size:18px;font-weight:900;letter-spacing:-.04em}.sub{font-size:11px;color:var(--m);font-weight:750;margin-top:3px}.actions,.filters,.tabs{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.live{display:flex;gap:7px;align-items:center;border:1px solid rgba(22,163,74,.18);background:rgba(22,163,74,.09);color:var(--g2);border-radius:999px;font-size:10px;font-weight:900;padding:7px 12px}.dot{width:7px;height:7px;border-radius:50%;background:var(--g)}.btn,.chip{border:0;border-radius:14px;background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;font-size:12px;font-weight:900;padding:10px 14px}.btn.alt,.chip{background:rgba(255,255,255,.58);color:var(--t2);border:1px solid var(--line)}.chip.active{background:rgba(22,163,74,.10);border-color:rgba(22,163,74,.22);color:var(--g2)}.filters{margin-bottom:14px}.sel,.search{height:38px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.7);padding:0 12px;color:var(--t2);font-size:12px;font-weight:850}.hero{display:grid;grid-template-columns:1.28fr .72fr;gap:14px;margin-bottom:14px}.panel,.card,.kpi,.drawer-card{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.48));border:1px solid var(--line);border-radius:28px;box-shadow:0 18px 54px rgba(17,47,31,.10),0 2px 8px rgba(17,47,31,.05);backdrop-filter:blur(18px)}.panel{padding:22px 24px}.eyebrow{font-size:10px;font-weight:950;letter-spacing:.14em;text-transform:uppercase;color:var(--g2)}h1{font-size:28px;line-height:1.1;font-weight:950;letter-spacing:-.06em;margin-top:8px}.panel p{font-size:13px;color:var(--m);font-weight:700;line-height:1.7;margin-top:8px}.health{padding:18px;display:grid;gap:10px}.health-row{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.44)}.health-row span{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--m);font-weight:900}.health-row b{font:900 13px var(--mono)}.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}.kpi{min-height:112px;padding:15px 14px;border-top:4px solid var(--tone,var(--g));text-align:left}.kpi .v{font:900 25px var(--mono);color:var(--tone,var(--g));line-height:1}.kpi .k{font-size:9px;text-transform:uppercase;letter-spacing:.105em;color:var(--m);font-weight:950;margin-top:9px}.kpi .s{font-size:10px;color:var(--t2);font-weight:800;margin-top:5px;line-height:1.4}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{overflow:hidden;margin-bottom:14px}.head{display:flex;justify-content:space-between;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.44)}.head h3{font-size:12px;font-weight:950;color:var(--t2);text-transform:uppercase;letter-spacing:.07em}.head p{font-size:10px;color:var(--m);font-weight:800;margin-top:4px}.wrap{overflow:auto;max-height:650px}table{width:100%;border-collapse:collapse}th{position:sticky;top:0;background:rgba(255,255,255,.82);z-index:2;font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--m);font-weight:950;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}td{font-size:12px;color:var(--t2);font-weight:700;padding:11px 12px;border-bottom:1px solid rgba(22,64,42,.08);vertical-align:top}tr:hover td{background:rgba(22,163,74,.045)}.num{font-family:var(--mono);font-weight:850}.link{font-weight:950;text-decoration:none;color:var(--t)}.link:hover{color:var(--g2);text-decoration:underline}.pill{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:950;border:1px solid var(--line)}.red{color:var(--r);background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.16)}.amber{color:var(--a);background:rgba(217,119,6,.08);border-color:rgba(217,119,6,.16)}.green{color:var(--g2);background:rgba(22,163,74,.09);border-color:rgba(22,163,74,.18)}.blue{color:var(--b);background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.16)}.empty{padding:26px;text-align:center;color:var(--m);font-size:13px;font-weight:800}.drawer{position:fixed;inset:0;z-index:500;display:none}.drawer.open{display:block}.drawer-bg{position:absolute;inset:0;background:rgba(17,47,31,.28);backdrop-filter:blur(9px)}.drawer-card{position:absolute;right:18px;top:18px;bottom:18px;width:min(1120px,calc(100vw - 36px));overflow:hidden;display:flex;flex-direction:column}.drawer-head{display:flex;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.62)}.drawer-title{font-size:16px;font-weight:950}.drawer-sub{font-size:11px;color:var(--m);font-weight:800;margin-top:4px}.drawer-body{overflow:auto;flex:1}.close{width:36px;height:36px;border:1px solid var(--line);background:rgba(255,255,255,.55);border-radius:12px;color:var(--t2);font-weight:950}@media(max-width:1300px){.kpis{grid-template-columns:repeat(3,1fr)}.hero,.grid2{grid-template-columns:1fr}}@media(max-width:760px){:root{--side:0}.sidebar{display:none}.main{margin-left:0;width:100%;padding:10px}.kpis{grid-template-columns:1fr 1fr}}@media(max-width:520px){.kpis{grid-template-columns:1fr}}</style></head><body><div class="app"><aside class="sidebar"><div class="brand"><div class="mark">T</div><div><b>Talentera</b><span>Sales Command Center</span></div></div><div id="nav"></div><div class="foot"><b>Supabase Live</b><br><span id="sync">Loading…</span></div></aside><main class="main"><header class="top"><div><div class="title" id="title">Talentera Command Center</div><div class="sub" id="subtitle">Glass dashboard · Supabase views · n8n sync engine</div></div><div class="actions"><div class="live"><span class="dot"></span><span id="live">Connecting</span></div><button class="btn alt" onclick="openDrawer('Loaded Sources',DIAG,'Supabase read status')">Sources</button><button class="btn" onclick="loadAll(true)">Refresh</button></div></header><section class="filters" id="filters"></section><section id="content"><div class="empty">Loading Supabase dashboard…</div></section></main></div><div class="drawer" id="drawer"><div class="drawer-bg" onclick="closeDrawer()"></div><div class="drawer-card"><div class="drawer-head"><div><div class="drawer-title" id="dt">Details</div><div class="drawer-sub" id="ds"></div></div><button class="close" onclick="closeDrawer()">✕</button></div><div class="drawer-body" id="db"></div></div></div><script>const SUPABASE_URL='https://czaxtwbmborxwzaboqxl.supabase.co',SUPABASE_KEY='sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX',PORTAL='145742477',HS='https://app-eu1.hubspot.com',sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);const VIEWS={retLogic:'vw_retention_renewal_logic',retNotBudget:'vw_retention_not_in_budget',retSidebar:'vw_retention_sidebar_reps',retKpi:'vw_retention_kpi_snapshot',retCoverage:'vw_retention_coverage_quality',acqSidebar:'vw_acquisition_sidebar_reps',acqKpi:'vw_acquisition_kpi_snapshot_periods',acqRepKpi:'vw_acquisition_rep_kpi_periods',acqTeam:'vw_acquisition_team_snapshot',acqRank:'vw_acquisition_rank_coverage',acqRankDetails:'vw_acquisition_rank_details',acqNeeds:'vw_acquisition_leads_need_contact_v2',acqPipe:'vw_acquisition_pipeline_snapshot',acqPipeDetails:'vw_acquisition_pipeline_details',acqPipeStage:'vw_acquisition_pipeline_by_stage',acqAttention:'vw_acquisition_pipeline_attention_summary',acqStuck:'vw_acquisition_stuck_deals',acqCold:'vw_acquisition_cold_deals',acqSources:'vw_acquisition_field_sources',pnl:'vw_pnl_advanced_summary',pnlMonthly:'vw_pnl_monthly_advanced',pnlBreakdown:'vw_pnl_cost_breakdown',pnlCompare:'vw_pnl_year_comparison',upsellSummary:'vw_features_plan_dashboard_summary',upsellCompanies:'vw_features_plan_company_summary',marketing:'vw_marketing_overview',quality:'vw_data_quality_dashboard',syncState:'sync_state',syncRuns:'sync_runs'};const S={active:'acquisition',acqTab:'overview',retTab:'team',year:'2026',month:'all',product:'all',country:'all',rank:'all',owner:'all',search:'',rep:null,repRole:null,data:{},err:{},loadedAt:null};let DIAG=[],CACHE={},cid=0;const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];function $(id){return document.getElementById(id)}function esc(v){return String(v??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function n(v){const x=Number(String(v??'').replace(/[^0-9.-]/g,''));return Number.isFinite(x)?x:0}function int(v){return Math.round(n(v)).toLocaleString()}function money(v){const x=n(v),s=x<0?'-':'',a=Math.abs(x);return s+'$'+(a>=1e6?(a/1e6).toFixed(1)+'M':Math.round(a).toLocaleString())}function pct(v){return (n(v)||0).toFixed(1)+'%'}function norm(v){return String(v??'').trim().toLowerCase()}function sum(rows,k){return (rows||[]).reduce((a,r)=>a+n(r[k]),0)}function uniq(arr){return [...new Set((arr||[]).filter(Boolean).map(String))].sort((a,b)=>a.localeCompare(b))}function cur(k){return S.data[k]||[]}function tone(c){return {green:'--g',cyan:'--c',blue:'--b',purple:'--p',amber:'--a',red:'--r'}[c]||'--g'}function rowUrl(r){return r.hubspot_url||r.hubspot_search_url||r.company_url||r.deal_url||r.url||((r.company_name||r.dealname||r.name)?`${HS}/contacts/${PORTAL}/objects/0-2/views/all/list?query=${encodeURIComponent(r.company_name||r.dealname||r.name)}`:'')}function link(v,r){const u=rowUrl(r);return u?`<a class="link" target="_blank" href="${esc(u)}">${esc(v||'Open')}</a>`:esc(v||'—')}function matchSearch(r){return !S.search||Object.values(r||{}).join(' ').toLowerCase().includes(S.search.toLowerCase())}function activeAcq(rows){return (rows||[]).filter(r=>(S.country==='all'||norm(r.country)===norm(S.country))&&(S.rank==='all'||norm(r.rank)===norm(S.rank))&&(S.owner==='all'||norm(r.owner_name)===norm(S.owner))&&(!S.rep||S.active!=='acqRep'||norm(r.owner_name)===norm(S.rep))&&matchSearch(r))}function activePnl(rows){return (rows||[]).filter(r=>(S.year==='all'||!r.year||String(r.year)===S.year)&&(S.month==='all'||!r.month||norm(String(r.month).slice(0,3))===norm(S.month))&&(S.product==='all'||!r.product||norm(r.product)===norm(S.product))&&matchSearch(r))}function retRows(){return cur('retLogic').filter(r=>(S.year==='all'||!r.year||String(r.year)===S.year)&&(S.month==='all'||!r.month||norm(String(r.month).slice(0,3))===norm(S.month))&&(S.product==='all'||!r.product||norm(r.product)===norm(S.product))&&matchSearch(r))}async function fetchView(key,view){try{const {data,error}=await sb.from(view).select('*').limit(key==='syncRuns'?100:5000);if(error)throw error;S.data[key]=data||[];S.err[key]='';return data||[]}catch(e){S.data[key]=[];S.err[key]=e.message||String(e);return []}}async function loadAll(manual=false){$('live').textContent=manual?'Refreshing':'Connecting';await Promise.all(Object.entries(VIEWS).map(([k,v])=>fetchView(k,v)));S.loadedAt=new Date();DIAG=Object.entries(VIEWS).map(([k,v])=>({source:k,view:v,rows:cur(k).length,status:S.err[k]?'Failed':'Loaded',error:S.err[k]||''}));$('live').textContent='Live';$('sync').textContent=`${DIAG.filter(x=>x.status==='Loaded').length} sources · ${S.loadedAt.toLocaleTimeString()}`;render()}function setPage(p){S.active=p;S.rep=null;render()}function setAcqTab(t){S.active='acquisition';S.acqTab=t;S.rep=null;render()}function setRetTab(t){S.active='retention';S.retTab=t;S.rep=null;render()}function setRep(page,name,role){S.active=page;S.rep=name;S.repRole=role;render()}function setFilter(k,v){S[k]=v;render()}function resetFilters(){S.year='2026';S.month='all';S.product='all';S.country='all';S.rank='all';S.owner='all';S.search='';render()}function cacheRows(rows){const id='c'+(++cid);CACHE[id]=rows||[];return id}function kpi(title,value,sub,color='green',rows=null){const id=rows?cacheRows(rows):'';return `<button class="kpi" style="--tone:var(${tone(color)})" ${rows?`onclick="openCache('${id}','${esc(title)}','${esc(sub||'Details')}')"`:''}><div class="v">${value}</div><div class="k">${esc(title)}</div>${sub?`<div class="s">${esc(sub)}</div>`:''}</button>`}function cell(v,k,r){if(v==null||v==='')return '—';if(['company_name','dealname','name'].includes(k))return link(v,r);if(/url/i.test(k)&&String(v).startsWith('http'))return `<a class="pill blue" target="_blank" href="${esc(v)}">Open</a>`;if(/value|amount|cash|booking|cogs|overheads|support|cost|profit|collection|position|delta|pipeline/i.test(k))return `<span class="num">${money(v)}</span>`;if(/pct|score|margin|rate/i.test(k))return `<span class="num">${pct(v)}</span>`;const s=String(v);if(/lost|delayed|critical|risk|churn|cold|stuck/i.test(s))return `<span class="pill red">${esc(s)}</span>`;if(/expected|upcoming|pending|watch|needs/i.test(s))return `<span class="pill amber">${esc(s)}</span>`;if(/cash|booked|renewed|active|completed|loaded|success|healthy|contacted|won/i.test(s))return `<span class="pill green">${esc(s)}</span>`;return esc(s)}function table(title,rows,cols=null,sub=''){rows=rows||[];cols=cols||Object.keys(rows[0]||{}).slice(0,10);const id=rows.length?cacheRows(rows):'';return `<section class="card"><div class="head"><div><h3>${esc(title)}</h3><p>${rows.length.toLocaleString()} rows${sub?' · '+esc(sub):''}</p></div>${rows.length?`<button class="chip" onclick="openCache('${id}','${esc(title)}','${rows.length.toLocaleString()} rows')">Open All</button>`:''}</div><div class="wrap">${rows.length?`<table><thead><tr>${cols.map(c=>`<th>${esc(c).replaceAll('_',' ')}</th>`).join('')}</tr></thead><tbody>${rows.slice(0,160).map(r=>`<tr>${cols.map(c=>`<td>${cell(r[c],c,r)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">No rows found.</div>'}</div></section>`}function health(){const ok=DIAG.filter(x=>x.status==='Loaded').length,bad=DIAG.length-ok;return `<div class="health-row"><span>Loaded Sources</span><b>${ok}</b></div><div class="health-row"><span>Failed Sources</span><b>${bad}</b></div><div class="health-row"><span>Last Refresh</span><b>${S.loadedAt?S.loadedAt.toLocaleTimeString():'—'}</b></div>`}function hero(title,sub,side=''){return `<div class="hero"><section class="panel"><span class="eyebrow">Live Snapshot</span><h1>${esc(title)}</h1><p>${esc(sub)}</p></section><section class="health">${side||health()}</section></div>`}function nav(){let h='<div class="sec">Main</div>';[['acquisition','🎯','Acquisition'],['retention','🛡️','Retention'],['pnl','💰','P&L'],['upsell','✨','Upselling'],['marketing','📣','Marketing'],['quality','🧰','Data Quality']].forEach(([id,ic,label])=>{const active=S.active===id||(id==='acquisition'&&S.active==='acqRep')||(id==='retention'&&S.active==='retRep');h+=`<button class="nav ${active?'active':''}" onclick="setPage('${id}')"><span>${ic}</span><span>${label}</span></button>`});if(S.active==='acquisition'||S.active==='acqRep'){h+='<div class="sec">Acquisition Pages</div>';[['overview','Team Overview'],['kpi','KPI Snapshot'],['rank','Rank A/B Coverage'],['needs','Leads Need Contact'],['pipeline','Pipeline Summary'],['sources','Field Sources']].forEach(([id,label])=>h+=`<button class="nav ${S.active==='acquisition'&&S.acqTab===id?'active':''}" onclick="setAcqTab('${id}')"><span>•</span><span>${label}</span></button>`);h+='<div class="sec">Acquisition Reps</div>';cur('acqSidebar').forEach(r=>h+=`<button class="nav ${S.active==='acqRep'&&S.rep===r.owner_name?'active':''}" onclick="setRep('acqRep','${esc(r.owner_name)}','activity')"><span>●</span><span>${esc(r.owner_name)}<small>${int(r.connected_calls)} connected · ${int(r.meetings_completed)} meetings</small></span><span class="badge">${int(r.connected_calls)}</span></button>`);const deals=cur('acqPipe').filter(r=>r.owner_role==='deals_only'||r.role==='deals_only');if(deals.length){h+='<div class="sec">Deal Owners</div>';deals.forEach(r=>h+=`<button class="nav ${S.active==='acqRep'&&S.rep===r.owner_name?'active':''}" onclick="setRep('acqRep','${esc(r.owner_name)}','deals_only')"><span>◆</span><span>${esc(r.owner_name)}<small>${int(r.open_deals)} open · ${money(r.open_pipeline)}</small></span><span class="badge">${int(r.open_deals)}</span></button>`)}}if(S.active==='retention'||S.active==='retRep'){h+='<div class="sec">Retention Pages</div>';[['team','Team Overview'],['financial','Financial Details']].forEach(([id,label])=>h+=`<button class="nav ${S.active==='retention'&&S.retTab===id?'active':''}" onclick="setRetTab('${id}')"><span>•</span><span>${label}</span></button>`);['RM','CSM'].forEach(role=>{h+=`<div class="sec">Retention ${role}</div>`;cur('retSidebar').filter(r=>r.role===role).forEach(r=>h+=`<button class="nav ${S.active==='retRep'&&S.rep===r.owner_name&&S.repRole===role?'active':''}" onclick="setRep('retRep','${esc(r.owner_name)}','${role}')"><span>●</span><span>${esc(r.owner_name)}<small>${int(r.accounts)} accounts · ${money(r.renewal_value)}</small></span><span class="badge">${int(r.delayed_accounts)}</span></button>`)})}document.getElementById('nav').innerHTML=h}function filters(){const acq=[...cur('acqRank'),...cur('acqRankDetails'),...cur('acqNeeds')],rr=cur('retLogic'),pnl=[...cur('pnl'),...cur('pnlMonthly')];const years=uniq([...rr.map(r=>r.year),...pnl.map(r=>r.year)]),products=uniq([...rr.map(r=>r.product),...pnl.map(r=>r.product),...cur('upsellCompanies').map(r=>r.product_line)]);let h=`<input class="search" value="${esc(S.search)}" oninput="setFilter('search',this.value)" placeholder="Search visible data…"><select class="sel" onchange="setFilter('year',this.value)"><option value="all">All Years</option>${(years.length?years:['2026']).map(y=>`<option ${S.year==y?'selected':''}>${esc(y)}</option>`).join('')}</select>`;if(S.active==='pnl'||S.active==='retention'||S.active==='retRep')h+=`<select class="sel" onchange="setFilter('month',this.value)"><option value="all">All Months</option>${MONTHS.map(m=>`<option ${S.month===m?'selected':''}>${m}</option>`).join('')}</select><select class="sel" onchange="setFilter('product',this.value)"><option value="all">All Products</option>${products.map(p=>`<option ${S.product===p?'selected':''}>${esc(p)}</option>`).join('')}</select>`;if(S.active==='acquisition'||S.active==='acqRep')h+=`<select class="sel" onchange="setFilter('owner',this.value)"><option value="all">All Owners</option>${uniq(acq.map(r=>r.owner_name)).map(o=>`<option ${S.owner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><select class="sel" onchange="setFilter('country',this.value)"><option value="all">All Countries</option>${uniq(acq.map(r=>r.country)).map(c=>`<option ${S.country===c?'selected':''}>${esc(c)}</option>`).join('')}</select><select class="sel" onchange="setFilter('rank',this.value)"><option value="all">All Ranks</option>${uniq(acq.map(r=>r.rank)).map(r=>`<option ${S.rank===r?'selected':''}>${esc(r)}</option>`).join('')}</select>`;h+=`<button class="btn alt" onclick="resetFilters()">Reset filters</button>`;document.getElementById('filters').innerHTML=h}function render(){nav();filters();const titles={acquisition:['Acquisition','Team overview, KPI snapshot, Rank A/B coverage, needs contact, pipeline, and field sources.'],acqRep:[`Acquisition · ${S.rep||''}`,'Rep-level acquisition details.'],retention:['Retention','Retention team, financials, RM/CSM views.'],retRep:[`Retention ${S.repRole||''} · ${S.rep||''}`,'Rep-level renewal action details.'],pnl:['P&L Advanced','Booking, cashing, COGS, overheads, support allocation, total cost and margins.'],upsell:['Upselling / Features Plan','Company-level feature plan and status.'],marketing:['Marketing','Marketing overview and source split.'],quality:['Data Quality','Sources, sync and data health.']};const [t,s]=titles[S.active]||titles.acquisition;$('title').textContent=t;$('subtitle').textContent=s;let html='';if(S.active==='acquisition')html=renderAcq();else if(S.active==='acqRep')html=renderAcqRep();else if(S.active==='retention')html=renderRetention();else if(S.active==='retRep')html=renderRetRep();else if(S.active==='pnl')html=renderPnl();else if(S.active==='upsell')html=renderUpsell();else if(S.active==='marketing')html=hero('Marketing','Marketing overview and source split.')+table('Marketing Overview',cur('marketing'));else if(S.active==='quality')html=hero('Data Quality & Sync Monitor','Source status, sync runs and failed views.',health())+table('Source Diagnostics',DIAG)+table('Sync State',cur('syncState'))+table('Sync Runs',cur('syncRuns'));$('content').innerHTML=html}function acqTeam(){const t=cur('acqTeam')[0]||{},p=cur('acqPipe');return {t,open:sum(p,'open_deals'),openVal:sum(p,'open_pipeline'),wonM:sum(p,'won_mtd')||sum(p,'won_deals'),lostM:sum(p,'lost_mtd')||sum(p,'lost_deals'),wonY:sum(p,'won_ytd')||sum(p,'won_deals'),lostY:sum(p,'lost_ytd')||sum(p,'lost_deals')}}function acqKpis(){const a=acqTeam(),t=a.t,details=activeAcq(cur('acqRankDetails')),needs=activeAcq(cur('acqNeeds')),rankA=details.filter(r=>['a','rank a'].includes(norm(r.rank))),rankB=details.filter(r=>['b','rank b'].includes(norm(r.rank))),openDeals=cur('acqPipeDetails').filter(r=>r.deal_status==='open'),wonDeals=cur('acqPipeDetails').filter(r=>r.deal_status==='won'),lostDeals=cur('acqPipeDetails').filter(r=>r.deal_status==='lost');return `<div class="kpis">${kpi('Companies',int(t.total_companies),'Allowed acquisition owners','green',details)}${kpi('Contacted',int(t.contacted_companies),'Same owner connected call OR completed meeting','cyan',details.filter(r=>!r.needs_contact))}${kpi('Needs Contact',int(t.needs_contact_companies),'No connected call and no completed meeting','red',needs)}${kpi('Rank A Coverage',pct(t.rank_a_coverage_pct),`${int(t.rank_a_contacted)} / ${int(t.rank_a_total)} contacted`,'green',rankA)}${kpi('Rank B Coverage',pct(t.rank_b_coverage_pct),`${int(t.rank_b_contacted)} / ${int(t.rank_b_total)} contacted`,'blue',rankB)}${kpi('Open Pipeline',money(a.openVal),`${int(a.open)} open deals`,'purple',openDeals)}${kpi('Won MTD',int(a.wonM),`${int(a.wonY)} won YTD`,'green',wonDeals)}${kpi('Lost MTD',int(a.lostM),`${int(a.lostY)} lost YTD`,'red',lostDeals)}</div>`}function sectionTabs(){return `<section class="card"><div class="head"><div><h3>Acquisition Sections</h3><p>Old-style sections, Supabase-backed</p></div><div class="tabs">${[['overview','Overview'],['kpi','KPI Snapshot'],['rank','Rank A/B'],['needs','Needs Contact'],['pipeline','Pipeline'],['sources','Field Sources']].map(([id,label])=>`<button class="chip ${S.acqTab===id?'active':''}" onclick="setAcqTab('${id}')">${label}</button>`).join('')}</div></div></section>`}function renderAcq(){const top=hero('Acquisition Team Overview','Owner-scoped activity: calls and meetings count only for the displayed company owner. Fadi/Faizan appear as deal owners only.')+sectionTabs()+acqKpis();if(S.acqTab==='kpi')return top+renderAcqKpi();if(S.acqTab==='rank')return top+renderRank();if(S.acqTab==='needs')return top+renderNeeds();if(S.acqTab==='pipeline')return top+renderPipeline();if(S.acqTab==='sources')return top+table('Acquisition Field Sources',cur('acqSources'));return top+`<div class="grid2">${table('Acquisition Reps',cur('acqSidebar'),['owner_name','hubspot_owner_id','calls_logged','connected_calls','meetings_logged','meetings_completed','last_activity_at'])}${table('Pipeline by Owner',cur('acqPipe'),['owner_name','owner_role','open_deals','open_pipeline','won_deals','won_amount','lost_deals','lost_amount'])}</div><div class="grid2">${table('Rank A/B Coverage',activeAcq(cur('acqRank')),['rank','country','owner_name','total_companies','touched_companies','untouched_companies','needs_contact','connected_calls','completed_meetings','coverage_pct'])}${table('Needs Contact',activeAcq(cur('acqNeeds')),['company_name','owner_name','country','rank','source_type','connected_calls','completed_meetings','last_touch_at','hubspot_url'])}</div>`}function renderAcqKpi(){const rows=cur('acqKpi'),cards=rows.map(r=>`<section class="card"><div class="head"><div><h3>${esc(String(r.period).toUpperCase())}</h3><p>Team activity snapshot</p></div></div><div class="kpis" style="padding:14px;margin:0;grid-template-columns:repeat(5,minmax(0,1fr))">${kpi('Calls Logged',int(r.calls_logged),'','blue')}${kpi('Connected Calls',int(r.connected_calls),'','cyan')}${kpi('Connection Rate',pct(r.connection_rate),'','green')}${kpi('Meetings Logged',int(r.meetings_logged),'','purple')}${kpi('Meetings Completed',int(r.meetings_completed),'','green')}</div></section>`).join('');return cards+table('Rep KPI Periods',cur('acqRepKpi'),['owner_name','calls_yesterday','connected_yesterday','conn_rate_yesterday','calls_mtd','connected_mtd','conn_rate_mtd','calls_ytd','connected_ytd','conn_rate_ytd','completed_mtd','completed_ytd'])}function renderRank(){const details=activeAcq(cur('acqRankDetails'));return `<div class="grid2">${table('Rank A/B Coverage by Country & Owner',activeAcq(cur('acqRank')),['rank','country','owner_name','total_companies','touched_companies','untouched_companies','needs_contact','calls_logged','connected_calls','meetings_logged','completed_meetings','coverage_pct'])}${table('Rank A/B Company Details',details,['company_name','owner_name','country','rank','company_tier','calls_logged','connected_calls','meetings_logged','completed_meetings','last_touch_at','needs_contact','hubspot_url'])}</div>`}function renderNeeds(){const rows=activeAcq(cur('acqNeeds')),online=rows.filter(r=>norm(r.source_type)==='online'),offline=rows.filter(r=>norm(r.source_type)==='offline'),unknown=rows.filter(r=>!['online','offline'].includes(norm(r.source_type)));return `<div class="kpis">${kpi('All Needs Contact',int(rows.length),'No connected/completed by same owner','red',rows)}${kpi('Online',int(online.length),'Source type online','blue',online)}${kpi('Offline',int(offline.length),'Source type offline','amber',offline)}${kpi('Unknown Source',int(unknown.length),'Needs source cleanup','purple',unknown)}</div><div class="grid2">${table('Online Need Contact',online,['company_name','owner_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}${table('Offline / Unknown Need Contact',[...offline,...unknown],['company_name','owner_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}</div>${table('All Needs Contact',rows,['company_name','owner_name','country','rank','source_type','calls_logged','connected_calls','meetings_logged','completed_meetings','last_touch_at','hubspot_url'])}`}function renderPipeline(){const open=cur('acqPipeDetails').filter(r=>r.deal_status==='open'),won=cur('acqPipeDetails').filter(r=>r.deal_status==='won'),lost=cur('acqPipeDetails').filter(r=>r.deal_status==='lost');return `<div class="kpis">${kpi('Open Deals',int(open.length),money(sum(open,'amount')),'purple',open)}${kpi('Won Deals',int(won.length),money(sum(won,'amount')),'green',won)}${kpi('Lost Deals',int(lost.length),money(sum(lost,'amount')),'red',lost)}${kpi('Stuck Deals',int(cur('acqStuck').length),'21+ days in stage','amber',cur('acqStuck'))}${kpi('Cold Deals',int(cur('acqCold').length),'21+ days since modified','red',cur('acqCold'))}</div><div class="grid2">${table('Pipeline by Owner',cur('acqPipe'),['owner_name','owner_role','open_deals','open_pipeline','won_deals','won_amount','lost_deals','lost_amount'])}${table('Pipeline by Stage',cur('acqPipeStage'),['dealstage','deals','amount','open_deals','open_amount'])}</div>${table('Deal Details',cur('acqPipeDetails'),['dealname','owner_name','owner_role','dealstage','deal_status','amount','product','closedate','hubspot_url'])}`}function renderAcqRep(){const name=S.rep,dealOnly=S.repRole==='deals_only';const repK=cur('acqRepKpi').find(r=>norm(r.owner_name)===norm(name))||{},rank=activeAcq(cur('acqRank')).filter(r=>norm(r.owner_name)===norm(name)),details=activeAcq(cur('acqRankDetails')).filter(r=>norm(r.owner_name)===norm(name)),needs=activeAcq(cur('acqNeeds')).filter(r=>norm(r.owner_name)===norm(name)),deals=cur('acqPipeDetails').filter(r=>norm(r.owner_name)===norm(name));if(dealOnly)return hero(`Deal Owner · ${name}`,'Acquisition deal owner only: pipeline, won/lost/open deals. No activity coverage is shown.')+`<div class="kpis">${kpi('Open Deals',int(deals.filter(r=>r.deal_status==='open').length),money(sum(deals.filter(r=>r.deal_status==='open'),'amount')),'purple',deals.filter(r=>r.deal_status==='open'))}${kpi('Won Deals',int(deals.filter(r=>r.deal_status==='won').length),money(sum(deals.filter(r=>r.deal_status==='won'),'amount')),'green',deals.filter(r=>r.deal_status==='won'))}${kpi('Lost Deals',int(deals.filter(r=>r.deal_status==='lost').length),money(sum(deals.filter(r=>r.deal_status==='lost'),'amount')),'red',deals.filter(r=>r.deal_status==='lost'))}</div>${table('Deal Owner Pipeline',deals,['dealname','dealstage','deal_status','amount','product','closedate','hubspot_url'])}`;return hero(`Acquisition Rep · ${name}`,'Activity, coverage, needs contact and pipeline for this rep only.')+`<div class="kpis">${kpi('Calls Yesterday',int(repK.calls_yesterday),'','blue')}${kpi('Connected Yesterday',int(repK.connected_yesterday),pct(repK.conn_rate_yesterday),'cyan')}${kpi('Calls MTD',int(repK.calls_mtd),'','blue')}${kpi('Connected MTD',int(repK.connected_mtd),pct(repK.conn_rate_mtd),'cyan')}${kpi('Completed Meetings MTD',int(repK.completed_mtd),'','green')}${kpi('Needs Contact',int(needs.length),'','red',needs)}</div><div class="grid2">${table('Rep Rank Coverage',rank,['rank','country','total_companies','touched_companies','untouched_companies','needs_contact','connected_calls','completed_meetings','coverage_pct'])}${table('Rep Needs Contact',needs,['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}</div><div class="grid2">${table('Rep Company Details',details,['company_name','country','rank','calls_logged','connected_calls','meetings_logged','completed_meetings','last_touch_at','needs_contact','hubspot_url'])}${table('Rep Pipeline',deals,['dealname','dealstage','deal_status','amount','closedate','hubspot_url'])}</div>`}function renderRetention(){const rows=retRows();if(S.retTab==='financial')return hero('Retention Financial Details','Budget vs booking vs cash collection.')+table('Retention Rows',rows,['company_name','product','month','renewal_value','booked_value','collected_value','booked_not_cash_value','remaining_collection_value','rm_owner','csm_owner','renewal_status','hubspot_search_url'])+table('Not In Budget',cur('retNotBudget'));return hero('Retention Team Overview','KPI snapshot, coverage and renewal action details.')+`<div class="grid2">${table('Retention KPI Snapshot',cur('retKpi'))}${table('Retention Coverage Quality',cur('retCoverage'))}</div>${table('Retention Rows',rows,['company_name','product','month','renewal_value','booked_value','collected_value','rm_owner','csm_owner','renewal_status','hubspot_search_url'])}`}function renderRetRep(){const rows=retRows().filter(r=>S.repRole==='RM'?norm(r.rm_owner)===norm(S.rep):norm(r.csm_owner)===norm(S.rep));return hero(`Retention ${S.repRole} · ${S.rep}`,'Filtered renewal rows and action items.')+table('Rep Renewal Rows',rows,['company_name','product','month','renewal_value','booked_value','collected_value','booked_not_cash_value','remaining_collection_value','rm_owner','csm_owner','renewal_status','hubspot_search_url'])}function renderPnl(){const rows=activePnl(cur('pnl')),monthly=activePnl(cur('pnlMonthly')),breakdown=activePnl(cur('pnlBreakdown')),tot={booking:sum(rows,'booking'),cashing:sum(rows,'cashing'),cogs:sum(rows,'cogs'),overheads:sum(rows,'overheads'),support:sum(rows,'support_allocation'),cost:sum(rows,'total_cost'),net:sum(rows,'net_cash_position')};return hero('P&L Advanced','Booking, cashing, cost breakdown and year comparison.')+`<div class="kpis">${kpi('Booking',money(tot.booking),'','green',monthly)}${kpi('Cashing',money(tot.cashing),'','cyan',monthly)}${kpi('COGS',money(tot.cogs),'','red',breakdown)}${kpi('Overheads',money(tot.overheads),'','amber',breakdown)}${kpi('Support Allocate',money(tot.support),'','purple',breakdown)}${kpi('Total Cost',money(tot.cost),'','red',breakdown)}${kpi('Net Cash',money(tot.net),'','blue',monthly)}</div><div class="grid2">${table('P&L Product Summary',rows)}${table('Year Comparison',cur('pnlCompare'))}</div><div class="grid2">${table('Monthly P&L',monthly)}${table('Cost Breakdown',breakdown)}</div>`}function renderUpsell(){return hero('Upselling / Features Plan','Company-level feature plan and status.')+`<div class="grid2">${table('Upsell Summary',cur('upsellSummary'))}${table('Upsell Companies',cur('upsellCompanies'))}</div>`}function openCache(id,title,sub){openDrawer(title,CACHE[id]||[],sub)}function openDrawer(title,rows,sub){$('dt').textContent=title;$('ds').textContent=sub||`${(rows||[]).length} rows`;$('db').innerHTML=table(title,rows||[]).replace('<section class="card">','<section class="card" style="box-shadow:none;border:0;border-radius:0">');$('drawer').classList.add('open')}function closeDrawer(){$('drawer').classList.remove('open')}loadAll();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Talentera · Sales Command Center</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --g:#16a34a;--gd:#15803d;--b:#2563eb;--p:#7c3aed;--a:#d97706;--r:#dc2626;--c:#0891b2;
+  --ink:#0f1a14;--ink2:#30463a;--mut:#71877b;--line:#e2ebe6;
+  --side:#0f1a14;--sideText:#a8c2b2;--sideMuted:#7f9c8d;--sideAccent:#3dd68c;
+  --bg:#eef5f1;--white:#fff;--font:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'DM Mono',monospace
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.46;background:
+radial-gradient(circle at 80% 8%,rgba(8,145,178,.14),transparent 26%),
+radial-gradient(circle at 22% 4%,rgba(22,163,74,.12),transparent 28%),
+linear-gradient(90deg,rgba(22,163,74,.05) 1px,transparent 1px),
+linear-gradient(rgba(22,163,74,.05) 1px,transparent 1px);background-size:auto,auto,34px 34px,34px 34px}
+button,input,select{font-family:inherit}button{cursor:pointer}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#cfdad4;border-radius:999px}
+.app{display:flex}.side{position:fixed;inset:0 auto 0 0;width:230px;background:var(--side);color:var(--sideText);overflow:auto;z-index:5}
+.brand{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:10px;align-items:center}
+.logo{width:33px;height:33px;border-radius:50%;background:#fff;border:3px solid #f5c542;color:#0f1a14;display:grid;place-items:center;font-weight:900}
+.brand b{display:block;color:#fff;font-size:15px}.brand small{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--sideText)}
+.sec{padding:18px 18px 5px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#71877b}
+.nav{width:calc(100% - 12px);margin:1px 6px;border:0;background:transparent;color:var(--sideText);border-radius:8px;padding:8px 10px;text-align:left;font-weight:800;font-size:12px;display:flex;gap:9px;align-items:center}
+.nav:hover,.nav.on{background:rgba(61,214,140,.12);color:var(--sideAccent)}
+.nav small{display:block;font-size:9px;color:var(--sideMuted);margin-top:2px;line-height:1.15}
+.badge{margin-left:auto;background:rgba(220,38,38,.2);color:#fca5a5;border-radius:99px;padding:2px 6px;font:800 9px var(--mono)}
+.viewTag{display:inline-flex;border:1px solid rgba(8,145,178,.25);background:rgba(8,145,178,.15);color:#22d3ee;border-radius:4px;padding:1px 5px;font-size:8px;font-weight:900;margin-left:4px}
+.user{position:sticky;bottom:0;margin-top:30px;padding:12px 8px;background:linear-gradient(transparent,#0f1a14 25%)}
+.u{display:flex;gap:9px;align-items:center;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px}
+.av{width:30px;height:30px;border-radius:9px;background:var(--sideAccent);color:#0f1a14;display:grid;place-items:center;font-size:11px;font-weight:900}
+.main{margin-left:230px;width:calc(100% - 230px);min-height:100vh;position:relative}
+.top{height:60px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:4}
+.tt{font-weight:900;font-size:15px}.ts{font-size:11px;color:var(--mut);margin-top:2px}.right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.live{border:1px solid rgba(22,163,74,.22);background:rgba(22,163,74,.08);color:var(--g);font-size:10px;text-transform:uppercase;font-weight:900;border-radius:999px;padding:5px 12px}
+.btn{border:0;background:var(--g);color:#fff;font-weight:900;border-radius:8px;padding:8px 13px}
+.tabs{height:45px;background:rgba(255,255,255,.86);border-bottom:1px solid var(--line);display:flex;gap:2px;align-items:center;padding:0 24px;overflow:auto;position:sticky;top:60px;z-index:3}
+.tab{height:45px;border:0;background:transparent;color:var(--mut);font-weight:900;font-size:11px;padding:0 13px;border-bottom:3px solid transparent;white-space:nowrap}
+.tab.on{color:var(--g);border-bottom-color:var(--g)}
+.filters{padding:14px 24px 0;display:flex;gap:8px;flex-wrap:wrap}
+.f{height:34px;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:8px;padding:0 10px;font-size:11px;font-weight:800;color:var(--ink2);outline:none}
+.content{padding:16px 24px 70px}.hero,.card,.kpi{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);backdrop-filter:blur(12px)}
+.hero{padding:18px 22px;margin-bottom:14px;display:flex;justify-content:space-between;gap:16px}
+.hero h1{margin:0;font-size:22px;letter-spacing:-.04em}.hero p{margin:5px 0 0;color:var(--mut);font-size:12px;font-weight:700;line-height:1.5}
+.hp{display:flex;gap:8px;flex-wrap:wrap}.pillbox{min-width:86px;background:#f7faf8;border-left:3px solid var(--x,var(--g));border-radius:10px;text-align:center;padding:8px}
+.pillbox b{display:block;color:var(--x,var(--g));font:900 18px var(--mono)}.pillbox span{font-size:8px;color:var(--mut);font-weight:900;text-transform:uppercase}
+.label{font-size:10px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#63776c;margin:15px 0 9px;display:flex;gap:8px;align-items:center}
+.label:before{content:"";width:3px;height:14px;border-radius:2px;background:var(--g)}.label:after{content:"";flex:1;height:1px;background:var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpi{border-top:3px solid var(--x,var(--g));text-align:left;padding:14px 12px;min-height:92px}
+.kpi:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.09)}
+.kpi b{display:block;color:var(--x,var(--g));font:900 22px var(--mono)}.kpi span{display:block;font-size:9px;font-weight:900;text-transform:uppercase;color:var(--mut);margin-top:7px}.kpi small{display:block;color:var(--ink2);font-size:10px;font-weight:700;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{overflow:hidden;margin-bottom:14px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);background:rgba(247,250,248,.78)}
+.hd h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.06em}.hd p{margin:3px 0 0;color:var(--mut);font-size:10px;font-weight:700}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;color:var(--ink2)}.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.wrap{overflow:auto;max-height:640px}table{width:100%;border-collapse:collapse}
+th{position:sticky;top:0;background:#fff;z-index:1;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:9px;color:var(--mut);font-weight:900;text-transform:uppercase;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #edf2ef;font-size:11px;font-weight:650;color:var(--ink2);vertical-align:top}tr:hover td{background:rgba(22,163,74,.035)}
+.num{font-family:var(--mono);font-weight:900}.link{font-weight:900;color:#101f16;text-decoration:none}.link:hover{color:var(--g);text-decoration:underline}
+.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}
+.green{color:var(--g);background:rgba(22,163,74,.08);border-color:rgba(22,163,74,.2)}.red{color:var(--r);background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.2)}
+.amber{color:var(--a);background:rgba(217,119,6,.08);border-color:rgba(217,119,6,.2)}.blue{color:var(--b);background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.2)}.purple{color:var(--p);background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.2)}
+.actionsList{padding:12px 16px}.act{display:flex;gap:12px;align-items:center;border-bottom:1px solid #edf2ef;padding:10px 0}.act:last-child{border-bottom:0}
+.no{width:22px;height:22px;border-radius:8px;display:grid;place-items:center;font-size:10px;font-weight:900}.grow{flex:1}.grow b{font-size:12px}.grow small{display:block;color:var(--mut);font-size:10px;margin-top:2px}
+.rank{padding:14px 16px}.rank h4{font-size:11px;color:var(--r);margin:10px 0 8px}.minirow{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf2ef}
+.empty{padding:24px;text-align:center;color:var(--mut);font-weight:800;font-size:12px}
+.drawer{position:fixed;inset:0;background:rgba(15,26,20,.35);backdrop-filter:blur(7px);z-index:20;display:none}.drawer.on{display:block}
+.box{position:absolute;right:18px;top:18px;bottom:18px;width:min(1100px,calc(100vw - 36px));background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 20px 80px rgba(0,0,0,.22);display:flex;flex-direction:column}
+.boxhd{display:flex;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}.boxhd b{font-size:16px}.boxhd small{display:block;color:var(--mut);margin-top:2px}.x{width:34px;height:34px;border:1px solid var(--line);background:#f7faf8;border-radius:10px;font-weight:900}.boxbody{overflow:auto;flex:1}
+@media(max-width:1300px){.kpis{grid-template-columns:repeat(4,1fr)}.grid2{grid-template-columns:1fr}.hero{display:block}.hp{margin-top:12px}}
+@media(max-width:760px){.side{display:none}.main{margin-left:0;width:100%}.kpis{grid-template-columns:1fr 1fr}.content,.filters,.tabs{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo">T</div><div><b>Talentera</b><small>Sales Command Center</small></div></div>
+    <div id="nav"></div>
+    <div class="user"><div class="u"><div class="av">SM</div><div><b style="color:#fff;font-size:12px">Sales Manager</b><small style="display:block">Admin · Riyadh</small></div></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div><div class="tt" id="title">Talentera</div><div class="ts" id="sub">Loading…</div></div>
+      <div class="right"><div class="live" id="live">Live · Supabase</div><button class="btn" onclick="loadAll()">↻ Refresh</button></div>
+    </header>
+    <nav class="tabs" id="tabs"></nav>
+    <section class="filters" id="filters"></section>
+    <section class="content" id="content"><div class="empty">Loading dashboard…</div></section>
+  </main>
+</div>
+
+<div class="drawer" id="drawer">
+  <div class="box">
+    <div class="boxhd"><div><b id="dt">Details</b><small id="ds"></small></div><button class="x" onclick="closeDrawer()">✕</button></div>
+    <div class="boxbody" id="db"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://czaxtwbmborxwzaboqxl.supabase.co';
+const SUPABASE_KEY='sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX';
+const PORTAL='145742477';
+const HS='https://app-eu1.hubspot.com';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const view={
+  acqReps:'vw_acquisition_sidebar_reps',
+  acqKpi:'vw_acquisition_kpi_snapshot_periods',
+  acqRep:'vw_acquisition_rep_kpi_periods',
+  acqTeam:'vw_acquisition_team_snapshot',
+  rank:'vw_acquisition_rank_details',
+  rankCov:'vw_acquisition_rank_coverage',
+  need:'vw_acquisition_leads_need_contact_v2',
+  pipe:'vw_acquisition_pipeline_snapshot',
+  deals:'vw_acquisition_pipeline_details',
+  stage:'vw_acquisition_pipeline_by_stage',
+  stuck:'vw_acquisition_stuck_deals',
+  cold:'vw_acquisition_cold_deals',
+  src:'vw_acquisition_field_sources',
+  ret:'vw_retention_renewal_logic',
+  retSide:'vw_retention_sidebar_reps',
+  retKpi:'vw_retention_kpi_snapshot',
+  retCov:'vw_retention_coverage_quality',
+  notBudget:'vw_retention_not_in_budget',
+  pnl:'vw_pnl_advanced_summary',
+  pnlM:'vw_pnl_monthly_advanced',
+  pnlB:'vw_pnl_cost_breakdown',
+  pnlC:'vw_pnl_year_comparison',
+  upS:'vw_features_plan_dashboard_summary',
+  upC:'vw_features_plan_company_summary'
+};
+
+const S={main:'retention',tab:'retTeam',f:{year:'2026',month:'all',product:'all',owner:'all',country:'all',rank:'all',q:''},d:{},time:null};
+let C={},cid=0;
+const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function el(x){return document.getElementById(x)}
+function n(v){let x=Number(String(v??'').replace(/[^0-9.-]/g,''));return isFinite(x)?x:0}
+function i(v){return Math.round(n(v)).toLocaleString()}
+function money(v){let x=n(v),s=x<0?'-':'',a=Math.abs(x);return s+'$'+(a>=1e6?(a/1e6).toFixed(1)+'M':Math.round(a).toLocaleString())}
+function pct(v){return (n(v)||0).toFixed(0)+'%'}
+function norm(v){return String(v??'').trim().toLowerCase()}
+function sum(a,k){return (a||[]).reduce((x,r)=>x+n(r[k]),0)}
+function rows(k){return S.d[k]||[]}
+function esc(v){return String(v??'').replace(/[&<>"]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[x]))}
+function uniq(a){return [...new Set((a||[]).filter(Boolean).map(String))].sort((x,y)=>x.localeCompare(y))}
+function recordUrl(r){return r.hubspot_url||r.hubspot_search_url||r.company_url||r.deal_url||((r.company_name||r.dealname||r.name)?`${HS}/contacts/${PORTAL}/objects/0-2/views/all/list?query=${encodeURIComponent(r.company_name||r.dealname||r.name)}`:'')}
+function linkCell(v,r){let u=recordUrl(r);return u?`<a class="link" target="_blank" rel="noopener" href="${esc(u)}">${esc(v)}</a>`:esc(v)}
+function ok(r){
+  let f=S.f;
+  return (f.q===''||Object.values(r).join(' ').toLowerCase().includes(f.q.toLowerCase()))
+  &&(f.owner==='all'||norm(r.owner_name)===norm(f.owner)||norm(r.rm_owner)===norm(f.owner)||norm(r.csm_owner)===norm(f.owner))
+  &&(f.country==='all'||norm(r.country)===norm(f.country))
+  &&(f.rank==='all'||norm(r.rank)===norm(f.rank))
+  &&(f.month==='all'||!r.month||norm(String(r.month).slice(0,3))===norm(f.month))
+  &&(f.product==='all'||!r.product||norm(r.product)===norm(f.product));
+}
+
+async function loadAll(){
+  el('live').textContent='Refreshing…';
+  await Promise.all(Object.entries(view).map(async([k,v])=>{
+    try{
+      let {data,error}=await sb.from(v).select('*').limit(5000);
+      if(error) throw error;
+      S.d[k]=data||[];
+    }catch(e){
+      S.d[k]=[];
+      console.warn('Supabase view failed',v,e.message||e);
+    }
+  }));
+  S.time=new Date();
+  el('live').textContent='Live · Supabase';
+  render();
+}
+
+function setMain(x){S.main=x;S.tab=x==='acquisition'?'acqTeam':x==='retention'?'retTeam':'pnl';render()}
+function setTab(x){S.tab=x;render()}
+function setF(k,v){S.f[k]=v;render()}
+function cache(r){let id='c'+(++cid);C[id]=r||[];return id}
+function openRows(t,r,s=''){let id=cache(r);openCache(id,t,s)}
+function openCache(id,t,s=''){el('dt').textContent=t;el('ds').textContent=s||`${(C[id]||[]).length} rows`;el('db').innerHTML=tbl(t,C[id]||[],null,true);el('drawer').classList.add('on')}
+function closeDrawer(){el('drawer').classList.remove('on')}
+
+function val(v,k,r){
+  if(v==null||v==='')return '—';
+  if(['company_name','dealname','name','account'].includes(k))return linkCell(v,r);
+  if(/url/i.test(k)&&String(v).startsWith('http'))return `<a class="tag blue" target="_blank" rel="noopener" href="${esc(v)}">Open</a>`;
+  if(/amount|value|cash|book|revenue|pipeline|cost|collection|renewal|profit|cogs|overheads/i.test(k))return `<span class="num">${money(v)}</span>`;
+  if(/pct|rate|coverage|score|margin/i.test(k))return `<span class="num">${pct(v)}</span>`;
+  let s=String(v);
+  if(/lost|delayed|churn|cold|stuck|overdue|risk/i.test(s))return `<span class="tag red">${esc(s)}</span>`;
+  if(/expected|upcoming|pending|unknown|missing/i.test(s))return `<span class="tag amber">${esc(s)}</span>`;
+  if(/won|cash|booked|renewed|active|completed|healthy|contacted/i.test(s))return `<span class="tag green">${esc(s)}</span>`;
+  return esc(s);
+}
+
+function tbl(t,r,cols,drawerMode=false){
+  r=(r||[]).filter(ok);
+  cols=cols||Object.keys(r[0]||{}).slice(0,11);
+  let id=cache(r);
+  return `<section class="card"><div class="hd"><div><h3>${esc(t)}</h3><p>${r.length.toLocaleString()} rows</p></div>${!drawerMode&&r.length?`<button class="chip" onclick="openCache('${id}','${esc(t)}','${r.length.toLocaleString()} rows')">Open All</button>`:''}</div><div class="wrap">${r.length?`<table><thead><tr>${cols.map(c=>`<th>${esc(c).replaceAll('_',' ')}</th>`).join('')}</tr></thead><tbody>${r.slice(0,drawerMode?999:120).map(x=>`<tr>${cols.map(c=>`<td>${val(x[c],c,x)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">No rows found</div>'}</div></section>`;
+}
+
+function kpi(l,v,s,c='g',r=null){
+  const colorMap={g:'--g',b:'--b',p:'--p',a:'--a',r:'--r',c:'--c'};
+  let id=r?cache(r):'';
+  return `<button class="kpi" style="--x:var(${colorMap[c]||'--g'})" ${r?`onclick="openCache('${id}','${esc(l)}','${esc(s||'')}')"`:''}><b>${v}</b><span>${esc(l)}</span>${s?`<small>${esc(s)}</small>`:''}</button>`;
+}
+
+function hero(t,s,arr=[]){
+  const colorMap={g:'--g',b:'--b',p:'--p',a:'--a',r:'--r',c:'--c'};
+  return `<div class="hero"><div><h1>${esc(t)}</h1><p>${esc(s)}</p></div><div class="hp">${arr.map(x=>`<div class="pillbox" style="--x:var(${colorMap[x[3]]||'--g'})"><b>${x[1]}</b><span>${esc(x[0])}</span></div>`).join('')}</div></div>`;
+}
+
+function nav(){
+  let h='<div class="sec">Main</div>';
+  [['acquisition','📊','Acquisition'],['retention','🛡️','Retention'],['pnl','📊','P&L']].forEach(x=>h+=`<button class="nav ${S.main===x[0]?'on':''}" onclick="setMain('${x[0]}')"><span>${x[1]}</span><span>${x[2]}</span></button>`);
+  if(S.main==='acquisition'){
+    h+='<div class="sec">Acquisition Reps</div>';
+    rows('acqReps').forEach(r=>h+=`<button class="nav ${S.tab==='rep:'+r.owner_name?'on':''}" onclick="setTab('rep:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)}<small>${i(r.connected_calls)} connected · ${i(r.meetings_completed)} meetings</small></span><span class="badge">${i(r.connected_calls)}</span></button>`);
+    rows('pipe').filter(r=>norm(r.owner_role)==='deals_only').forEach(r=>h+=`<button class="nav ${S.tab==='deal:'+r.owner_name?'on':''}" onclick="setTab('deal:${esc(r.owner_name)}')"><span>◆</span><span>${esc(r.owner_name)} <span class="viewTag">VIEW</span><small>${i(r.open_deals)} open · ${money(r.open_pipeline)}</small></span></button>`);
+  }
+  if(S.main==='retention'){
+    h+='<div class="sec">Retention</div>';
+    [['retTeam','Team Overview'],['retFinancial','Financial Details'],['features','Features Plan']].forEach(x=>h+=`<button class="nav ${S.tab===x[0]?'on':''}" onclick="setTab('${x[0]}')"><span>•</span><span>${x[1]}</span></button>`);
+    h+='<div class="sec">Retention Team</div>';
+    rows('retSide').forEach(r=>h+=`<button class="nav ${S.tab==='ret:'+r.owner_name?'on':''}" onclick="setTab('ret:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)} <span class="viewTag">${esc(r.role||'')}</span><small>${i(r.accounts)} accounts · ${money(r.renewal_value)}</small></span><span class="badge">${i(r.delayed_accounts)}</span></button>`);
+  }
+  el('nav').innerHTML=h;
+}
+
+function tabs(){
+  let t=[];
+  if(S.main==='acquisition')t=[['acqTeam','🏦 Team Overview'],['acqFinancial','💰 Financial Details'],...rows('acqReps').map(r=>['rep:'+r.owner_name,r.owner_name]),...rows('pipe').filter(r=>norm(r.owner_role)==='deals_only').map(r=>['deal:'+r.owner_name,r.owner_name+' VIEW'])];
+  else if(S.main==='retention')t=[['retTeam','🛡️ Team Overview'],['retFinancial','💰 Financial Details'],['features','✨ Features Plan'],...rows('retSide').map(r=>['ret:'+r.owner_name,r.owner_name])];
+  else t=[['pnl','📊 P&L Dashboard'],['pnlDetails','Cost Breakdown']];
+  el('tabs').innerHTML=t.map(x=>`<button class="tab ${S.tab===x[0]?'on':''}" onclick="setTab('${esc(x[0])}')">${esc(x[1])}</button>`).join('');
+}
+
+function filters(){
+  let all=[...rows('rank'),...rows('need'),...rows('ret'),...rows('pnl'),...rows('pnlM'),...rows('upC')];
+  let owners=uniq([...all.map(r=>r.owner_name),...all.map(r=>r.rm_owner),...all.map(r=>r.csm_owner)]);
+  el('filters').innerHTML=`<input class="f" placeholder="Search…" value="${esc(S.f.q)}" oninput="setF('q',this.value)">
+  <select class="f" onchange="setF('month',this.value)"><option value="all">All Months</option>${M.map(x=>`<option ${S.f.month===x?'selected':''}>${x}</option>`).join('')}</select>
+  <select class="f" onchange="setF('product',this.value)"><option value="all">All Products</option>${uniq(all.map(r=>r.product||r.product_line)).map(x=>`<option ${S.f.product===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
+  <select class="f" onchange="setF('owner',this.value)"><option value="all">All Owners</option>${owners.map(x=>`<option ${S.f.owner===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
+  <select class="f" onchange="setF('country',this.value)"><option value="all">All Countries</option>${uniq(all.map(r=>r.country)).map(x=>`<option ${S.f.country===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
+  <select class="f" onchange="setF('rank',this.value)"><option value="all">All Ranks</option>${uniq(all.map(r=>r.rank)).map(x=>`<option ${S.f.rank===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
+  <button class="chip" onclick="S.f={year:'2026',month:'all',product:'all',owner:'all',country:'all',rank:'all',q:''};render()">Reset</button>`;
+}
+
+function render(){
+  nav();tabs();filters();
+  let title='Talentera',html='';
+  if(S.main==='acquisition'){
+    title=S.tab.startsWith('rep:')?'Acquisition · '+S.tab.slice(4):S.tab==='acqFinancial'?'Acquisition · Financial Details':S.tab.startsWith('deal:')?'Acquisition · '+S.tab.slice(5):'Acquisition · Team Overview';
+    html=S.tab==='acqFinancial'?acqFinancial():S.tab.startsWith('rep:')?acqRep(S.tab.slice(4)):S.tab.startsWith('deal:')?dealOwner(S.tab.slice(5)):acqTeam();
+  }else if(S.main==='retention'){
+    title=S.tab==='retFinancial'?'Retention · Financial Details':S.tab.startsWith('ret:')?'Retention · '+S.tab.slice(4):S.tab==='features'?'Retention · Features Plan':'Retention · Team Overview';
+    html=S.tab==='retFinancial'?retFinancial():S.tab==='features'?features():S.tab.startsWith('ret:')?retOwner(S.tab.slice(4)):retTeam();
+  }else{
+    title='P&L';
+    html=S.tab==='pnlDetails'?pnlDetails():pnl();
+  }
+  el('title').textContent=title;
+  el('sub').textContent=`Updated ${S.time?S.time.toLocaleString():'--'} · Auto refresh 5min`;
+  el('content').innerHTML=html;
+}
+
+function period(periodRows,fields){
+  return `<section class="card"><div class="hd"><div><h3>📌 Yesterday · MTD · YTD summary</h3><p>Same visual block as legacy dashboard</p></div></div><div style="padding:12px">${['yesterday','mtd','ytd'].map(p=>{
+    let r=periodRows.find(x=>norm(x.period)===p)||{};
+    return `<div style="display:grid;grid-template-columns:90px repeat(${fields.length},1fr);gap:8px;margin-bottom:8px"><div class="card" style="padding:14px"><b style="font-size:11px;text-transform:uppercase">${p}</b><small style="display:block;color:var(--mut)">${p==='yesterday'?'daily execution':p==='mtd'?'current month':'current year'}</small></div>${fields.map(f=>kpi(f[0],f[2]?f[2](r):i(r[f[1]]),f[3]||'',f[4]||'b')).join('')}</div>`;
+  }).join('')}</div></section>`;
+}
+
+function acqTeam(){
+  let t=rows('acqTeam')[0]||{},rank=rows('rank').filter(ok),needs=rows('need').filter(ok),open=rows('deals').filter(r=>norm(r.deal_status)==='open'),won=rows('deals').filter(r=>norm(r.deal_status)==='won'),lost=rows('deals').filter(r=>norm(r.deal_status)==='lost');
+  return hero('Acquisition Team Overview','Team KPIs, Rank A/B coverage, needs contact and pipeline.',[['Needs',i(needs.length),'','r'],['Open',i(open.length),'','p'],['Pipeline',money(sum(open,'amount')),'','g']])
+  +`<div class="kpis">${kpi('Companies',i(t.total_companies),'allowed owners','g',rank)}${kpi('Contacted',i(t.contacted_companies),'owner scoped','b',rank.filter(r=>!r.needs_contact))}${kpi('Needs Contact',i(needs.length),'online/offline','r',needs)}${kpi('Rank A Coverage',pct(t.rank_a_coverage_pct),`${i(t.rank_a_contacted)} contacted`,'g',rank.filter(r=>['a','rank a'].includes(norm(r.rank))))}${kpi('Rank B Coverage',pct(t.rank_b_coverage_pct),`${i(t.rank_b_contacted)} contacted`,'a',rank.filter(r=>['b','rank b'].includes(norm(r.rank))))}${kpi('Open Pipeline',money(sum(open,'amount')),`${i(open.length)} deals`,'p',open)}${kpi('Won',i(won.length),money(sum(won,'amount')),'g',won)}${kpi('Lost',i(lost.length),money(sum(lost,'amount')),'r',lost)}</div>`
+  +period(rows('acqKpi'),[['Calls','calls_logged'],['Connected','connected_calls'],['Rate','connection_rate',r=>pct(r.connection_rate),'connected/calls','r'],['Meetings','meetings_completed'],['Pipeline','open_pipeline',()=>money(sum(open,'amount')),'snapshot','g']])
+  +`<div class="grid2">${tbl('Rank A/B Coverage',rows('rankCov'),['rank','country','owner_name','total_companies','touched_companies','untouched_companies','needs_contact','connected_calls','completed_meetings','coverage_pct'])}${tbl('Needs To Contact',needs,['company_name','owner_name','country','rank','source_type','connected_calls','completed_meetings','last_touch_at','hubspot_url'])}</div><div class="grid2">${tbl('Pipeline by Owner',rows('pipe'),['owner_name','owner_role','open_deals','open_pipeline','won_deals','won_amount','lost_deals','lost_amount'])}${tbl('Pipeline by Stage',rows('stage'),['dealstage','deals','amount','open_deals','open_amount'])}</div>`;
+}
+
+function acqRep(name){
+  let rep=rows('acqRep').find(r=>norm(r.owner_name)===norm(name))||{},details=rows('rank').filter(r=>ok(r)&&norm(r.owner_name)===norm(name)),needs=rows('need').filter(r=>ok(r)&&norm(r.owner_name)===norm(name)),deals=rows('deals').filter(r=>norm(r.owner_name)===norm(name)),open=deals.filter(r=>norm(r.deal_status)==='open'),stuck=rows('stuck').filter(r=>norm(r.owner_name)===norm(name));
+  return hero(name,'Rep activity, needs contact, AI coaching, open deals, Rank A/B and stuck deals.',[['Calls',i(rep.calls_mtd),'','b'],['Rate',pct(rep.conn_rate_mtd),'','r'],['Meetings',i(rep.completed_mtd),'','p'],['Pipeline',money(sum(open,'amount')),'','g']])
+  +period([{period:'yesterday',calls_logged:rep.calls_yesterday,connection_rate:rep.conn_rate_yesterday,meetings_completed:rep.completed_yesterday},{period:'mtd',calls_logged:rep.calls_mtd,connection_rate:rep.conn_rate_mtd,meetings_completed:rep.completed_mtd},{period:'ytd',calls_logged:rep.calls_ytd,connection_rate:rep.conn_rate_ytd,meetings_completed:rep.completed_ytd}], [['Calls','calls_logged'],['Conv. Rate','connection_rate',r=>pct(r.connection_rate),'','r'],['Meetings','meetings_completed'],['Leads','leads',()=>i(needs.length),'needs contact','c'],['Won','won',()=>i(deals.filter(x=>norm(x.deal_status)==='won').length),'','g'],['Lost','lost',()=>i(deals.filter(x=>norm(x.deal_status)==='lost').length),'','r']])
+  +`<div class="grid2">${tbl('Online / Inbound Needs Contact',needs.filter(r=>norm(r.source_type)==='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}${tbl('Offline / Outbound Needs Contact',needs.filter(r=>norm(r.source_type)!=='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}</div><div class="grid2">${tbl('Open Deals',open,['dealname','dealstage','amount','product','closedate','hubspot_url'])}${rankCard(details)}</div>${tbl('Stuck Deals (>21 days)',stuck,['dealname','dealstage','amount','days_in_stage','days_since_modified','hubspot_url'])}`;
+}
+
+function rankCard(details){
+  let arrA=details.filter(r=>['a','rank a'].includes(norm(r.rank))),arrB=details.filter(r=>['b','rank b'].includes(norm(r.rank)));
+  return `<section class="card"><div class="hd"><div><h3>🎯 Rank A/B Coverage</h3><p>Same-owner activity only</p></div></div><div class="kpis" style="padding:12px;grid-template-columns:repeat(5,1fr)">${kpi('A untouched',i(arrA.filter(r=>r.needs_contact).length),'','r',arrA.filter(r=>r.needs_contact))}${kpi('A touched',i(arrA.filter(r=>!r.needs_contact).length),'','g',arrA.filter(r=>!r.needs_contact))}${kpi('Meetings',i(sum(details,'completed_meetings')),'','p',details.filter(r=>n(r.completed_meetings)>0))}${kpi('B untouched',i(arrB.filter(r=>r.needs_contact).length),'','a',arrB.filter(r=>r.needs_contact))}${kpi('B touched',i(arrB.filter(r=>!r.needs_contact).length),'','g',arrB.filter(r=>!r.needs_contact))}</div><div class="rank"><h4>Rank A — ${i(arrA.length)}</h4>${arrA.slice(0,6).map(r=>`<div class="minirow"><div>${linkCell(r.company_name,r)}</div><span class="tag red">Rank A</span></div>`).join('')||'<div class="empty">No Rank A</div>'}<h4 style="color:var(--a)">Rank B — ${i(arrB.length)}</h4>${arrB.slice(0,6).map(r=>`<div class="minirow"><div>${linkCell(r.company_name,r)}</div><span class="tag amber">Rank B</span></div>`).join('')||'<div class="empty">No Rank B</div>'}</div></section>`;
+}
+
+function dealOwner(name){
+  let d=rows('deals').filter(r=>norm(r.owner_name)===norm(name)),open=d.filter(r=>norm(r.deal_status)==='open'),won=d.filter(r=>norm(r.deal_status)==='won'),lost=d.filter(r=>norm(r.deal_status)==='lost');
+  return hero(name,'Acquisition deal-owner view only: activity KPIs intentionally hidden.',[['Open',i(open.length),'','p'],['Won',i(won.length),'','g'],['Lost',i(lost.length),'','r']])
+  +`<div class="kpis">${kpi('Open Deals',i(open.length),money(sum(open,'amount')),'p',open)}${kpi('Won Deals',i(won.length),money(sum(won,'amount')),'g',won)}${kpi('Lost Deals',i(lost.length),money(sum(lost,'amount')),'r',lost)}</div>${tbl('Deal Owner Pipeline',d,['dealname','dealstage','deal_status','amount','product','closedate','hubspot_url'])}`;
+}
+
+function acqFinancial(){
+  let won=rows('deals').filter(r=>norm(r.deal_status)==='won'),signed=rows('deals').filter(r=>norm(r.deal_status)==='open');
+  return hero('Financial Details','Cashing revenue, signed contract and pending to cash.',[])
+  +`<div class="kpis" style="grid-template-columns:repeat(3,1fr)">${kpi('Cashing Revenue',money(sum(won,'amount')),`${i(won.length)} closed won deals`,'g',won)}${kpi('Signed Contract',money(sum(signed,'amount')),`${i(signed.length)} open deals`,'a',signed)}${kpi('Pending To Cash',money(sum(signed,'amount')),'same as signed','b',signed)}</div><div class="grid2">${tbl('Cashing',won,['dealname','owner_name','amount','closedate','dealstage','hubspot_url'])}${tbl('Signed / Booking',signed,['dealname','owner_name','amount','closedate','dealstage','deal_status','hubspot_url'])}</div>`;
+}
+
+function retMetrics(){
+  let r=rows('ret').filter(ok),del=r.filter(x=>/delayed/i.test(String(x.renewal_status||x.status||''))),book=r.filter(x=>n(x.booked_value)>0),cash=r.filter(x=>n(x.collected_value||x.cash_collected)>0);
+  return{r,del,book,cash,renewal:sum(r,'renewal_value'),bookVal:sum(r,'booked_value'),cashVal:sum(r,'collected_value'),remain:sum(r,'remaining_collection_value')};
+}
+
+function retTeam(){
+  let x=retMetrics();
+  return hero('Today’s Retention Focus','Smart actions for delayed renewals and tier-based RM / CSM follow-up.',[['Delayed',i(x.del.length),'','r'],['Tier A',i(x.del.length),'','a'],['CSM Due',i(rows('retCov').length),'','p'],['RM Due',i(rows('retSide').length),'','b']])
+  +`<section class="card"><div class="hd"><div><h3>⚡ Smart Actions</h3></div><span class="tag blue">Retention manager view</span></div><div class="actionsList"><div class="act"><div class="no red">1</div><div class="grow"><b>Work ${i(x.del.length)} delayed renewals</b><small>Renewal date already passed and no current-year booked/cashed movement.</small></div><b class="num" style="color:var(--r)">${i(x.del.length)}</b></div><div class="act"><div class="no amber">2</div><div class="grow"><b>Clear Tier follow-ups</b><small>Tier cadence follow-up due by RM/CSM.</small></div><b class="num" style="color:var(--a)">${i(rows('retCov').length)}</b></div></div></section>`
+  +period(rows('retKpi'),[['Calls','connected_calls'],['Meetings','meetings_completed'],['Renewed','renewed_count'],['Booked','booked_count'],['Cashed','cashed_count'],['Churned','churned_count'],['Delayed','delayed_count']])
+  +monthly()
+  +`<div class="grid2"><div>${tbl('Unified Renewal Table',x.r,['company_name','tier','renewal_value','month','renewal_date','rm_owner','csm_owner','renewal_status','hubspot_search_url'])}</div><div>${tbl('Coverage Quality',rows('retCov'),['role','owner_name','accounts','delayed_accounts','calls_logged','connected_calls','meetings_logged','meetings_completed','coverage_status'])}${tbl('Churn Reasons',x.r.filter(r=>/lost|churn/i.test(String(r.renewal_status||r.status||''))),['company_name','product','renewal_value','renewal_status','rm_owner','csm_owner'])}</div></div>${tbl('RM / CSM Follow-up Metrics by Tier',x.r,['company_name','tier','rm_owner','csm_owner','renewal_status'])}`;
+}
+
+function monthly(){
+  let map={};
+  rows('ret').filter(ok).forEach(r=>{
+    let mo=String(r.month||'Unknown').slice(0,3)||'Unknown';
+    map[mo]=map[mo]||{month:mo,due:0,renewed:0,booked:0,cashed:0,delayed:0,value:0,what_happens:''};
+    let o=map[mo];o.due++;o.value+=n(r.renewal_value);
+    if(n(r.booked_value)>0)o.booked++;
+    if(n(r.collected_value)>0)o.cashed++;
+    if(/delayed/i.test(String(r.renewal_status||r.status||'')))o.delayed++;
+    if(n(r.booked_value)>0||n(r.collected_value)>0)o.renewed++;
+    o.what_happens=o.delayed?`${o.delayed} delayed renewal(s) need action`:`${o.renewed} renewed`;
+  });
+  return tbl('Monthly Renewal Pipeline',Object.values(map),['month','due','renewed','booked','cashed','delayed','value','what_happens']);
+}
+
+function retFinancial(){
+  let x=retMetrics(),not=rows('notBudget'),lost=x.r.filter(r=>/lost|churn/i.test(String(r.renewal_status||r.status||'')));
+  return hero('Retention Financial Details','Budget, booking, collection, not-in-budget and renewal status split.',[])
+  +`<div class="kpis">${kpi('Budget Renewal',money(x.renewal),`${i(x.r.length)} rows`,'b',x.r)}${kpi('Booked Total',money(x.bookVal),`${i(x.book.length)} booked`,'p',x.book)}${kpi('Cash Collected',money(x.cashVal),`${i(x.cash.length)} cashed`,'g',x.cash)}${kpi('Remaining',money(x.remain),'open collection','b',x.r.filter(r=>n(r.remaining_collection_value)>0))}${kpi('Delayed',i(x.del.length),'needs action','r',x.del)}${kpi('Not in Budget',i(not.length),'outside budget','a',not)}</div>${tbl('Owner Financial Summary',rows('retSide'),['owner_name','role','accounts','renewal_value','booked_value','cash_collected','delayed_accounts'])}${tbl('Booked Value Total',x.book,['company_name','rm_owner','csm_owner','product','month','renewal_value','booked_value','collected_value','remaining_collection_value','renewal_status'])}${tbl('Cash Collected',x.cash,['company_name','rm_owner','csm_owner','product','month','renewal_value','booked_value','collected_value','remaining_collection_value','renewal_status'])}${tbl('Delayed',x.del,['company_name','rm_owner','csm_owner','product','month','renewal_value','booked_value','collected_value','remaining_collection_value','renewal_status'])}${tbl('Lost',lost,['company_name','rm_owner','csm_owner','product','month','renewal_value','renewal_status'])}${tbl('Not In Budget',not)}`;
+}
+
+function retOwner(name){
+  let r=rows('ret').filter(x=>ok(x)&&(norm(x.rm_owner)===norm(name)||norm(x.csm_owner)===norm(name)||norm(x.owner_name)===norm(name)));
+  return hero(name,'Retention owner view: renewal rows, action items and financial exposure.',[])
+  +`<div class="kpis">${kpi('Accounts',i(r.length),'','b',r)}${kpi('Renewal Value',money(sum(r,'renewal_value')),'','g',r)}${kpi('Booked',money(sum(r,'booked_value')),'','p',r.filter(x=>n(x.booked_value)>0))}${kpi('Cash',money(sum(r,'collected_value')),'','g',r.filter(x=>n(x.collected_value)>0))}${kpi('Delayed',i(r.filter(x=>/delayed/i.test(String(x.renewal_status||x.status||''))).length),'','r',r.filter(x=>/delayed/i.test(String(x.renewal_status||x.status||''))))}</div>${tbl('Owner Renewal Rows',r,['company_name','tier','product','month','renewal_value','booked_value','collected_value','remaining_collection_value','rm_owner','csm_owner','renewal_status','hubspot_search_url'])}`;
+}
+
+function features(){
+  return hero('Features Plan for Upselling','Company-level feature plan and status.',[])
+  +`<div class="grid2">${tbl('Features Plan Summary',rows('upS'))}${tbl('Company Summary',rows('upC'))}</div>`;
+}
+
+function pnl(){
+  let r=rows('pnl').filter(ok),mm=rows('pnlM').filter(ok),b=rows('pnlB').filter(ok);
+  return hero('Executive P&L Dashboard','Booking, cashing, cost breakdown and margin views.',[])
+  +`<div class="kpis">${kpi('Booking',money(sum(r,'booking')),'','g',mm)}${kpi('Cashing',money(sum(r,'cashing')),'','b',mm)}${kpi('COGS',money(sum(r,'cogs')),'','r',b)}${kpi('Overheads',money(sum(r,'overheads')),'','a',b)}${kpi('Support Allocation',money(sum(r,'support_allocation')),'','p',b)}${kpi('Total Cost',money(sum(r,'total_cost')),'','r',b)}${kpi('Net Cash',money(sum(r,'net_cash_position')),'','g',mm)}</div><div class="grid2">${tbl('P&L Product Summary',r)}${tbl('Year Comparison',rows('pnlC'))}</div>${tbl('Monthly P&L',mm)}`;
+}
+
+function pnlDetails(){
+  return hero('P&L Cost Breakdown','COGS, overheads and support allocation by month/product.',[])
+  +tbl('Cost Breakdown',rows('pnlB').filter(ok))
+  +tbl('Monthly Advanced',rows('pnlM').filter(ok));
+}
+
+loadAll();
+setInterval(loadAll,300000);
+</script>
+</body>
+</html>

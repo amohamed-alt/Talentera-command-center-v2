@@ -12,7 +12,7 @@
 :root{
   --g:#16a34a;--gd:#15803d;--b:#2563eb;--p:#7c3aed;--a:#d97706;--r:#dc2626;--c:#0891b2;
   --ink:#0f1a14;--ink2:#30463a;--mut:#71877b;--line:#e2ebe6;
-  --side:#0f1a14;--sideText:#a8c2b2;--sideMuted:#7f9c8d;--sideAccent:#3dd68c;
+  --side:rgba(239,248,242,.94);--sideText:#2f4b3d;--sideMuted:#6f877b;--sideAccent:#16a34a;
   --bg:#eef5f1;--white:#fff;--font:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'DM Mono',monospace
 }
 *{box-sizing:border-box}
@@ -24,19 +24,19 @@ linear-gradient(90deg,rgba(22,163,74,.05) 1px,transparent 1px),
 linear-gradient(rgba(22,163,74,.05) 1px,transparent 1px);background-size:auto,auto,34px 34px,34px 34px}
 button,input,select{font-family:inherit}button{cursor:pointer}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#cfdad4;border-radius:999px}
-.app{display:flex}.side{position:fixed;inset:0 auto 0 0;width:230px;background:var(--side);color:var(--sideText);overflow:auto;z-index:5}
-.brand{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:10px;align-items:center}
+.app{display:flex}.side{position:fixed;inset:0 auto 0 0;width:230px;background:linear-gradient(180deg,rgba(239,248,242,.96),rgba(232,245,237,.86));color:var(--sideText);overflow:auto;z-index:5;border-right:1px solid rgba(22,64,42,.12);box-shadow:inset -1px 0 rgba(255,255,255,.65);backdrop-filter:blur(18px)}
+.brand{padding:16px 18px;border-bottom:1px solid rgba(22,64,42,.12);display:flex;gap:10px;align-items:center}
 .logo{width:33px;height:33px;border-radius:50%;background:#fff;border:3px solid #f5c542;color:#0f1a14;display:grid;place-items:center;font-weight:900}
-.brand b{display:block;color:#fff;font-size:15px}.brand small{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--sideText)}
-.sec{padding:18px 18px 5px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#71877b}
+.brand b{display:block;color:#102019;font-size:15px}.brand small{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--sideMuted);font-weight:800}
+.sec{padding:18px 18px 5px;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:rgba(48,70,58,.55)}
 .nav{width:calc(100% - 12px);margin:1px 6px;border:0;background:transparent;color:var(--sideText);border-radius:8px;padding:8px 10px;text-align:left;font-weight:800;font-size:12px;display:flex;gap:9px;align-items:center}
-.nav:hover,.nav.on{background:rgba(61,214,140,.12);color:var(--sideAccent)}
-.nav small{display:block;font-size:9px;color:var(--sideMuted);margin-top:2px;line-height:1.15}
-.badge{margin-left:auto;background:rgba(220,38,38,.2);color:#fca5a5;border-radius:99px;padding:2px 6px;font:800 9px var(--mono)}
-.viewTag{display:inline-flex;border:1px solid rgba(8,145,178,.25);background:rgba(8,145,178,.15);color:#22d3ee;border-radius:4px;padding:1px 5px;font-size:8px;font-weight:900;margin-left:4px}
-.user{position:sticky;bottom:0;margin-top:30px;padding:12px 8px;background:linear-gradient(transparent,#0f1a14 25%)}
-.u{display:flex;gap:9px;align-items:center;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px}
-.av{width:30px;height:30px;border-radius:9px;background:var(--sideAccent);color:#0f1a14;display:grid;place-items:center;font-size:11px;font-weight:900}
+.nav:hover,.nav.on{background:rgba(255,255,255,.72);color:var(--sideAccent);box-shadow:0 8px 22px rgba(17,47,31,.07);border:1px solid rgba(22,163,74,.16)}
+.nav small{display:block;font-size:9px;color:var(--sideMuted);margin-top:2px;line-height:1.15;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{margin-left:auto;background:rgba(220,38,38,.10);color:#dc2626;border:1px solid rgba(220,38,38,.16);border-radius:99px;padding:2px 6px;font:800 9px var(--mono)}
+.viewTag{display:inline-flex;border:1px solid rgba(8,145,178,.22);background:rgba(8,145,178,.10);color:#0891b2;border-radius:4px;padding:1px 5px;font-size:8px;font-weight:900;margin-left:4px}
+.user{position:sticky;bottom:0;margin-top:30px;padding:12px 8px;background:linear-gradient(transparent,rgba(239,248,242,.98) 25%)}
+.u{display:flex;gap:9px;align-items:center;border:1px solid rgba(22,64,42,.12);background:rgba(255,255,255,.62);border-radius:10px;padding:8px}
+.av{width:30px;height:30px;border-radius:9px;background:var(--sideAccent);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:900}
 .main{margin-left:230px;width:calc(100% - 230px);min-height:100vh;position:relative}
 .top{height:60px;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:4}
 .tt{font-weight:900;font-size:15px}.ts{font-size:11px;color:var(--mut);margin-top:2px}.right{margin-left:auto;display:flex;gap:10px;align-items:center}
@@ -86,7 +86,7 @@ td{padding:10px 12px;border-bottom:1px solid #edf2ef;font-size:11px;font-weight:
   <aside class="side">
     <div class="brand"><div class="logo">T</div><div><b>Talentera</b><small>Sales Command Center</small></div></div>
     <div id="nav"></div>
-    <div class="user"><div class="u"><div class="av">SM</div><div><b style="color:#fff;font-size:12px">Sales Manager</b><small style="display:block">Admin · Riyadh</small></div></div></div>
+    <div class="user"><div class="u"><div class="av">SM</div><div><b style="color:#102019;font-size:12px">Sales Manager</b><small style="display:block;color:#6f877b">Admin · Riyadh</small></div></div></div>
   </aside>
 
   <main class="main">
@@ -142,6 +142,9 @@ const view={
 };
 
 const S={main:'retention',tab:'retTeam',f:{year:'2026',month:'all',product:'all',owner:'all',country:'all',rank:'all',q:''},d:{},time:null};
+const ACQ_ACTIVITY_OWNERS=['Marita Chedid','Zein Fares','Ursula Waked','Ahmad Khawajah','Mohammad Khalid','Mohammad Jehad Al-Barqawi','Jehad Al-Barqawi'];
+const ACQ_DEAL_ONLY_OWNERS=['Fadi Zanona','Mohammed Faizan','Mohammad Faizan'];
+const RETENTION_OWNERS=['Fadi Zanona','Mohammad Jehad Al-Barqawi','Jehad Al-Barqawi','Mohammed Faizan','Mohammad Faizan','Darshna Suresh','Haia Al-Zo’ubi','Haia Al-Zoubi','Hatem Alawneh','Maryam Alfarra','Sarah Al-jarrah','Sara Al-jarrah'];
 let C={},cid=0;
 const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -150,7 +153,7 @@ function n(v){let x=Number(String(v??'').replace(/[^0-9.-]/g,''));return isFinit
 function i(v){return Math.round(n(v)).toLocaleString()}
 function money(v){let x=n(v),s=x<0?'-':'',a=Math.abs(x);return s+'$'+(a>=1e6?(a/1e6).toFixed(1)+'M':Math.round(a).toLocaleString())}
 function pct(v){return (n(v)||0).toFixed(0)+'%'}
-function norm(v){return String(v??'').trim().toLowerCase()}
+function norm(v){return String(v??'').trim().toLowerCase()}function allowed(list,name){return list.some(x=>norm(x)===norm(name))}
 function sum(a,k){return (a||[]).reduce((x,r)=>x+n(r[k]),0)}
 function rows(k){return S.d[k]||[]}
 function esc(v){return String(v??'').replace(/[&<>"]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[x]))}
@@ -160,6 +163,7 @@ function linkCell(v,r){let u=recordUrl(r);return u?`<a class="link" target="_bla
 function ok(r){
   let f=S.f;
   return (f.q===''||Object.values(r).join(' ').toLowerCase().includes(f.q.toLowerCase()))
+  &&(f.year==='all'||!r.year||String(r.year)===String(f.year))
   &&(f.owner==='all'||norm(r.owner_name)===norm(f.owner)||norm(r.rm_owner)===norm(f.owner)||norm(r.csm_owner)===norm(f.owner))
   &&(f.country==='all'||norm(r.country)===norm(f.country))
   &&(f.rank==='all'||norm(r.rank)===norm(f.rank))
@@ -228,22 +232,22 @@ function nav(){
   [['acquisition','📊','Acquisition'],['retention','🛡️','Retention'],['pnl','📊','P&L']].forEach(x=>h+=`<button class="nav ${S.main===x[0]?'on':''}" onclick="setMain('${x[0]}')"><span>${x[1]}</span><span>${x[2]}</span></button>`);
   if(S.main==='acquisition'){
     h+='<div class="sec">Acquisition Reps</div>';
-    rows('acqReps').forEach(r=>h+=`<button class="nav ${S.tab==='rep:'+r.owner_name?'on':''}" onclick="setTab('rep:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)}<small>${i(r.connected_calls)} connected · ${i(r.meetings_completed)} meetings</small></span><span class="badge">${i(r.connected_calls)}</span></button>`);
-    rows('pipe').filter(r=>norm(r.owner_role)==='deals_only').forEach(r=>h+=`<button class="nav ${S.tab==='deal:'+r.owner_name?'on':''}" onclick="setTab('deal:${esc(r.owner_name)}')"><span>◆</span><span>${esc(r.owner_name)} <span class="viewTag">VIEW</span><small>${i(r.open_deals)} open · ${money(r.open_pipeline)}</small></span></button>`);
+    rows('acqReps').filter(r=>allowed(ACQ_ACTIVITY_OWNERS,r.owner_name)).forEach(r=>h+=`<button class="nav ${S.tab==='rep:'+r.owner_name?'on':''}" onclick="setTab('rep:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)}<small>${i(r.connected_calls)} connected · ${i(r.meetings_completed)} meetings</small></span><span class="badge">${i(r.connected_calls)}</span></button>`);
+    rows('pipe').filter(r=>norm(r.owner_role)==='deals_only'||allowed(ACQ_DEAL_ONLY_OWNERS,r.owner_name)).forEach(r=>h+=`<button class="nav ${S.tab==='deal:'+r.owner_name?'on':''}" onclick="setTab('deal:${esc(r.owner_name)}')"><span>◆</span><span>${esc(r.owner_name)} <span class="viewTag">VIEW</span><small>${i(r.open_deals)} open · ${money(r.open_pipeline)}</small></span></button>`);
   }
   if(S.main==='retention'){
     h+='<div class="sec">Retention</div>';
     [['retTeam','Team Overview'],['retFinancial','Financial Details'],['features','Features Plan']].forEach(x=>h+=`<button class="nav ${S.tab===x[0]?'on':''}" onclick="setTab('${x[0]}')"><span>•</span><span>${x[1]}</span></button>`);
     h+='<div class="sec">Retention Team</div>';
-    rows('retSide').forEach(r=>h+=`<button class="nav ${S.tab==='ret:'+r.owner_name?'on':''}" onclick="setTab('ret:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)} <span class="viewTag">${esc(r.role||'')}</span><small>${i(r.accounts)} accounts · ${money(r.renewal_value)}</small></span><span class="badge">${i(r.delayed_accounts)}</span></button>`);
+    rows('retSide').filter(r=>allowed(RETENTION_OWNERS,r.owner_name)).forEach(r=>h+=`<button class="nav ${S.tab==='ret:'+r.owner_name?'on':''}" onclick="setTab('ret:${esc(r.owner_name)}')"><span>●</span><span>${esc(r.owner_name)} <span class="viewTag">${esc(r.role||'')}</span><small>${i(r.accounts)} accounts · ${money(r.renewal_value)}</small></span><span class="badge">${i(r.delayed_accounts)}</span></button>`);
   }
   el('nav').innerHTML=h;
 }
 
 function tabs(){
   let t=[];
-  if(S.main==='acquisition')t=[['acqTeam','🏦 Team Overview'],['acqFinancial','💰 Financial Details'],...rows('acqReps').map(r=>['rep:'+r.owner_name,r.owner_name]),...rows('pipe').filter(r=>norm(r.owner_role)==='deals_only').map(r=>['deal:'+r.owner_name,r.owner_name+' VIEW'])];
-  else if(S.main==='retention')t=[['retTeam','🛡️ Team Overview'],['retFinancial','💰 Financial Details'],['features','✨ Features Plan'],...rows('retSide').map(r=>['ret:'+r.owner_name,r.owner_name])];
+  if(S.main==='acquisition')t=[['acqTeam','🏦 Team Overview'],['acqFinancial','💰 Financial Details'],...rows('acqReps').filter(r=>allowed(ACQ_ACTIVITY_OWNERS,r.owner_name)).map(r=>['rep:'+r.owner_name,r.owner_name]),...rows('pipe').filter(r=>norm(r.owner_role)==='deals_only'||allowed(ACQ_DEAL_ONLY_OWNERS,r.owner_name)).map(r=>['deal:'+r.owner_name,r.owner_name+' VIEW'])];
+  else if(S.main==='retention')t=[['retTeam','🛡️ Team Overview'],['retFinancial','💰 Financial Details'],['features','✨ Features Plan'],...rows('retSide').filter(r=>allowed(RETENTION_OWNERS,r.owner_name)).map(r=>['ret:'+r.owner_name,r.owner_name])];
   else t=[['pnl','📊 P&L Dashboard'],['pnlDetails','Cost Breakdown']];
   el('tabs').innerHTML=t.map(x=>`<button class="tab ${S.tab===x[0]?'on':''}" onclick="setTab('${esc(x[0])}')">${esc(x[1])}</button>`).join('');
 }
@@ -252,6 +256,7 @@ function filters(){
   let all=[...rows('rank'),...rows('need'),...rows('ret'),...rows('pnl'),...rows('pnlM'),...rows('upC')];
   let owners=uniq([...all.map(r=>r.owner_name),...all.map(r=>r.rm_owner),...all.map(r=>r.csm_owner)]);
   el('filters').innerHTML=`<input class="f" placeholder="Search…" value="${esc(S.f.q)}" oninput="setF('q',this.value)">
+  <select class="f" onchange="setF('year',this.value)"><option value="all">All Years</option>${uniq(all.map(r=>r.year)).length?uniq(all.map(r=>r.year)).map(x=>`<option ${S.f.year==x?'selected':''}>${esc(x)}</option>`).join(''):`<option ${S.f.year==='2026'?'selected':''}>2026</option>`}</select>
   <select class="f" onchange="setF('month',this.value)"><option value="all">All Months</option>${M.map(x=>`<option ${S.f.month===x?'selected':''}>${x}</option>`).join('')}</select>
   <select class="f" onchange="setF('product',this.value)"><option value="all">All Products</option>${uniq(all.map(r=>r.product||r.product_line)).map(x=>`<option ${S.f.product===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
   <select class="f" onchange="setF('owner',this.value)"><option value="all">All Owners</option>${owners.map(x=>`<option ${S.f.owner===x?'selected':''}>${esc(x)}</option>`).join('')}</select>
@@ -297,7 +302,7 @@ function acqRep(name){
   let rep=rows('acqRep').find(r=>norm(r.owner_name)===norm(name))||{},details=rows('rank').filter(r=>ok(r)&&norm(r.owner_name)===norm(name)),needs=rows('need').filter(r=>ok(r)&&norm(r.owner_name)===norm(name)),deals=rows('deals').filter(r=>norm(r.owner_name)===norm(name)),open=deals.filter(r=>norm(r.deal_status)==='open'),stuck=rows('stuck').filter(r=>norm(r.owner_name)===norm(name));
   return hero(name,'Rep activity, needs contact, AI coaching, open deals, Rank A/B and stuck deals.',[['Calls',i(rep.calls_mtd),'','b'],['Rate',pct(rep.conn_rate_mtd),'','r'],['Meetings',i(rep.completed_mtd),'','p'],['Pipeline',money(sum(open,'amount')),'','g']])
   +period([{period:'yesterday',calls_logged:rep.calls_yesterday,connection_rate:rep.conn_rate_yesterday,meetings_completed:rep.completed_yesterday},{period:'mtd',calls_logged:rep.calls_mtd,connection_rate:rep.conn_rate_mtd,meetings_completed:rep.completed_mtd},{period:'ytd',calls_logged:rep.calls_ytd,connection_rate:rep.conn_rate_ytd,meetings_completed:rep.completed_ytd}], [['Calls','calls_logged'],['Conv. Rate','connection_rate',r=>pct(r.connection_rate),'','r'],['Meetings','meetings_completed'],['Leads','leads',()=>i(needs.length),'needs contact','c'],['Won','won',()=>i(deals.filter(x=>norm(x.deal_status)==='won').length),'','g'],['Lost','lost',()=>i(deals.filter(x=>norm(x.deal_status)==='lost').length),'','r']])
-  +`<div class="grid2">${tbl('Online / Inbound Needs Contact',needs.filter(r=>norm(r.source_type)==='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}${tbl('Offline / Outbound Needs Contact',needs.filter(r=>norm(r.source_type)!=='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}</div><div class="grid2">${tbl('Open Deals',open,['dealname','dealstage','amount','product','closedate','hubspot_url'])}${rankCard(details)}</div>${tbl('Stuck Deals (>21 days)',stuck,['dealname','dealstage','amount','days_in_stage','days_since_modified','hubspot_url'])}`;
+  +`<div class="grid2">${tbl('Online / Inbound Needs Contact',needs.filter(r=>norm(r.source_type)==='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}${tbl('Offline / Outbound Needs Contact',needs.filter(r=>norm(r.source_type)!=='online'),['company_name','country','rank','source_type','connected_calls','completed_meetings','hubspot_url'])}</div>${tbl('AI Coaching / Attention Deals',[...stuck,...rows('cold').filter(r=>norm(r.owner_name)===norm(name))].filter((r,idx,arr)=>idx===arr.findIndex(x=>x.hubspot_deal_id===r.hubspot_deal_id)),['dealname','dealstage','amount','days_in_stage','days_since_modified','hubspot_url'])}<div class="grid2">${tbl('Open Deals',open,['dealname','dealstage','amount','product','closedate','hubspot_url'])}${rankCard(details)}</div>${tbl('Stuck Deals (>21 days)',stuck,['dealname','dealstage','amount','days_in_stage','days_since_modified','hubspot_url'])}`;
 }
 
 function rankCard(details){

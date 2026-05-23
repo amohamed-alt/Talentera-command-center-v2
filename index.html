@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <title>Talentera · Sales Command Center</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=DM+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <style>
 :root{--primary:#16A34A;--primary-dk:#15803D;--sb-bg:#0F1A14;--sb-text:#8BAD8A;--sb-accent:#3DD68C;--sb-border:rgba(61,214,140,0.1);--sb-w:230px;--page-bg:#F0F4F2;--surface:#FFFFFF;--surface2:#F7FAF8;--border:#E4EBE7;--text:#0D1F16;--text2:#3A5044;--muted:#6B877A;--green:#16A34A;--green-bg:rgba(22,163,74,0.08);--green-bd:rgba(22,163,74,0.2);--red:#DC2626;--red-bg:rgba(220,38,38,0.08);--red-bd:rgba(220,38,38,0.2);--amber:#D97706;--amber-bg:rgba(217,119,6,0.08);--amber-bd:rgba(217,119,6,0.2);--blue:#2563EB;--blue-bg:rgba(37,99,235,0.08);--blue-bd:rgba(37,99,235,0.2);--purple:#7C3AED;--purple-bg:rgba(124,58,237,0.08);--purple-bd:rgba(124,58,237,0.2);--cyan:#0891B2;--cyan-bg:rgba(8,145,178,0.08);--font:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"DM Mono",monospace;--r-sm:8px;--r:12px;--r-lg:18px;--sh-xs:0 1px 3px rgba(0,0,0,0.06);--sh:0 2px 8px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.05);--sh-md:0 6px 24px rgba(0,0,0,0.09),0 2px 6px rgba(0,0,0,0.05)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1558,591 +1559,562 @@ body::after{
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="auth-locked">
-
-<div id="authGate" class="auth-gate" aria-label="Dashboard password login">
-  <div class="auth-card">
-    <div class="auth-card-top">
-      <div class="auth-logo-row">
-        <div class="auth-logo-mark">T</div>
-        <div>
-          <div class="auth-brand">Talentera</div>
-          <div class="auth-subbrand">Sales Command Center</div>
-        </div>
-      </div>
-      <div class="auth-title">Dashboard Login</div>
-      <div class="auth-copy">Enter the dashboard password to continue.</div>
-    </div>
-    <div class="auth-card-body">
-      <form id="authForm" autocomplete="off">
-        <label class="auth-label" for="authPassword">Password</label>
-        <div class="auth-input-wrap">
-          <input id="authPassword" class="auth-input" type="password" placeholder="Enter password" autocomplete="current-password">
-          <button type="button" class="auth-eye" id="authToggle" aria-label="Show password">👁️</button>
-        </div>
-        <button type="submit" class="auth-btn">Login</button>
-        <div id="authError" class="auth-error">Incorrect password. Please try again.</div>
-        <div class="auth-note">Access is required before opening the dashboard. Refresh will not ask again after login.</div>
-      </form>
-    </div>
-  </div>
+<div aria-label="Dashboard password login" class="auth-gate" id="authGate">
+<div class="auth-card">
+<div class="auth-card-top">
+<div class="auth-logo-row">
+<div class="auth-logo-mark">T</div>
+<div>
+<div class="auth-brand">Talentera</div>
+<div class="auth-subbrand">Sales Command Center</div>
 </div>
-
+</div>
+<div class="auth-title">Dashboard Login</div>
+<div class="auth-copy">Enter the dashboard password to continue.</div>
+</div>
+<div class="auth-card-body">
+<form autocomplete="off" id="authForm">
+<label class="auth-label" for="authPassword">Password</label>
+<div class="auth-input-wrap">
+<input autocomplete="current-password" class="auth-input" id="authPassword" placeholder="Enter password" type="password"/>
+<button aria-label="Show password" class="auth-eye" id="authToggle" type="button">👁️</button>
+</div>
+<button class="auth-btn" type="submit">Login</button>
+<div class="auth-error" id="authError">Incorrect password. Please try again.</div>
+<div class="auth-note">Access is required before opening the dashboard. Refresh will not ask again after login.</div>
+</form>
+</div>
+</div>
+</div>
 <div class="app">
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" alt="Talentera" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <div style="display:none;font-size:14px;font-weight:700;color:#fff">Talentera</div>
-      <div class="logo-sub">Sales Command Center</div>
-    </div>
-    <div class="sidebar-section">Main</div>
-    <button class="nav-item active" id="side-acquisition" onclick="switchMainPanel('acquisition')"><span class="nav-icon">&#128202;</span> Acquisition</button>
+<aside class="sidebar">
+<div class="sidebar-logo">
+<img alt="Talentera" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg"/>
+<div style="display:none;font-size:14px;font-weight:700;color:#fff">Talentera</div>
+<div class="logo-sub">Sales Command Center</div>
+</div>
+<div class="sidebar-section">Main</div>
+<button class="nav-item active" id="side-acquisition" onclick="switchMainPanel('acquisition')"><span class="nav-icon">📊</span> Acquisition</button>
 <button class="nav-item" id="side-retention" onclick="switchMainPanel('retention')"><span class="qcq-logo">🛡️</span> Retention</button>
 <button class="nav-item" id="side-revenue-analysis-main" onclick="switchRetentionRevenueAnalysis()"><span class="nav-icon" style="color:var(--blue)">📊</span> P&amp;L</button>
-    <div class="sidebar-section" id="repsSectionTitle">Acquisition Reps</div>
-    <div id="sideRepLinks"></div>
-    <div class="sidebar-bottom">
-      <div class="user-row">
-        <div class="user-av">SM</div>
-        <div><div class="user-name">Sales Manager</div><div class="user-role">Admin &middot; Riyadh</div></div>
-      </div>
-    </div>
-  </aside>
-  <div class="main-area">
-    <div class="topbar">
-      <div>
-        <div class="topbar-title" id="topbarTitle">Acquisition · Team Overview</div>
-        <div class="topbar-sub" id="topbarSub">Loading...</div>
-      </div>
-      <div class="topbar-right">
-        <div class="live-badge"><span class="live-dot"></span>LIVE &middot; HUBSPOT</div>
-        <button class="refresh-btn" onclick="loadData()"><span id="ri">&#8635;</span> Refresh</button>
-      </div>
-    </div>
-    <div class="tabs-bar" id="tabsBar">
-      <button class="tab-btn active" id="tab-team" onclick="switchTab('team')">&#127962; Team Overview</button>
-      <button class="tab-btn" id="tab-financial" onclick="switchTab('financial')">&#128176; Financial Details</button>
-    </div>
-    <div class="content">
-      <div class="loading" id="loadingState">
-        <div class="spinner"></div>
-        <div class="load-txt">Fetching latest HubSpot data&hellip;</div>
-      </div>
-      <div id="dashMain" style="display:none">
-        <div class="panel active" id="panel-team">
-
-          <!-- ═══════════════════════════════════════════════════ -->
-          <!-- COMMAND CENTER PREVIEW                              -->
-          <!-- ═══════════════════════════════════════════════════ -->
-          <div class="command-preview" id="commandPreview">
-            <div class="focus-strip">
-              <div class="focus-top">
-                <div>
-                  <div class="focus-title">Today&#8217;s Focus</div>
-                  <div class="focus-sub">The most important sales actions based on HubSpot activity and outreach.</div>
-                </div>
-                <div class="focus-date">Live Snapshot<br><span class="focus-date-val" id="cpGenAt">&#8212;</span></div>
-              </div>
-              <div class="focus-grid">
-                <div class="focus-pill" style="--fp-c:var(--red)"><div class="focus-pill-value" id="cpNotLeads">&#8212;</div><div class="focus-pill-label">Leads need contact</div><div class="focus-pill-sub" id="cpNotLeadsSub"></div></div>
-                <div class="focus-pill" style="--fp-c:var(--amber)"><div class="focus-pill-value" id="cpUntouched">&#8212;</div><div class="focus-pill-label">Rank A/B untouched</div><div class="focus-pill-sub" id="cpUntouchedSub"></div></div>
-                <div class="focus-pill" style="--fp-c:#f87171"><div class="focus-pill-value" id="cpAtRisk">&#8212;</div><div class="focus-pill-label">Deals at risk</div><div class="focus-pill-sub" id="cpAtRiskSub"></div></div>
-                <div class="focus-pill" id="cpRatePill" style="--fp-c:var(--sb-accent)"><div style="display:flex;align-items:center;gap:8px"><div class="focus-pill-value" id="cpContactRate">&#8212;</div><span class="focus-badge" id="cpRateBadge"></span></div><div class="focus-pill-label">Lead contact rate</div><div class="focus-pill-sub" id="cpContactRateSub"></div></div>
-              </div>
-              <div class="focus-focus-row"><span>&#9654;</span><span id="cpFocusText">Loading manager focus&#8230;</span></div>
-            </div>
-
-            <div class="command-health-grid">
-              <div class="command-card">
-                <div class="command-card-top"><div class="command-card-title">Revenue Health</div><span class="command-card-accent" style="background:var(--green)"></span></div>
-                <div class="command-card-body"><div class="command-main-value" style="color:var(--green)" id="cpPipeline">&#8212;</div><div class="command-main-label">Open Pipeline</div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" style="color:var(--green)" id="cpWonMTD">&#8212;</div><div class="command-mini-l">Won MTD</div></div><div class="command-mini"><div class="command-mini-v" style="color:var(--red)" id="cpLostMTD">&#8212;</div><div class="command-mini-l">Lost MTD</div></div></div></div>
-              </div>
-              <div class="command-card">
-                <div class="command-card-top"><div class="command-card-title">Outreach Health</div><span class="command-card-accent" style="background:var(--cyan)"></span></div>
-                <div class="command-card-body"><div class="command-main-value" style="color:var(--cyan)" id="cpOutreachRate">&#8212;</div><div class="command-main-label">Lead Contact Rate</div><div class="command-bar"><div class="command-bar-fill" id="cpOutreachBar" style="background:var(--cyan);width:0%"></div></div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" style="color:var(--green)" id="cpContactedLeads">&#8212;</div><div class="command-mini-l">Contacted</div></div><div class="command-mini"><div class="command-mini-v" style="color:var(--red)" id="cpNotContactedLeads">&#8212;</div><div class="command-mini-l">Not contacted</div></div></div></div>
-              </div>
-              <div class="command-card">
-                <div class="command-card-top"><div class="command-card-title">Rep Execution</div><span class="command-card-accent" style="background:var(--blue)"></span></div>
-                <div class="command-card-body"><div class="command-main-value" style="color:var(--blue)" id="cpCallsMTD">&#8212;</div><div class="command-main-label">Calls MTD</div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" style="color:var(--green)" id="cpConnMTD">&#8212;</div><div class="command-mini-l">Connected</div></div><div class="command-mini"><div class="command-mini-v" style="color:var(--purple)" id="cpMtgsMTD">&#8212;</div><div class="command-mini-l">Meetings</div></div></div></div>
-              </div>
-            </div>
-            <div class="priority-card"><div class="priority-head"><div class="priority-title">&#9889; Priority Actions</div><span class="badge bb">Manager view</span></div><div class="priority-list" id="cpPriorityList"></div></div>
-          </div>
-          <!-- /COMMAND CENTER PREVIEW -->
-
-          <div class="manager-summary-bar" id="managerSummaryBar" style="display:none!important">
-            <div>
-              <div class="manager-summary-main" id="managerSummaryMain">Loading executive summary…</div>
-              <div class="manager-summary-sub" id="managerSummarySub">Prioritized for manager action.</div>
-            </div>
-            <div class="manager-summary-actions" id="managerSummaryActions"></div>
-          </div>
-
-          <div class="manager-section-label" style="display:none!important">Manager Action Plan</div>
-
-          <div class="action-strip" id="managerActionStrip" style="display:none!important"></div>
-
-          <div class="manager-section-label">Critical Follow-ups</div>
-
-          <div class="compact-section" id="priorityLeadsSection">
-            <div class="compact-hd">
-              <div class="compact-title">🎯 Priority Leads & SLA Breaches</div>
-              <a class="quick-link" href="#outreachCard">View Outreach Details ↓</a>
-            </div>
-            <div class="compact-grid" id="managerMiniCards"></div>
-            <div class="mini-list" id="priorityLeadList"></div>
-          </div>
-
-          <div class="compact-section" id="leadFunnelSection">
-            <div class="compact-hd">
-              <div class="compact-title">🔻 Lead Funnel & Source Performance</div>
-              <span class="badge bb">Fallback from outreachCoverage</span>
-            </div>
-            <div class="funnel" id="leadFunnelGrid"></div>
-          </div>
-
-          <div class="compact-section" id="dataQualitySection" style="display:none!important">
-            <div class="compact-hd">
-              <div class="compact-title">🧹 Data Quality Warnings</div>
-              <span class="badge ba" id="dataQualityBadge">Auto check</span>
-            </div>
-            <div class="mini-list" id="dataQualityList"></div>
-          </div>
-
-          <div class="manager-section-label">Detailed Performance</div>
-
-          <div class="compact-section collapsible manager-secondary open" id="legacyKpiWrap">
-            <div class="compact-hd">
-              <div class="compact-title">📊 Detailed KPI Cards</div>
-              <button class="collapse-toggle collapse-state" onclick="toggleCollapse('legacyKpiWrap')"></button>
-            </div>
-            <div class="collapsible-body">
-              <div id="kpiSection"></div>
-            </div>
-          </div>
-
-          <div class="card manager-secondary">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">&#128202;</div>Yesterday's Performance</div>
-              <span class="badge bb" id="perfDate"></span>
-            </div>
-            <div style="overflow-x:auto"><table class="tbl">
-              <thead><tr>
-                <th>Rep</th><th class="c" style="color:var(--blue)">Calls</th><th class="c" style="color:var(--green)">Connected</th>
-                <th class="c" style="color:var(--red)">Missed</th><th class="c">Rate</th><th class="c" style="color:var(--purple)">Meetings</th>
-                <th class="c" style="color:var(--amber)">Open Deals</th><th class="c" style="color:var(--cyan)">Pipeline</th><th class="c">Health</th>
-              </tr></thead>
-              <tbody id="perfBody"></tbody>
-            </table></div>
-          </div>
-          <div class="card manager-secondary">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--amber-bg)">&#128161;</div>Insights &amp; Recommendations</div>
-              <span class="badge br" id="recBadge"></span>
-            </div>
-            <div id="recContainer"></div>
-          </div>
-          <div class="card manager-secondary">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">&#128317;</div>Acquisition Pipeline</div>
-              <span class="badge bb" id="pipeTotal"></span>
-            </div>
-            <div style="padding:14px 18px" id="pipeHorizContainer"></div>
-          </div>
-          <div style="margin-bottom:14px">
-            <div class="sec-hd"><div class="sec-title">&#128301; Open Pipeline by Rep</div><span class="badge bb" id="pipeTotalBadge"></span></div>
-            <div class="pipe-cards-grid" id="pipeCards"></div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--sh)">
-              <span style="font-size:11px;font-weight:600;color:var(--muted)">Total Open Pipeline</span>
-              <span id="pipeTotalAmt" style="font-family:var(--mono);font-size:16px;font-weight:600;color:var(--primary)"></span>
-            </div>
-          </div>
-          <div class="card manager-secondary">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">&#9889;</div>AI Coaching Insights</div>
-              <span class="badge bp">No Next Activity</span>
-            </div>
-            <div class="coaching-grid" id="aiGrid"></div>
-            <div style="margin:0 14px 14px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r-sm);padding:12px 14px;border-left:3px solid var(--blue)">
-              <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">&#127919; Manager Focus</div>
-              <div style="font-size:11px;color:var(--text2)">Prioritize follow-ups with no next activity scheduled.</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--green-bg)">&#127919;</div>Leads Overview</div>
-              <div style="display:flex;gap:5px" id="leadsBadgeRow"></div>
-            </div>
-            <div class="leads-period-grid" id="leadsPeriods"></div>
-            <div style="overflow-x:auto"><table class="tbl">
-              <thead><tr>
-                <th>Rep</th>
-                <th class="c">Yesterday<br><span style="font-size:8px;font-weight:400;color:var(--muted)">&darr; in &middot; &uarr; out</span></th>
-                <th class="c">MTD<br><span style="font-size:8px;font-weight:400;color:var(--muted)">&darr; in &middot; &uarr; out</span></th>
-                <th class="c">YTD<br><span style="font-size:8px;font-weight:400;color:var(--muted)">&darr; in &middot; &uarr; out</span></th>
-              </tr></thead>
-              <tbody id="leadsRepBody"></tbody>
-            </table></div>
-          </div>
-          <!-- ═══════════════════════════════════════════════ -->
-          <!-- OUTREACH COVERAGE — under Leads Overview       -->
-          <!-- reads D.outreachCoverage from data.json        -->
-          <!-- ═══════════════════════════════════════════════ -->
-          <div class="manager-section-label">Coverage Control</div>
-
-          <div class="card manager-primary-card" id="outreachCard">
-            <div class="card-hd">
-              <div class="card-title">
-                <div class="card-title-icon" style="background:var(--cyan-bg)">&#128225;</div>
+<div class="sidebar-section" id="repsSectionTitle">Acquisition Reps</div>
+<div id="sideRepLinks"></div>
+<div class="sidebar-bottom">
+<div class="user-row">
+<div class="user-av">SM</div>
+<div><div class="user-name">Sales Manager</div><div class="user-role">Admin · Riyadh</div></div>
+</div>
+</div>
+</aside>
+<div class="main-area">
+<div class="topbar">
+<div>
+<div class="topbar-title" id="topbarTitle">Acquisition · Team Overview</div>
+<div class="topbar-sub" id="topbarSub">Loading...</div>
+</div>
+<div class="topbar-right">
+<div class="live-badge"><span class="live-dot"></span>LIVE · HUBSPOT</div>
+<button class="refresh-btn" onclick="loadData()"><span id="ri">↻</span> Refresh</button>
+</div>
+</div>
+<div class="tabs-bar" id="tabsBar">
+<button class="tab-btn active" id="tab-team" onclick="switchTab('team')">🏚 Team Overview</button>
+<button class="tab-btn" id="tab-financial" onclick="switchTab('financial')">💰 Financial Details</button>
+</div>
+<div class="content">
+<div class="loading" id="loadingState">
+<div class="spinner"></div>
+<div class="load-txt">Fetching latest HubSpot data…</div>
+</div>
+<div id="dashMain" style="display:none">
+<div class="panel active" id="panel-team">
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- COMMAND CENTER PREVIEW                              -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="command-preview" id="commandPreview">
+<div class="focus-strip">
+<div class="focus-top">
+<div>
+<div class="focus-title">Today’s Focus</div>
+<div class="focus-sub">The most important sales actions based on HubSpot activity and outreach.</div>
+</div>
+<div class="focus-date">Live Snapshot<br/><span class="focus-date-val" id="cpGenAt">—</span></div>
+</div>
+<div class="focus-grid">
+<div class="focus-pill" style="--fp-c:var(--red)"><div class="focus-pill-value" id="cpNotLeads">—</div><div class="focus-pill-label">Leads need contact</div><div class="focus-pill-sub" id="cpNotLeadsSub"></div></div>
+<div class="focus-pill" style="--fp-c:var(--amber)"><div class="focus-pill-value" id="cpUntouched">—</div><div class="focus-pill-label">Rank A/B untouched</div><div class="focus-pill-sub" id="cpUntouchedSub"></div></div>
+<div class="focus-pill" style="--fp-c:#f87171"><div class="focus-pill-value" id="cpAtRisk">—</div><div class="focus-pill-label">Deals at risk</div><div class="focus-pill-sub" id="cpAtRiskSub"></div></div>
+<div class="focus-pill" id="cpRatePill" style="--fp-c:var(--sb-accent)"><div style="display:flex;align-items:center;gap:8px"><div class="focus-pill-value" id="cpContactRate">—</div><span class="focus-badge" id="cpRateBadge"></span></div><div class="focus-pill-label">Lead contact rate</div><div class="focus-pill-sub" id="cpContactRateSub"></div></div>
+</div>
+<div class="focus-focus-row"><span>▶</span><span id="cpFocusText">Loading manager focus…</span></div>
+</div>
+<div class="command-health-grid">
+<div class="command-card">
+<div class="command-card-top"><div class="command-card-title">Revenue Health</div><span class="command-card-accent" style="background:var(--green)"></span></div>
+<div class="command-card-body"><div class="command-main-value" id="cpPipeline" style="color:var(--green)">—</div><div class="command-main-label">Open Pipeline</div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" id="cpWonMTD" style="color:var(--green)">—</div><div class="command-mini-l">Won MTD</div></div><div class="command-mini"><div class="command-mini-v" id="cpLostMTD" style="color:var(--red)">—</div><div class="command-mini-l">Lost MTD</div></div></div></div>
+</div>
+<div class="command-card">
+<div class="command-card-top"><div class="command-card-title">Outreach Health</div><span class="command-card-accent" style="background:var(--cyan)"></span></div>
+<div class="command-card-body"><div class="command-main-value" id="cpOutreachRate" style="color:var(--cyan)">—</div><div class="command-main-label">Lead Contact Rate</div><div class="command-bar"><div class="command-bar-fill" id="cpOutreachBar" style="background:var(--cyan);width:0%"></div></div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" id="cpContactedLeads" style="color:var(--green)">—</div><div class="command-mini-l">Contacted</div></div><div class="command-mini"><div class="command-mini-v" id="cpNotContactedLeads" style="color:var(--red)">—</div><div class="command-mini-l">Not contacted</div></div></div></div>
+</div>
+<div class="command-card">
+<div class="command-card-top"><div class="command-card-title">Rep Execution</div><span class="command-card-accent" style="background:var(--blue)"></span></div>
+<div class="command-card-body"><div class="command-main-value" id="cpCallsMTD" style="color:var(--blue)">—</div><div class="command-main-label">Calls MTD</div><div class="command-sub-row"><div class="command-mini"><div class="command-mini-v" id="cpConnMTD" style="color:var(--green)">—</div><div class="command-mini-l">Connected</div></div><div class="command-mini"><div class="command-mini-v" id="cpMtgsMTD" style="color:var(--purple)">—</div><div class="command-mini-l">Meetings</div></div></div></div>
+</div>
+</div>
+<div class="priority-card"><div class="priority-head"><div class="priority-title">⚡ Priority Actions</div><span class="badge bb">Manager view</span></div><div class="priority-list" id="cpPriorityList"></div></div>
+</div>
+<!-- /COMMAND CENTER PREVIEW -->
+<div class="manager-summary-bar" id="managerSummaryBar" style="display:none!important">
+<div>
+<div class="manager-summary-main" id="managerSummaryMain">Loading executive summary…</div>
+<div class="manager-summary-sub" id="managerSummarySub">Prioritized for manager action.</div>
+</div>
+<div class="manager-summary-actions" id="managerSummaryActions"></div>
+</div>
+<div class="manager-section-label" style="display:none!important">Manager Action Plan</div>
+<div class="action-strip" id="managerActionStrip" style="display:none!important"></div>
+<div class="manager-section-label">Critical Follow-ups</div>
+<div class="compact-section" id="priorityLeadsSection">
+<div class="compact-hd">
+<div class="compact-title">🎯 Priority Leads &amp; SLA Breaches</div>
+<a class="quick-link" href="#outreachCard">View Outreach Details ↓</a>
+</div>
+<div class="compact-grid" id="managerMiniCards"></div>
+<div class="mini-list" id="priorityLeadList"></div>
+</div>
+<div class="compact-section" id="leadFunnelSection">
+<div class="compact-hd">
+<div class="compact-title">🔻 Lead Funnel &amp; Source Performance</div>
+<span class="badge bb">Supabase outreachCoverage</span>
+</div>
+<div class="funnel" id="leadFunnelGrid"></div>
+</div>
+<div class="compact-section" id="dataQualitySection" style="display:none!important">
+<div class="compact-hd">
+<div class="compact-title">🧹 Data Quality Warnings</div>
+<span class="badge ba" id="dataQualityBadge">Auto check</span>
+</div>
+<div class="mini-list" id="dataQualityList"></div>
+</div>
+<div class="manager-section-label">Detailed Performance</div>
+<div class="compact-section collapsible manager-secondary open" id="legacyKpiWrap">
+<div class="compact-hd">
+<div class="compact-title">📊 Detailed KPI Cards</div>
+<button class="collapse-toggle collapse-state" onclick="toggleCollapse('legacyKpiWrap')"></button>
+</div>
+<div class="collapsible-body">
+<div id="kpiSection"></div>
+</div>
+</div>
+<div class="card manager-secondary">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">📊</div>Yesterday's Performance</div>
+<span class="badge bb" id="perfDate"></span>
+</div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr>
+<th>Rep</th><th class="c" style="color:var(--blue)">Calls</th><th class="c" style="color:var(--green)">Connected</th>
+<th class="c" style="color:var(--red)">Missed</th><th class="c">Rate</th><th class="c" style="color:var(--purple)">Meetings</th>
+<th class="c" style="color:var(--amber)">Open Deals</th><th class="c" style="color:var(--cyan)">Pipeline</th><th class="c">Health</th>
+</tr></thead>
+<tbody id="perfBody"></tbody>
+</table></div>
+</div>
+<div class="card manager-secondary">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--amber-bg)">💡</div>Insights &amp; Recommendations</div>
+<span class="badge br" id="recBadge"></span>
+</div>
+<div id="recContainer"></div>
+</div>
+<div class="card manager-secondary">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">🔽</div>Acquisition Pipeline</div>
+<span class="badge bb" id="pipeTotal"></span>
+</div>
+<div id="pipeHorizContainer" style="padding:14px 18px"></div>
+</div>
+<div style="margin-bottom:14px">
+<div class="sec-hd"><div class="sec-title">🔭 Open Pipeline by Rep</div><span class="badge bb" id="pipeTotalBadge"></span></div>
+<div class="pipe-cards-grid" id="pipeCards"></div>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--sh)">
+<span style="font-size:11px;font-weight:600;color:var(--muted)">Total Open Pipeline</span>
+<span id="pipeTotalAmt" style="font-family:var(--mono);font-size:16px;font-weight:600;color:var(--primary)"></span>
+</div>
+</div>
+<div class="card manager-secondary">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">⚡</div>AI Coaching Insights</div>
+<span class="badge bp">No Next Activity</span>
+</div>
+<div class="coaching-grid" id="aiGrid"></div>
+<div style="margin:0 14px 14px;background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:var(--r-sm);padding:12px 14px;border-left:3px solid var(--blue)">
+<div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">🎯 Manager Focus</div>
+<div style="font-size:11px;color:var(--text2)">Prioritize follow-ups with no next activity scheduled.</div>
+</div>
+</div>
+<div class="card">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--green-bg)">🎯</div>Leads Overview</div>
+<div id="leadsBadgeRow" style="display:flex;gap:5px"></div>
+</div>
+<div class="leads-period-grid" id="leadsPeriods"></div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr>
+<th>Rep</th>
+<th class="c">Yesterday<br/><span style="font-size:8px;font-weight:400;color:var(--muted)">↓ in · ↑ out</span></th>
+<th class="c">MTD<br/><span style="font-size:8px;font-weight:400;color:var(--muted)">↓ in · ↑ out</span></th>
+<th class="c">YTD<br/><span style="font-size:8px;font-weight:400;color:var(--muted)">↓ in · ↑ out</span></th>
+</tr></thead>
+<tbody id="leadsRepBody"></tbody>
+</table></div>
+</div>
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OUTREACH COVERAGE — under Leads Overview       -->
+<!-- reads D.outreachCoverage from Supabase        -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="manager-section-label">Coverage Control</div>
+<div class="card manager-primary-card" id="outreachCard">
+<div class="card-hd">
+<div class="card-title">
+<div class="card-title-icon" style="background:var(--cyan-bg)">📡</div>
                 Lead Outreach Coverage
               </div>
-              <div style="display:flex;gap:5px">
-                <span class="badge bb" id="outreachLeadBadge"></span>
-                <span class="badge bg" id="outreachCoBadge"></span>
-              </div>
-            </div>
-            <div class="outreach-kpi-grid" id="outreachKpiGrid"></div>
-            <div class="outreach-bar-wrap">
-              <div class="outreach-bar-row">
-                <div class="outreach-bar-header">
-                  <span class="outreach-bar-label" style="color:var(--cyan)">Leads Contacted Rate</span>
-                  <span class="outreach-bar-rate" id="outreachLeadRateVal" style="color:var(--cyan)"></span>
-                </div>
-                <div class="outreach-bar-track"><div class="outreach-bar-fill" id="outreachLeadRateBar" style="background:var(--cyan)"></div></div>
-              </div>
-              <div class="outreach-bar-row">
-                <div class="outreach-bar-header">
-                  <span class="outreach-bar-label" style="color:var(--green)">Companies Contacted Rate</span>
-                  <span class="outreach-bar-rate" id="outreachCoRateVal" style="color:var(--green)"></span>
-                </div>
-                <div class="outreach-bar-track"><div class="outreach-bar-fill" id="outreachCoRateBar" style="background:var(--green)"></div></div>
-              </div>
-            </div>
-            <div style="padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;gap:24px;flex-wrap:wrap">
-              <span style="font-size:10px;color:var(--muted)">Qualified outreach activities:</span>
-              <span id="outreachActCalls" style="font-size:10px;font-weight:700;color:var(--blue)"></span>
-              <span id="outreachActMeetings" style="font-size:10px;font-weight:700;color:var(--purple)"></span>
-            </div>
-            <div style="border-bottom:1px solid var(--border);padding:10px 18px;background:var(--surface2)">
-              <div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Source Split</div>
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px">
-                  <div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Online / Inbound</div>
-                  <div id="outreachOnlineSplit" style="font-family:var(--mono);font-size:14px;font-weight:600;margin-top:4px;color:var(--blue)">—</div>
-                </div>
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px">
-                  <div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Offline / Outbound</div>
-                  <div id="outreachOfflineSplit" style="font-family:var(--mono);font-size:14px;font-weight:600;margin-top:4px;color:var(--amber)">—</div>
-                </div>
-              </div>
-            </div>
-            <div style="border-top:1px solid var(--border)">
-              <div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.1em">&#9742;  Leads Need Contact</span>
-                <span class="badge br" id="outreachLeadNotBadge"></span>
-              </div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Contact</th><th>Owner</th><th>Source</th><th class="c">Created</th><th class="c">Connected Calls</th><th class="c">Days Without Contact</th></tr></thead><tbody id="outreachLeadNotBody"></tbody></table></div>
-              <div id="outreachLeadNotMore" style="display:none"><table class="tbl"><tbody id="outreachLeadNotBodyMore"></tbody></table></div>
-              <button class="see-more" id="outreachLeadNotToggle" style="display:none" onclick="toggleOutreach('LeadNot')">&#9660; Show more</button>
-            </div>
-            <div style="border-top:1px solid var(--border)">
-              <div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em">&#128203; Companies Not Contacted Yet</span>
-                <span class="badge ba" id="outreachCoNotBadge"></span>
-              </div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company</th><th>Owner</th><th class="c">Domain</th><th class="c">Created</th></tr></thead><tbody id="outreachCoNotBody"></tbody></table></div>
-              <div id="outreachCoNotMore" style="display:none"><table class="tbl"><tbody id="outreachCoNotBodyMore"></tbody></table></div>
-              <button class="see-more" id="outreachCoNotToggle" style="display:none" onclick="toggleOutreach('CoNot')">&#9660; Show more</button>
-            </div>
-          </div>
-          <!-- ═══════════════════════════════════════════════ -->
-
-          <div class="card manager-critical-card" id="rankCoverageCard">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">&#127919;</div>Rank A/B Coverage</div>
-              <div style="display:flex;gap:5px" id="rankBadgeRow"></div>
-            </div>
-            <div class="acq-rank-country-panel" id="rankCountryCoveragePanel">
-              <div class="acq-rank-country-head">
-                <div>
-                  <div class="acq-rank-country-title">🌍 Coverage by Country</div>
-                  <div class="acq-rank-country-sub" id="rankCountryCoverageSub">Contacted vs not contacted for Rank A/B accounts.</div>
-                </div>
-                <div class="acq-country-row" id="rankCountryCoverageChips"></div>
-              </div>
-              <div class="acq-rank-country-metrics" id="rankCountryCoverageMetrics"></div>
-              <div class="acq-rank-country-table">
-                <table class="tbl">
-                  <thead><tr><th>Rep</th><th class="c">A Touched</th><th class="c">A Untouched</th><th class="c">A Meetings Completed</th><th class="c">B Touched</th><th class="c">B Untouched</th><th class="c">B Meetings Completed</th><th class="c">Coverage</th></tr></thead>
-                  <tbody id="rankCountryCoverageRows"></tbody>
-                </table>
-              </div>
-            </div>
-            <div style="overflow-x:auto"><table class="tbl">
-              <thead><tr>
-                <th>Rep</th><th class="c">Rank A</th><th class="c" style="color:var(--green);font-size:8px">&#10003; A Contacted</th>
-                <th class="c" style="color:var(--red);font-size:8px">&#10007; A Untouched</th><th class="c">Rank B</th>
-                <th class="c" style="color:var(--green);font-size:8px">&#10003; B Contacted</th><th class="c" style="color:var(--amber);font-size:8px">&#10007; B Untouched</th>
-                <th class="c" style="color:var(--red)">Idle &gt;21d</th><th>Top Idle Accounts</th>
-              </tr></thead>
-              <tbody id="rankRepBody"></tbody>
-            </table></div>
-            <div style="border-top:1px solid var(--border);display:none!important">
-              <div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.1em">&#128203; Untouched Rank A Accounts</span>
-                <span class="badge br" id="untouchedABadge"></span>
-              </div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Company</th></tr></thead><tbody id="untouchedABody"></tbody></table></div>
-              <div id="untouchedAMore" style="display:none"><table class="tbl"><tbody id="untouchedABodyMore"></tbody></table></div>
-              <button class="see-more" id="untouchedAToggle" style="display:none" onclick="toggleUntouched('A')">&#9660; Show more</button>
-            </div>
-            <div style="border-top:1px solid var(--border);display:none!important">
-              <div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em">&#128203; Untouched Rank B Accounts</span>
-                <span class="badge ba" id="untouchedBBadge"></span>
-              </div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Company</th></tr></thead><tbody id="untouchedBBody"></tbody></table></div>
-              <div id="untouchedBMore" style="display:none"><table class="tbl"><tbody id="untouchedBBodyMore"></tbody></table></div>
-              <button class="see-more" id="untouchedBToggle" style="display:none" onclick="toggleUntouched('B')">&#9660; Show more</button>
-            </div>
-            <div style="border-top:1px solid var(--border);display:none!important">
-              <div class="card-hd" style="background:transparent;border:none;padding:8px 18px">
-                <span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Top 10 Inactive Accounts</span>
-              </div>
-              <div style="overflow-x:auto"><table class="tbl">
-                <thead><tr><th>Rank</th><th>Company</th><th class="c">Owner</th><th class="c">Last Activity</th></tr></thead>
-                <tbody id="rankBody"></tbody>
-              </table></div>
-              <div id="rankFooter" style="padding:8px 18px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);text-align:center;background:var(--surface2)"></div>
-            </div>
-          </div>
-          <div class="g2">
-            <div class="card" style="margin-bottom:0">
-              <div class="card-hd" style="border-left:3px solid var(--green)">
-                <div class="card-title" style="color:var(--green)">&#127942; Closed Won &mdash; MTD</div>
-                <span class="badge bg" id="wonBadge"></span>
-              </div>
-              <div id="wonContainer"></div>
-            </div>
-            <div class="card" style="margin-bottom:0">
-              <div class="card-hd" style="border-left:3px solid var(--red)">
-                <div class="card-title" style="color:var(--red)">&#10060; Closed Lost &mdash; MTD</div>
-                <span class="badge br" id="lostBadge"></span>
-              </div>
-              <div id="lostContainer"></div>
-            </div>
-          </div>
-          <div class="card" style="margin-top:14px">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">&#129302;</div>AI Sales Intelligence</div>
-              <span class="badge bp">Claude Analysis</span>
-            </div>
-            <div id="aiInsightsContainer"></div>
-          </div>
-          <div class="card" style="margin-top:14px">
-            <div class="card-hd">
-              <div class="card-title"><div class="card-title-icon" style="background:var(--surface2)">&#127758;</div>Market News &amp; Events</div>
-              <span style="font-size:10px;color:var(--muted);font-weight:500">HR &middot; Middle East &middot; Daily</span>
-            </div>
-            <div id="newsContainer"></div>
-          </div>
-        </div>
-
-        <div class="panel" id="panel-financial">
-          <div class="financial-hero">
-            <div class="financial-hero-icon">&#128176;</div>
-            <div>
-              <div class="financial-hero-title">Financial Details</div>
-              <div class="financial-hero-sub">A dedicated view for answering the manager's money questions: what has already cashed, what is signed but not cashed yet, and which signed deals need follow-up before they become real revenue.</div>
-            </div>
-          </div>
-          <div class="financial-guide-grid">
-            <div class="financial-guide-card" style="--fc:var(--green)"><div class="financial-guide-title">Cashing Revenue</div><div class="financial-guide-desc">Deals already moved to Cashing / Closed Won. This is the clearest money signal.</div></div>
-            <div class="financial-guide-card" style="--fc:var(--amber)"><div class="financial-guide-title">Signed Contract</div><div class="financial-guide-desc">Signed / Booking deals that are waiting to move into Cashing.</div></div>
-            <div class="financial-guide-card" style="--fc:var(--blue)"><div class="financial-guide-title">Pending to Cash</div><div class="financial-guide-desc">Expected value still before Cashing. Use it to prioritize collection and activation follow-up.</div></div>
-            <div class="financial-guide-card" style="--fc:var(--purple)"><div class="financial-guide-title">Signed Date</div><div class="financial-guide-desc">Shows when the agreement was signed so the manager can track aging.</div></div>
-            <div class="financial-guide-card" style="--fc:var(--red)"><div class="financial-guide-title">Follow-up Status</div><div class="financial-guide-desc">Highlights delayed signed deals and keeps financial risk separate from the main dashboard.</div></div>
-          </div>
-          <div class="card financial-card" id="financialDetailsCard">
-            <div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--green-bg)">&#128176;</div>Financial Details — Cashing / Signed</div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge bg" id="finCashingBadge"></span><span class="badge ba" id="finSignedBadge"></span></div></div>
-            <div class="financial-summary-grid" id="financialSummaryGrid"></div>
-            <div class="financial-split">
-              <div class="financial-subcard"><div class="financial-subhd"><div class="financial-subtitle" style="color:var(--green)">&#9989; Cashing</div><span class="fin-status ok" id="finCashingMini"></span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Rep</th><th class="c">Amount</th><th class="c">Signed Date</th><th class="c">Cashing Date</th><th class="c">Days</th></tr></thead><tbody id="financialCashingBody"></tbody></table></div></div>
-              <div class="financial-subcard"><div class="financial-subhd"><div class="financial-subtitle" style="color:var(--amber)">&#128221; Signed / Booking</div><span class="fin-status warn" id="finSignedMini"></span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Waiting Deal</th><th>Rep</th><th class="c">Amount</th><th class="c">Signed Date</th><th class="c">Waiting</th><th class="c">Status</th></tr></thead><tbody id="financialSignedBody"></tbody></table></div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" id="panel-retention-financial">
-          <div class="ret-fin-hero">
-            <div class="ret-fin-hero-icon">💰</div>
-            <div>
-              <div class="ret-fin-hero-title">Retention Financial Details</div>
-              <div class="ret-fin-hero-sub">A clean money view for Customer Success: Booked/Cashed are filtered exactly by deal stage = Booked or Cashed and date entered current stage = current year. Contract start date is displayed only as info and is not used.</div>
-            </div>
-          </div>
-
-          <div class="ret-fin-top-grid" id="retFinTopGrid"></div>
-
-          <div class="ret-fin-board">
-            <div class="ret-fin-board-hd">
-              <div class="ret-fin-board-title">📊 Owner Financial Summary</div>
-              <span class="badge bb" id="retFinOwnerBadge">Retention owners</span>
-            </div>
-            <div class="ret-fin-owner-grid" id="retFinOwnerGrid"></div>
-          </div>
-
-          <div class="ret-fin-split">
-            <div class="ret-fin-subcard" style="--sc:var(--green)">
-              <div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--green)">✅ Cashed This Year</div><span class="badge bg" id="retFinCashedBadge"></span></div>
-              <div class="ret-fin-mini-note">Stage = Cashed and date entered current stage is in the current year. Contract start date is not used.</div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Owner</th><th class="c">Amount</th><th class="c">Current Stage Date<br><span style="font-size:8px;font-weight:400;color:var(--muted)">Info only</span></th><th class="c">Date Entered Current Stage</th><th class="c">Status</th></tr></thead><tbody id="retFinCashedBody"></tbody></table></div>
-              <button class="ret-show-btn" id="retFinCashedToggle" onclick="toggleRetMore('retFinCashedBody', this)">▼ Show more</button>
-            </div>
-            <div class="ret-fin-subcard" style="--sc:var(--purple)">
-              <div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--purple)">📝 Booked This Year</div><span class="badge bp" id="retFinBookedBadge"></span></div>
-              <div class="ret-fin-mini-note">Stage = Booked and date entered current stage is in the current year. Contract start date is not used.</div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Owner</th><th class="c">Amount</th><th class="c">Current Stage Date<br><span style="font-size:8px;font-weight:400;color:var(--muted)">Info only</span></th><th class="c">Date Entered Current Stage</th><th class="c">Status</th></tr></thead><tbody id="retFinBookedBody"></tbody></table></div>
-              <button class="ret-show-btn" id="retFinBookedToggle" onclick="toggleRetMore('retFinBookedBody', this)">▼ Show more</button>
-            </div>
-          </div>
-
-          <div class="ret-fin-split">
-            <div class="ret-fin-subcard" style="--sc:var(--cyan)">
-              <div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--cyan)">🔁 Renewed Companies</div><span class="badge bb" id="retFinRenewedBadge"></span></div>
-              <div class="ret-fin-mini-note">Same-company current-year Booked/Cashed deal created after the contract renewal date.</div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company</th><th>Renewed Deal</th><th class="c">Value</th><th class="c">Renewal Date</th><th class="c">Type</th><th>RM / CSM</th></tr></thead><tbody id="retFinRenewedBody"></tbody></table></div>
-              <button class="ret-show-btn" id="retFinRenewedToggle" onclick="toggleRetMore('retFinRenewedBody', this)">▼ Show more</button>
-            </div>
-            <div class="ret-fin-subcard" style="--sc:var(--red)">
-              <div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--red)">🚨 Delayed Renewal Exposure</div><span class="badge br" id="retFinDelayedBadge"></span></div>
-              <div class="ret-fin-mini-note">Renewal date passed and no same-company current-year Booked/Cashed deal exists after that date.</div>
-              <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company / Deal</th><th>Owner</th><th class="c">Exposure</th><th class="c">Renewal Date</th><th class="c">Overdue</th><th class="c">Action</th></tr></thead><tbody id="retFinDelayedBody"></tbody></table></div>
-              <button class="ret-show-btn" id="retFinDelayedToggle" onclick="toggleRetMore('retFinDelayedBody', this)">▼ Show more</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel" id="panel-retention">
-          <div class="command-preview ret-smart-focus" id="retTodayFocus">
-            <div class="focus-strip">
-              <div class="focus-top">
-                <div>
-                  <div class="focus-title">Today’s Retention Focus</div>
-                  <div class="focus-sub">Smart actions for delayed renewals and tier-based RM / CSM follow-up.</div>
-                </div>
-                <div class="focus-date">Retention Snapshot<br><span class="focus-date-val" id="retFocusGenAt">—</span></div>
-              </div>
-              <div class="focus-grid">
-                <div class="focus-pill" style="--fp-c:var(--red)"><div class="focus-pill-value" id="retFocusDelayed">—</div><div class="focus-pill-label">Delayed Renewals</div><div class="focus-pill-sub" id="retFocusDelayedSub"></div></div>
-                <div class="focus-pill" style="--fp-c:var(--amber)"><div class="focus-pill-value" id="retFocusTierA">—</div><div class="focus-pill-label">Tier A Overdue</div><div class="focus-pill-sub">CSM 7d · RM 14d</div></div>
-                <div class="focus-pill" style="--fp-c:var(--purple)"><div class="focus-pill-value" id="retFocusCsm">—</div><div class="focus-pill-label">CSM Follow-up Due</div><div class="focus-pill-sub" id="retFocusCsmSub"></div></div>
-                <div class="focus-pill" style="--fp-c:var(--blue)"><div class="focus-pill-value" id="retFocusRm">—</div><div class="focus-pill-label">RM Follow-up Due</div><div class="focus-pill-sub" id="retFocusRmSub"></div></div>
-              </div>
-              <div class="focus-focus-row"><span>▶</span><span id="retFocusText">Loading retention actions…</span></div>
-            </div>
-            <div class="priority-card" style="margin-bottom:14px">
-              <div class="priority-head"><div class="priority-title">⚡ Smart Actions</div><span class="badge bb">Retention manager view</span></div>
-              <div class="priority-list" id="retSmartActionList"></div>
-            </div>
-          </div>
-
-          <div class="manager-section-label">Retention KPI Snapshots</div>
-          <div class="ret-kpi-master-card">
-            <div class="ret-kpi-master-hd">
-              <div class="ret-kpi-master-title">📌 Yesterday · MTD · YTD in one view</div>
-              <span class="badge bb">Connected calls · Completed meetings · 2026 renewal logic</span>
-            </div>
-            <div class="ret-kpi-period-row" style="--pc:var(--blue)">
-              <div class="ret-kpi-period-label"><div class="ret-kpi-period-name">Yesterday</div><div class="ret-kpi-period-sub">daily execution</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retYCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">After renewal</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s">Date entered CY</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s">Date entered CY</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retYChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Date entered</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retYDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Overdue</div></div>
-            </div>
-            <div class="ret-kpi-period-row" style="--pc:var(--amber)">
-              <div class="ret-kpi-period-label"><div class="ret-kpi-period-name">MTD</div><div class="ret-kpi-period-sub">current month</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retMCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retMMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retMRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">This month</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retMBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s" id="retMBookedValue">Value</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retMCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s" id="retMCashedValue">Value</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retMChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Stage churned</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retMDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Past date</div></div>
-            </div>
-            <div class="ret-kpi-period-row" style="--pc:var(--green)">
-              <div class="ret-kpi-period-label"><div class="ret-kpi-period-name">YTD</div><div class="ret-kpi-period-sub">current year</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retYtdCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYtdMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYtdRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">Renewals won</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYtdBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s">Date entered CY</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYtdCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s">Date entered CY</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retYtdChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Date entered</div></div>
-              <div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retYtdDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Overdue</div></div>
-            </div>
-          </div>
-
-          <div class="manager-section-label">Renewal Phase — Contract Dates</div>
-          <div class="card">
-            <div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--amber-bg)">📅</div>Monthly Renewal Pipeline</div><span class="badge ba">contract_renewal_date</span></div>
-            <div style="overflow-x:auto"><table class="tbl">
-              <thead><tr><th>Renewal Month</th><th class="c">Due</th><th class="c">Renewed</th><th class="c">Booked</th><th class="c">Cashed</th><th class="c">Delayed</th><th class="c">Value</th><th>What happens</th></tr></thead>
-              <tbody id="retRenewalMonthBody"></tbody>
-            </table></div><button class="ret-show-btn" id="retRenewalMonthToggle" onclick="toggleRetMore('retRenewalMonthBody', this)">▼ Show more</button>
-          </div>
-
-          <div class="manager-section-label">Renewal Management</div>
-          <div class="ret-merged-grid">
-            <div class="card ret-merged-action-card">
-              <div class="card-hd">
-                <div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">🔁</div>Unified Renewal Table</div>
-                <span class="badge br">No duplicates</span>
-              </div>
-              <div class="ret-merged-note">One row per company. Delayed renewals, upcoming renewals, and renewal attention are merged together so tier, value, owners, activity, renewal dates, and status appear in one complete table.</div>
-              <div style="overflow-x:auto"><table class="tbl">
-                <thead><tr><th>Account</th><th class="c">Tier</th><th class="c">Renewal Value</th><th class="c">Month</th><th class="c">Renewal Date</th><th class="c">Overdue / Left</th><th>RM Owner</th><th>CSM Owner</th><th class="c">RM Touch</th><th class="c">CSM Touch</th><th class="c">Status</th></tr></thead>
-                <tbody id="retRenewalUnifiedBody"></tbody>
-              </table></div><button class="ret-show-btn" id="retRenewalUnifiedToggle" onclick="toggleRetMore('retRenewalUnifiedBody', this)">▼ Show more</button>
-            </div>
-
-            <div class="ret-merged-side">
-              <div class="card">
-                <div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--cyan-bg)">📊</div>Coverage Quality</div><span class="badge bc">Calls + Meetings</span></div>
-                <div class="ret-coverage" id="retCoverageBody"></div>
-              </div>
-              <div class="card">
-                <div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">🚀</div>Churn Reasons</div><span class="badge bb">Churn analysis</span></div>
-                <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Reason</th><th class="c">Deals</th><th class="c">Value</th><th class="c">Top Account</th><th class="c">Status</th></tr></thead><tbody id="retUpsellCoverageBody"></tbody></table></div><button class="ret-show-btn" id="retChurnReasonsToggle" onclick="toggleRetMore('retUpsellCoverageBody', this)">▼ Show more</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="manager-section-label">RM / CSM Follow-up Metrics by Tier</div>
-          <div class="card">
-            <div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">👥</div>RM / CSM Follow-up Metrics</div><span class="badge bp">Company tier cadence</span></div>
-            <div class="ret-filter-bar" id="retTierFilterBar"></div>
-            <div style="overflow-x:auto"><table class="tbl">
-              <thead><tr><th>Account</th><th class="c">Tier</th><th>RM Owner</th><th class="c">RM Last Activity</th><th class="c">RM Cadence</th><th>CSM Owner</th><th class="c">CSM Last Activity</th><th class="c">CSM Cadence</th><th>Alert</th></tr></thead>
-              <tbody id="retOwnerMatrixBody"></tbody>
-            </table></div><button class="ret-show-btn" id="retOwnerMatrixToggle" onclick="toggleRetMore('retOwnerMatrixBody', this)">▼ Show more</button>
-          </div>
-
-          <div class="ret-owner-grid">
-            <div class="ret-owner-card" style="--oc:var(--blue)">
-              <div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:900;color:var(--blue)">RM View</div><span class="badge bb">Fadi · Jehad · Faizan</span></div>
-              <div class="ret-mini-stats" id="retRmStats"></div>
-            </div>
-            <div class="ret-owner-card" style="--oc:var(--cyan)">
-              <div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:900;color:var(--cyan)">CSM View</div><span class="badge bc">Customer Success</span></div>
-              <div class="ret-mini-stats" id="retCsmStats"></div>
-            </div>
-          </div>
-          <div id="repPanels"></div>
-      </div>
-    </div>
-  </div>
+<div style="display:flex;gap:5px">
+<span class="badge bb" id="outreachLeadBadge"></span>
+<span class="badge bg" id="outreachCoBadge"></span>
+</div>
+</div>
+<div class="outreach-kpi-grid" id="outreachKpiGrid"></div>
+<div class="outreach-bar-wrap">
+<div class="outreach-bar-row">
+<div class="outreach-bar-header">
+<span class="outreach-bar-label" style="color:var(--cyan)">Leads Contacted Rate</span>
+<span class="outreach-bar-rate" id="outreachLeadRateVal" style="color:var(--cyan)"></span>
+</div>
+<div class="outreach-bar-track"><div class="outreach-bar-fill" id="outreachLeadRateBar" style="background:var(--cyan)"></div></div>
+</div>
+<div class="outreach-bar-row">
+<div class="outreach-bar-header">
+<span class="outreach-bar-label" style="color:var(--green)">Companies Contacted Rate</span>
+<span class="outreach-bar-rate" id="outreachCoRateVal" style="color:var(--green)"></span>
+</div>
+<div class="outreach-bar-track"><div class="outreach-bar-fill" id="outreachCoRateBar" style="background:var(--green)"></div></div>
+</div>
+</div>
+<div style="padding:10px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;gap:24px;flex-wrap:wrap">
+<span style="font-size:10px;color:var(--muted)">Qualified outreach activities:</span>
+<span id="outreachActCalls" style="font-size:10px;font-weight:700;color:var(--blue)"></span>
+<span id="outreachActMeetings" style="font-size:10px;font-weight:700;color:var(--purple)"></span>
+</div>
+<div style="border-bottom:1px solid var(--border);padding:10px 18px;background:var(--surface2)">
+<div style="font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Source Split</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px">
+<div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Online / Inbound</div>
+<div id="outreachOnlineSplit" style="font-family:var(--mono);font-size:14px;font-weight:600;margin-top:4px;color:var(--blue)">—</div>
+</div>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px">
+<div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Offline / Outbound</div>
+<div id="outreachOfflineSplit" style="font-family:var(--mono);font-size:14px;font-weight:600;margin-top:4px;color:var(--amber)">—</div>
+</div>
+</div>
+</div>
+<div style="border-top:1px solid var(--border)">
+<div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.1em">☎  Leads Need Contact</span>
+<span class="badge br" id="outreachLeadNotBadge"></span>
+</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Contact</th><th>Owner</th><th>Source</th><th class="c">Created</th><th class="c">Connected Calls</th><th class="c">Days Without Contact</th></tr></thead><tbody id="outreachLeadNotBody"></tbody></table></div>
+<div id="outreachLeadNotMore" style="display:none"><table class="tbl"><tbody id="outreachLeadNotBodyMore"></tbody></table></div>
+<button class="see-more" id="outreachLeadNotToggle" onclick="toggleOutreach('LeadNot')" style="display:none">▼ Show more</button>
+</div>
+<div style="border-top:1px solid var(--border)">
+<div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em">📋 Companies Not Contacted Yet</span>
+<span class="badge ba" id="outreachCoNotBadge"></span>
+</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company</th><th>Owner</th><th class="c">Domain</th><th class="c">Created</th></tr></thead><tbody id="outreachCoNotBody"></tbody></table></div>
+<div id="outreachCoNotMore" style="display:none"><table class="tbl"><tbody id="outreachCoNotBodyMore"></tbody></table></div>
+<button class="see-more" id="outreachCoNotToggle" onclick="toggleOutreach('CoNot')" style="display:none">▼ Show more</button>
+</div>
+</div>
+<!-- ═══════════════════════════════════════════════ -->
+<div class="card manager-critical-card" id="rankCoverageCard">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">🎯</div>Rank A/B Coverage</div>
+<div id="rankBadgeRow" style="display:flex;gap:5px"></div>
+</div>
+<div class="acq-rank-country-panel" id="rankCountryCoveragePanel">
+<div class="acq-rank-country-head">
+<div>
+<div class="acq-rank-country-title">🌍 Coverage by Country</div>
+<div class="acq-rank-country-sub" id="rankCountryCoverageSub">Contacted vs not contacted for Rank A/B accounts.</div>
+</div>
+<div class="acq-country-row" id="rankCountryCoverageChips"></div>
+</div>
+<div class="acq-rank-country-metrics" id="rankCountryCoverageMetrics"></div>
+<div class="acq-rank-country-table">
+<table class="tbl">
+<thead><tr><th>Rep</th><th class="c">A Touched</th><th class="c">A Untouched</th><th class="c">A Meetings Completed</th><th class="c">B Touched</th><th class="c">B Untouched</th><th class="c">B Meetings Completed</th><th class="c">Coverage</th></tr></thead>
+<tbody id="rankCountryCoverageRows"></tbody>
+</table>
+</div>
+</div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr>
+<th>Rep</th><th class="c">Rank A</th><th class="c" style="color:var(--green);font-size:8px">✓ A Contacted</th>
+<th class="c" style="color:var(--red);font-size:8px">✗ A Untouched</th><th class="c">Rank B</th>
+<th class="c" style="color:var(--green);font-size:8px">✓ B Contacted</th><th class="c" style="color:var(--amber);font-size:8px">✗ B Untouched</th>
+<th class="c" style="color:var(--red)">Idle &gt;21d</th><th>Top Idle Accounts</th>
+</tr></thead>
+<tbody id="rankRepBody"></tbody>
+</table></div>
+<div style="border-top:1px solid var(--border);display:none!important">
+<div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.1em">📋 Untouched Rank A Accounts</span>
+<span class="badge br" id="untouchedABadge"></span>
+</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Company</th></tr></thead><tbody id="untouchedABody"></tbody></table></div>
+<div id="untouchedAMore" style="display:none"><table class="tbl"><tbody id="untouchedABodyMore"></tbody></table></div>
+<button class="see-more" id="untouchedAToggle" onclick="toggleUntouched('A')" style="display:none">▼ Show more</button>
+</div>
+<div style="border-top:1px solid var(--border);display:none!important">
+<div style="padding:10px 18px 6px;display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em">📋 Untouched Rank B Accounts</span>
+<span class="badge ba" id="untouchedBBadge"></span>
+</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Rep</th><th>Company</th></tr></thead><tbody id="untouchedBBody"></tbody></table></div>
+<div id="untouchedBMore" style="display:none"><table class="tbl"><tbody id="untouchedBBodyMore"></tbody></table></div>
+<button class="see-more" id="untouchedBToggle" onclick="toggleUntouched('B')" style="display:none">▼ Show more</button>
+</div>
+<div style="border-top:1px solid var(--border);display:none!important">
+<div class="card-hd" style="background:transparent;border:none;padding:8px 18px">
+<span style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Top 10 Inactive Accounts</span>
+</div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr><th>Rank</th><th>Company</th><th class="c">Owner</th><th class="c">Last Activity</th></tr></thead>
+<tbody id="rankBody"></tbody>
+</table></div>
+<div id="rankFooter" style="padding:8px 18px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);text-align:center;background:var(--surface2)"></div>
+</div>
+</div>
+<div class="g2">
+<div class="card" style="margin-bottom:0">
+<div class="card-hd" style="border-left:3px solid var(--green)">
+<div class="card-title" style="color:var(--green)">🏆 Closed Won — MTD</div>
+<span class="badge bg" id="wonBadge"></span>
+</div>
+<div id="wonContainer"></div>
+</div>
+<div class="card" style="margin-bottom:0">
+<div class="card-hd" style="border-left:3px solid var(--red)">
+<div class="card-title" style="color:var(--red)">❌ Closed Lost — MTD</div>
+<span class="badge br" id="lostBadge"></span>
+</div>
+<div id="lostContainer"></div>
+</div>
+</div>
+<div class="card" style="margin-top:14px">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">🤖</div>AI Sales Intelligence</div>
+<span class="badge bp">Claude Analysis</span>
+</div>
+<div id="aiInsightsContainer"></div>
+</div>
+<div class="card" style="margin-top:14px">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--surface2)">🌎</div>Market News &amp; Events</div>
+<span style="font-size:10px;color:var(--muted);font-weight:500">HR · Middle East · Daily</span>
+</div>
+<div id="newsContainer"></div>
+</div>
+</div>
+<div class="panel" id="panel-financial">
+<div class="financial-hero">
+<div class="financial-hero-icon">💰</div>
+<div>
+<div class="financial-hero-title">Financial Details</div>
+<div class="financial-hero-sub">A dedicated view for answering the manager's money questions: what has already cashed, what is signed but not cashed yet, and which signed deals need follow-up before they become real revenue.</div>
+</div>
+</div>
+<div class="financial-guide-grid">
+<div class="financial-guide-card" style="--fc:var(--green)"><div class="financial-guide-title">Cashing Revenue</div><div class="financial-guide-desc">Deals already moved to Cashing / Closed Won. This is the clearest money signal.</div></div>
+<div class="financial-guide-card" style="--fc:var(--amber)"><div class="financial-guide-title">Signed Contract</div><div class="financial-guide-desc">Signed / Booking deals that are waiting to move into Cashing.</div></div>
+<div class="financial-guide-card" style="--fc:var(--blue)"><div class="financial-guide-title">Pending to Cash</div><div class="financial-guide-desc">Expected value still before Cashing. Use it to prioritize collection and activation follow-up.</div></div>
+<div class="financial-guide-card" style="--fc:var(--purple)"><div class="financial-guide-title">Signed Date</div><div class="financial-guide-desc">Shows when the agreement was signed so the manager can track aging.</div></div>
+<div class="financial-guide-card" style="--fc:var(--red)"><div class="financial-guide-title">Follow-up Status</div><div class="financial-guide-desc">Highlights delayed signed deals and keeps financial risk separate from the main dashboard.</div></div>
+</div>
+<div class="card financial-card" id="financialDetailsCard">
+<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--green-bg)">💰</div>Financial Details — Cashing / Signed</div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="badge bg" id="finCashingBadge"></span><span class="badge ba" id="finSignedBadge"></span></div></div>
+<div class="financial-summary-grid" id="financialSummaryGrid"></div>
+<div class="financial-split">
+<div class="financial-subcard"><div class="financial-subhd"><div class="financial-subtitle" style="color:var(--green)">✅ Cashing</div><span class="fin-status ok" id="finCashingMini"></span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Rep</th><th class="c">Amount</th><th class="c">Signed Date</th><th class="c">Cashing Date</th><th class="c">Days</th></tr></thead><tbody id="financialCashingBody"></tbody></table></div></div>
+<div class="financial-subcard"><div class="financial-subhd"><div class="financial-subtitle" style="color:var(--amber)">📝 Signed / Booking</div><span class="fin-status warn" id="finSignedMini"></span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Waiting Deal</th><th>Rep</th><th class="c">Amount</th><th class="c">Signed Date</th><th class="c">Waiting</th><th class="c">Status</th></tr></thead><tbody id="financialSignedBody"></tbody></table></div></div>
+</div>
+</div>
+</div>
+<div class="panel" id="panel-retention-financial">
+<div class="ret-fin-hero">
+<div class="ret-fin-hero-icon">💰</div>
+<div>
+<div class="ret-fin-hero-title">Retention Financial Details</div>
+<div class="ret-fin-hero-sub">A clean money view for Customer Success: Booked/Cashed are filtered exactly by deal stage = Booked or Cashed and date entered current stage = current year. Contract start date is displayed only as info and is not used.</div>
+</div>
+</div>
+<div class="ret-fin-top-grid" id="retFinTopGrid"></div>
+<div class="ret-fin-board">
+<div class="ret-fin-board-hd">
+<div class="ret-fin-board-title">📊 Owner Financial Summary</div>
+<span class="badge bb" id="retFinOwnerBadge">Retention owners</span>
+</div>
+<div class="ret-fin-owner-grid" id="retFinOwnerGrid"></div>
+</div>
+<div class="ret-fin-split">
+<div class="ret-fin-subcard" style="--sc:var(--green)">
+<div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--green)">✅ Cashed This Year</div><span class="badge bg" id="retFinCashedBadge"></span></div>
+<div class="ret-fin-mini-note">Stage = Cashed and date entered current stage is in the current year. Contract start date is not used.</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Owner</th><th class="c">Amount</th><th class="c">Current Stage Date<br/><span style="font-size:8px;font-weight:400;color:var(--muted)">Info only</span></th><th class="c">Date Entered Current Stage</th><th class="c">Status</th></tr></thead><tbody id="retFinCashedBody"></tbody></table></div>
+<button class="ret-show-btn" id="retFinCashedToggle" onclick="toggleRetMore('retFinCashedBody', this)">▼ Show more</button>
+</div>
+<div class="ret-fin-subcard" style="--sc:var(--purple)">
+<div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--purple)">📝 Booked This Year</div><span class="badge bp" id="retFinBookedBadge"></span></div>
+<div class="ret-fin-mini-note">Stage = Booked and date entered current stage is in the current year. Contract start date is not used.</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Deal / Company</th><th>Owner</th><th class="c">Amount</th><th class="c">Current Stage Date<br/><span style="font-size:8px;font-weight:400;color:var(--muted)">Info only</span></th><th class="c">Date Entered Current Stage</th><th class="c">Status</th></tr></thead><tbody id="retFinBookedBody"></tbody></table></div>
+<button class="ret-show-btn" id="retFinBookedToggle" onclick="toggleRetMore('retFinBookedBody', this)">▼ Show more</button>
+</div>
+</div>
+<div class="ret-fin-split">
+<div class="ret-fin-subcard" style="--sc:var(--cyan)">
+<div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--cyan)">🔁 Renewed Companies</div><span class="badge bb" id="retFinRenewedBadge"></span></div>
+<div class="ret-fin-mini-note">Same-company current-year Booked/Cashed deal created after the contract renewal date.</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company</th><th>Renewed Deal</th><th class="c">Value</th><th class="c">Renewal Date</th><th class="c">Type</th><th>RM / CSM</th></tr></thead><tbody id="retFinRenewedBody"></tbody></table></div>
+<button class="ret-show-btn" id="retFinRenewedToggle" onclick="toggleRetMore('retFinRenewedBody', this)">▼ Show more</button>
+</div>
+<div class="ret-fin-subcard" style="--sc:var(--red)">
+<div class="ret-fin-subhd"><div class="ret-fin-subtitle" style="color:var(--red)">🚨 Delayed Renewal Exposure</div><span class="badge br" id="retFinDelayedBadge"></span></div>
+<div class="ret-fin-mini-note">Renewal date passed and no same-company current-year Booked/Cashed deal exists after that date.</div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Company / Deal</th><th>Owner</th><th class="c">Exposure</th><th class="c">Renewal Date</th><th class="c">Overdue</th><th class="c">Action</th></tr></thead><tbody id="retFinDelayedBody"></tbody></table></div>
+<button class="ret-show-btn" id="retFinDelayedToggle" onclick="toggleRetMore('retFinDelayedBody', this)">▼ Show more</button>
+</div>
+</div>
+</div>
+<div class="panel" id="panel-retention">
+<div class="command-preview ret-smart-focus" id="retTodayFocus">
+<div class="focus-strip">
+<div class="focus-top">
+<div>
+<div class="focus-title">Today’s Retention Focus</div>
+<div class="focus-sub">Smart actions for delayed renewals and tier-based RM / CSM follow-up.</div>
+</div>
+<div class="focus-date">Retention Snapshot<br/><span class="focus-date-val" id="retFocusGenAt">—</span></div>
+</div>
+<div class="focus-grid">
+<div class="focus-pill" style="--fp-c:var(--red)"><div class="focus-pill-value" id="retFocusDelayed">—</div><div class="focus-pill-label">Delayed Renewals</div><div class="focus-pill-sub" id="retFocusDelayedSub"></div></div>
+<div class="focus-pill" style="--fp-c:var(--amber)"><div class="focus-pill-value" id="retFocusTierA">—</div><div class="focus-pill-label">Tier A Overdue</div><div class="focus-pill-sub">CSM 7d · RM 14d</div></div>
+<div class="focus-pill" style="--fp-c:var(--purple)"><div class="focus-pill-value" id="retFocusCsm">—</div><div class="focus-pill-label">CSM Follow-up Due</div><div class="focus-pill-sub" id="retFocusCsmSub"></div></div>
+<div class="focus-pill" style="--fp-c:var(--blue)"><div class="focus-pill-value" id="retFocusRm">—</div><div class="focus-pill-label">RM Follow-up Due</div><div class="focus-pill-sub" id="retFocusRmSub"></div></div>
+</div>
+<div class="focus-focus-row"><span>▶</span><span id="retFocusText">Loading retention actions…</span></div>
+</div>
+<div class="priority-card" style="margin-bottom:14px">
+<div class="priority-head"><div class="priority-title">⚡ Smart Actions</div><span class="badge bb">Retention manager view</span></div>
+<div class="priority-list" id="retSmartActionList"></div>
+</div>
+</div>
+<div class="manager-section-label">Retention KPI Snapshots</div>
+<div class="ret-kpi-master-card">
+<div class="ret-kpi-master-hd">
+<div class="ret-kpi-master-title">📌 Yesterday · MTD · YTD in one view</div>
+<span class="badge bb">Connected calls · Completed meetings · 2026 renewal logic</span>
+</div>
+<div class="ret-kpi-period-row" style="--pc:var(--blue)">
+<div class="ret-kpi-period-label"><div class="ret-kpi-period-name">Yesterday</div><div class="ret-kpi-period-sub">daily execution</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retYCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">After renewal</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s">Date entered CY</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s">Date entered CY</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retYChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Date entered</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retYDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Overdue</div></div>
+</div>
+<div class="ret-kpi-period-row" style="--pc:var(--amber)">
+<div class="ret-kpi-period-label"><div class="ret-kpi-period-name">MTD</div><div class="ret-kpi-period-sub">current month</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retMCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retMMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retMRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">This month</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retMBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s" id="retMBookedValue">Value</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retMCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s" id="retMCashedValue">Value</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retMChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Stage churned</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retMDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Past date</div></div>
+</div>
+<div class="ret-kpi-period-row" style="--pc:var(--green)">
+<div class="ret-kpi-period-label"><div class="ret-kpi-period-name">YTD</div><div class="ret-kpi-period-sub">current year</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--blue)"><div class="ret-kpi-v" id="retYtdCalls">—</div><div class="ret-kpi-l">Calls</div><div class="ret-kpi-s">Connected</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYtdMeetings">—</div><div class="ret-kpi-l">Meetings</div><div class="ret-kpi-s">Completed</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYtdRenewed">—</div><div class="ret-kpi-l">Renewed</div><div class="ret-kpi-s">Renewals won</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--purple)"><div class="ret-kpi-v" id="retYtdBooked">—</div><div class="ret-kpi-l">Booked</div><div class="ret-kpi-s">Date entered CY</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--green)"><div class="ret-kpi-v" id="retYtdCashed">—</div><div class="ret-kpi-l">Cashed</div><div class="ret-kpi-s">Date entered CY</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--red)"><div class="ret-kpi-v" id="retYtdChurn">—</div><div class="ret-kpi-l">Churn</div><div class="ret-kpi-s">Date entered</div></div>
+<div class="ret-kpi-compact" style="--rk:var(--amber)"><div class="ret-kpi-v" id="retYtdDelayed">—</div><div class="ret-kpi-l">Delayed</div><div class="ret-kpi-s">Overdue</div></div>
+</div>
+</div>
+<div class="manager-section-label">Renewal Phase — Contract Dates</div>
+<div class="card">
+<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--amber-bg)">📅</div>Monthly Renewal Pipeline</div><span class="badge ba">contract_renewal_date</span></div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr><th>Renewal Month</th><th class="c">Due</th><th class="c">Renewed</th><th class="c">Booked</th><th class="c">Cashed</th><th class="c">Delayed</th><th class="c">Value</th><th>What happens</th></tr></thead>
+<tbody id="retRenewalMonthBody"></tbody>
+</table></div><button class="ret-show-btn" id="retRenewalMonthToggle" onclick="toggleRetMore('retRenewalMonthBody', this)">▼ Show more</button>
+</div>
+<div class="manager-section-label">Renewal Management</div>
+<div class="ret-merged-grid">
+<div class="card ret-merged-action-card">
+<div class="card-hd">
+<div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">🔁</div>Unified Renewal Table</div>
+<span class="badge br">No duplicates</span>
+</div>
+<div class="ret-merged-note">One row per company. Delayed renewals, upcoming renewals, and renewal attention are merged together so tier, value, owners, activity, renewal dates, and status appear in one complete table.</div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr><th>Account</th><th class="c">Tier</th><th class="c">Renewal Value</th><th class="c">Month</th><th class="c">Renewal Date</th><th class="c">Overdue / Left</th><th>RM Owner</th><th>CSM Owner</th><th class="c">RM Touch</th><th class="c">CSM Touch</th><th class="c">Status</th></tr></thead>
+<tbody id="retRenewalUnifiedBody"></tbody>
+</table></div><button class="ret-show-btn" id="retRenewalUnifiedToggle" onclick="toggleRetMore('retRenewalUnifiedBody', this)">▼ Show more</button>
+</div>
+<div class="ret-merged-side">
+<div class="card">
+<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--cyan-bg)">📊</div>Coverage Quality</div><span class="badge bc">Calls + Meetings</span></div>
+<div class="ret-coverage" id="retCoverageBody"></div>
+</div>
+<div class="card">
+<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--blue-bg)">🚀</div>Churn Reasons</div><span class="badge bb">Churn analysis</span></div>
+<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Reason</th><th class="c">Deals</th><th class="c">Value</th><th class="c">Top Account</th><th class="c">Status</th></tr></thead><tbody id="retUpsellCoverageBody"></tbody></table></div><button class="ret-show-btn" id="retChurnReasonsToggle" onclick="toggleRetMore('retUpsellCoverageBody', this)">▼ Show more</button>
+</div>
+</div>
+</div>
+<div class="manager-section-label">RM / CSM Follow-up Metrics by Tier</div>
+<div class="card">
+<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--purple-bg)">👥</div>RM / CSM Follow-up Metrics</div><span class="badge bp">Company tier cadence</span></div>
+<div class="ret-filter-bar" id="retTierFilterBar"></div>
+<div style="overflow-x:auto"><table class="tbl">
+<thead><tr><th>Account</th><th class="c">Tier</th><th>RM Owner</th><th class="c">RM Last Activity</th><th class="c">RM Cadence</th><th>CSM Owner</th><th class="c">CSM Last Activity</th><th class="c">CSM Cadence</th><th>Alert</th></tr></thead>
+<tbody id="retOwnerMatrixBody"></tbody>
+</table></div><button class="ret-show-btn" id="retOwnerMatrixToggle" onclick="toggleRetMore('retOwnerMatrixBody', this)">▼ Show more</button>
+</div>
+<div class="ret-owner-grid">
+<div class="ret-owner-card" style="--oc:var(--blue)">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:900;color:var(--blue)">RM View</div><span class="badge bb">Fadi · Jehad · Faizan</span></div>
+<div class="ret-mini-stats" id="retRmStats"></div>
+</div>
+<div class="ret-owner-card" style="--oc:var(--cyan)">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:900;color:var(--cyan)">CSM View</div><span class="badge bc">Customer Success</span></div>
+<div class="ret-mini-stats" id="retCsmStats"></div>
+</div>
+</div>
+<div id="repPanels"></div>
+</div>
+</div>
+</div>
 </div>
 <script>
 let D=null;
@@ -2601,7 +2573,7 @@ function openAcqCompletedMeetingDetails(repKey, countryKey, rankKey, label){
       <div><span class="acq-detail-pill">${contacts.length.toLocaleString()} meeting contact${contacts.length === 1 ? "" : "s"}</span></div>
       <div style="font-size:11px;font-weight:800;color:var(--text2);text-align:right">${contactText}${esc(more)}</div>
     </div>`;
-  }).join("") : `<div class="acq-detail-empty">No completed meeting rows found for this filter in the current data.json.</div>`;
+  }).join("") : `<div class="acq-detail-empty">No completed meeting rows found for this filter in the current Supabase.</div>`;
   const more = rows.length > 120 ? `<div class="acq-detail-empty" style="padding:12px">Showing first 120 of ${rows.length.toLocaleString()} companies.</div>` : "";
   document.getElementById("acqCompletedMeetingsBackdrop")?.remove();
   const node = document.createElement("div");
@@ -2877,7 +2849,7 @@ function renderFinancialDetails(){
       const meta = `${row.stage || ''} · Date entered current stage: ${stageDate}`;
       const status = row.riskLabel || row.status || row.stage || 'Deal';
       return `<div class="acq-detail-row"><div class="acq-detail-name">${recordLink(name,url)}<div class="acq-detail-meta">${esc(meta)}</div></div><div>${esc(row.rep || '—')}</div><div><span class="acq-detail-pill">${esc(status)}</span></div><div style="font-family:var(--mono);font-weight:900;text-align:right">${esc(money(row.amount || 0))}</div></div>`;
-    }).join('') : `<div class="acq-detail-empty">No ${esc(periodLabel)} deals available for this number in the current data.json.</div>`;
+    }).join('') : `<div class="acq-detail-empty">No ${esc(periodLabel)} deals available for this number in the current Supabase.</div>`;
     const more = safeRows.length > 100 ? `<div class="acq-detail-empty" style="padding:12px">Showing first 100 of ${safeRows.length.toLocaleString()} rows.</div>` : '';
     const node = document.createElement('div');
     node.id = 'acqFinancialBackdrop';
@@ -3039,9 +3011,9 @@ function renderManagerAddons(){
   if(!total) dq.push(['Missing outreachCoverage.contacts','Lead outreach data is empty or not generated.']);
   if((ct.notContactedList||[]).some(x=>!x.ownerName&&!x.ownerId)) dq.push(['Leads without owner','Some not-contacted leads do not have a clear owner.']);
   if((co.notContactedList||[]).some(x=>!x.rank)) dq.push(['Companies without rank','Some company rows do not include Rank A/B info.']);
-  if(!ss.online&&!ss.offline&&!ss.inbound&&!ss.outbound) dq.push(['Missing source split','Online/offline split is not available in data.json.']);
+  if(!ss.online&&!ss.offline&&!ss.inbound&&!ss.outbound) dq.push(['Missing source split','Online/offline split is not available in Supabase.']);
   setHTML('dataQualityBadge', `${dq.length} warnings`);
-  setHTML('dataQualityList', dq.length?dq.map((x,i)=>`<div class="mini-row"><div class="mini-main"><div class="mini-name">${x[0]}</div><div class="mini-meta">${x[1]}</div></div><div class="mini-score" style="color:var(--amber)">!</div></div>`).join(''):`<div class="mini-row"><div class="mini-main"><div class="mini-name">Data quality looks good</div><div class="mini-meta">No major warnings detected from current data.json.</div></div><div class="mini-score" style="color:var(--green)">✓</div></div>`);
+  setHTML('dataQualityList', dq.length?dq.map((x,i)=>`<div class="mini-row"><div class="mini-main"><div class="mini-name">${x[0]}</div><div class="mini-meta">${x[1]}</div></div><div class="mini-score" style="color:var(--amber)">!</div></div>`).join(''):`<div class="mini-row"><div class="mini-main"><div class="mini-name">Data quality looks good</div><div class="mini-meta">No major warnings detected from current Supabase.</div></div><div class="mini-score" style="color:var(--green)">✓</div></div>`);
 }
 
 function renderCommandPreview(){
@@ -3285,7 +3257,7 @@ function renderRepNoConnectedLeadsBlock(rep){
 
 /* ════════════════════════════════════════
    OUTREACH COVERAGE RENDERER
-   reads D.outreachCoverage from data.json
+   reads D.outreachCoverage from Supabase
    ════════════════════════════════════════ */
 function renderOutreach(){
   const card = $("outreachCard");
@@ -3295,7 +3267,7 @@ function renderOutreach(){
   card.style.display = "block";
 
   if(!oc){
-    card.innerHTML = `<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">⚠️</div>Lead Outreach Coverage</div></div><div style="padding:16px 18px;color:var(--red);font-size:12px;font-weight:700">outreachCoverage is missing from loaded data.json</div>`;
+    card.innerHTML = `<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">⚠️</div>Lead Outreach Coverage</div></div><div style="padding:16px 18px;color:var(--red);font-size:12px;font-weight:700">outreachCoverage is missing from loaded Supabase</div>`;
     return;
   }
 
@@ -3485,7 +3457,7 @@ function openAcqMetricCard(kind,opts={}){
     const value = type==='lead' ? (leadDays !== null ? leadDays + 'd' : '—') : acqFirstValue(row,["amount"]) !== null ? fmt(acqFirstValue(row,["amount"])||0) : (row.score!==undefined ? row.score : (row.ageDays!==undefined ? row.ageDays+'d' : ''));
     const status = type==='lead' ? `${acqConnectedCallsCount(row) ?? 0} connected calls` : (acqFirstValue(row,["leadStatus","status","reason","priority"]) || (type==='deal'?'Deal':'Company'));
     return `<div class="acq-detail-row"><div class="acq-detail-name">${recordLink(name,url)}<div class="acq-detail-meta">${esc(meta||'')}</div></div><div>${esc(owner)}</div><div><span class="acq-detail-pill">${esc(status||'—')}</span></div><div style="font-family:var(--mono);font-weight:900;text-align:right">${esc(value||'—')}</div></div>`;
-  }).join('') : `<div class="acq-detail-empty">No strict zero-connected-call rows found in current data.json. Export outreachCoverage.contacts.noConnectedCallsList from n8n first.</div>`;
+  }).join('') : `<div class="acq-detail-empty">No strict zero-connected-call rows found in current Supabase. Export outreachCoverage.contacts.noConnectedCallsList from n8n first.</div>`;
   const more=rows.length>80?`<div class="acq-detail-empty" style="padding:12px">Showing first 80 of ${rows.length.toLocaleString()} rows.</div>`:'';
   const node=document.createElement('div');
   node.id='acqMetricBackdrop';
@@ -4162,38 +4134,23 @@ async function loadData(options={}){
   try{
     const supa=await fetchSupabaseAcquisition();
     D=acqEnhanceSupabaseData(buildAcquisitionFromSupabase(supa),supa);
-    try{
-      const legacy=await fetchJsonFromSources([
-        './data.json','data.json',
-        'https://amohamed-alt.github.io/talentera-huddle/data.json',
-        'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/data.json'
-      ],false);
-      D=acqMergeLegacyFallback(D,legacy);
-    }catch(fallbackErr){
-      console.warn('Legacy Acquisition fallback was not loaded; using Supabase-only data.', fallbackErr);
-    }
+    if(D && D.meta) D.meta.source='Supabase only';
     window.D=D;
   }catch(e){
     console.error('Supabase Acquisition data failed to load',e);
-    D=fallbackAcquisition();
+    D=buildAcquisitionFromSupabase({});
+    D.meta=D.meta||{};
+    D.meta.source='Supabase only';
+    D.meta.error=String(e&&e.message||e);
     window.D=D;
   }
 
-  const retentionSources=[
-    './data-retention.json','data-retention.json','./Data%20Retention.json','Data%20Retention.json',
-    'https://amohamed-alt.github.io/talentera-huddle/data-retention.json',
-    'https://amohamed-alt.github.io/talentera-huddle/Data%20Retention.json',
-    'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/data-retention.json',
-    'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/Data%20Retention.json'
-  ];
-  try{
-    R=await fetchJsonFromSources(retentionSources,false);
-    window.R=R;
-  }catch(e){
-    console.warn('Retention JSON data was not loaded; keeping Retention empty until source is available.',e);
-    R=R||null;
+  // Retention / Financial / Upsell / P&L are loaded lazily by their Supabase bridges.
+  if(!window.R){
+    R={meta:{source:'Supabase only',generatedAt:new Date().toISOString()},repData:[],team:{},retentionSheets2026:{accounts:[]}};
     window.R=R;
   }
+
   window.__acqCompletedMeetingCompanyIndex=null;
   render();
   restoreCurrentView({keepScroll:true});
@@ -5725,7 +5682,7 @@ function toggleRetMore(bodyId, btn){
       '<div class="sidebar-section" style="padding:12px 10px 5px;margin:0;font-size:8px">Retention Team</div>'
     ];
     if(!repData.length){
-      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in data-retention.json</div>');
+      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in Supabase</div>');
     }
     repData.forEach(function(r){
       var color = r.color || 'var(--cyan)';
@@ -6106,7 +6063,7 @@ function toggleRetMore(bodyId, btn){
       '<div class="sidebar-section" style="padding:12px 10px 5px;margin:0;font-size:8px">Retention Team</div>'
     ];
     if(!repData.length){
-      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in data-retention.json</div>');
+      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in Supabase</div>');
     }
     repData.forEach(function(r){
       var color = r.color || 'var(--cyan)';
@@ -6149,7 +6106,7 @@ function toggleRetMore(bodyId, btn){
     var monthText = monthLabel(m);
 
     if(!rs || !all.length){
-      set('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Sheet Data</div><div class="ret-fin-card-l">retentionSheets2026 missing</div><div class="ret-fin-card-s">Run the n8n sheet workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      set('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Sheet Data</div><div class="ret-fin-card-l">retentionSheets2026 missing</div><div class="ret-fin-card-s">Run the n8n sheet workflow and make sure Supabase contains retentionSheets2026.accounts.</div></div>');
       set('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retentionSheets2026.accounts is empty.</div>');
       set('retFinCashedBody', empty(6,'No collection rows from sheets.'));
       set('retFinBookedBody', empty(6,'No booking rows from sheets.'));
@@ -6262,7 +6219,7 @@ function updateClock(){
 setInterval(updateClock,60000);
 window.__dashboardAutoRefreshTimer && clearInterval(window.__dashboardAutoRefreshTimer);
 
-loadData({ keepView:true, keepScroll:true });
+setTimeout(function(){ window.loadData({ keepView:true, keepScroll:true }); }, 0);
 
 // Smooth mode: full auto-refresh disabled. Use the Refresh button for a controlled data reload.
 window.__dashboardAutoRefreshTimer = null;
@@ -6419,8 +6376,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 })();
 
 </script>
-
-
 <script>
 /* FINAL MANAGER ORDER — clean version only.
    Reorders existing Acquisition Team Overview sections; does not recreate removed sections,
@@ -6544,10 +6499,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   }
 })();
 </script>
-
-
-
-
 <script>
 /* ═══════════════════════════════════════════
    RETENTION ADDON — Features Plan for Upselling
@@ -6615,18 +6566,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     return '';
   }
   function rawRows(){
-    var r = window.R || {};
-    var candidates = [
-      r.featuresPlanForUpselling,
-      r.upsellingFeaturesPlan,
-      r.featuresPlan,
-      r.featuresPlanRows,
-      r.sheetData && r.sheetData.featuresPlanForUpselling,
-      r.sheetData && r.sheetData.upsellingFeaturesPlan,
-      r.googleSheets && r.googleSheets.featuresPlanForUpselling
-    ];
-    for(var i=0;i<candidates.length;i++) if(Array.isArray(candidates[i])) return candidates[i];
-    return [];
+    return Array.isArray(window.RETENTION_UPSELL_SUPABASE_ROWS) ? window.RETENTION_UPSELL_SUPABASE_ROWS : [];
   }
   function getRows(){
     var carry = { product:'', clientName:'', csm:'', rm:'', renewalMonth:'', renewalValue:0 };
@@ -6766,6 +6706,16 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   }
   window.renderRetentionUpsellingFeaturesPlan = function(){
     ensurePanel();
+    if(window.retentionUpsellEnsureSupabase && !window.RETENTION_UPSELL_SUPABASE_READY){
+      var bodyLoading = byId('retUpsellBody');
+      if(bodyLoading) bodyLoading.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">Loading Features Plan from Supabase...</div></td></tr>';
+      window.retentionUpsellEnsureSupabase().then(function(){ window.renderRetentionUpsellingFeaturesPlan(); }).catch(function(e){
+        console.error('Features Plan Supabase load failed', e);
+        var bodyErr = byId('retUpsellBody');
+        if(bodyErr) bodyErr.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">Supabase Features Plan view returned an error.</div></td></tr>';
+      });
+      return;
+    }
     var rows = getRows();
     var groupedAll = groupRowsByClient(rows);
     var clients = uniqueClientsFromRows(rows);
@@ -6805,7 +6755,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     var body = byId('retUpsellBody');
     if(!body) return;
     if(!rows.length){
-      body.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">No Google Sheet rows found yet. Add featuresPlanForUpselling to the Retention JSON from n8n.</div></td></tr>';
+      body.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">No Supabase feature rows found yet. Check vw_upsell_feature_details.</div></td></tr>';
       return;
     }
     if(!filtered.length){
@@ -6906,157 +6856,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   }
 
   ensurePanel();
-})();
-</script>
-
-
-<script>
-(function(){
-  if(window.__ROBUST_RETENTION_JSON_READER_FIXED__) return;
-  window.__ROBUST_RETENTION_JSON_READER_FIXED__ = true;
-
-  var RETENTION_JSON_PATHS = [
-    './data-retention.json',
-    './Data Retention.json',
-    './Data%20Retention.json',
-    './retention-data.json',
-    './data_retention.json',
-    './retention.json'
-  ];
-
-  async function readJson(path){
-    var url = path + (path.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
-    var res = await fetch(url, { cache: 'no-store' });
-    if(!res.ok) throw new Error('HTTP ' + res.status + ' for ' + path);
-    var text = await res.text();
-    text = String(text || '').replace(/^\uFEFF/, '').trim();
-    if(!text) throw new Error('Empty JSON file: ' + path);
-    return { data: JSON.parse(text), path: path };
-  }
-
-  async function readFirst(paths){
-    var errors = [];
-    for(var i = 0; i < paths.length; i++){
-      try{
-        return await readJson(paths[i]);
-      }catch(e){
-        errors.push(paths[i] + ': ' + (e && e.message ? e.message : e));
-      }
-    }
-    console.warn('JSON load failed:', errors.join(' | '));
-    return null;
-  }
-
-  function fallbackAcquisitionData(){
-    return {
-      meta:{yesterdayLabel:'No data',generatedAt:'--'},
-      kpi:{yesterday:{},mtd:{},ytd:{}},
-      team:{},
-      repData:[],
-      stageData:[],
-      topInactiveRankAccounts:[],
-      rankTotals:{},
-      outreachCoverage:{},
-      autoRecs:[],
-      closedWon:[],
-      closedLost:[],
-      lostByReason:{},
-      marketNews:[]
-    };
-  }
-
-  function refreshCurrentView(options, previousState, previousScroll){
-    try{
-      if(typeof window.render === 'function') window.render();
-    }catch(e){
-      console.error('Main render failed', e);
-    }
-
-    try{
-      if(window.restoreDashboardState && previousState){
-        window.restoreDashboardState(previousState);
-      }else if(typeof window.restoreCurrentView === 'function'){
-        window.restoreCurrentView({ keepScroll:true });
-      }
-    }catch(e){
-      console.error('Restore view failed', e);
-    }
-
-    try{
-      if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'financial' && typeof window.renderRetentionFinancialDetails === 'function'){
-        window.renderRetentionFinancialDetails();
-      }
-
-      if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'upselling' && typeof window.renderRetentionUpsellingFeaturesPlan === 'function'){
-        window.renderRetentionUpsellingFeaturesPlan();
-      }
-
-      if(window.APP_MAIN_PANEL === 'retention' && typeof window.renderRetentionSidebar === 'function'){
-        window.renderRetentionSidebar(window.APP_RETENTION_VIEW || 'overview');
-      }
-    }catch(e){
-      console.error('Retention post-render failed', e);
-    }
-
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        if(!options || options.keepScroll !== false) window.scrollTo(0, previousScroll || 0);
-      });
-    });
-  }
-
-  window.loadData = async function(options){
-    options = options || {};
-
-    var ri = document.getElementById('ri');
-    if(ri) ri.classList.add('spin');
-
-    var previousScroll = options.keepScroll === false ? 0 : window.scrollY;
-    var previousState = window.getDashboardState ? window.getDashboardState() : null;
-
-    try{
-      var acq = await readFirst(['./data.json']);
-      window.D = acq && acq.data ? acq.data : fallbackAcquisitionData();
-      window.DATA_LOADED_FROM = acq ? acq.path : null;
-
-      var ret = await readFirst(RETENTION_JSON_PATHS);
-      window.R = ret && ret.data ? ret.data : null;
-      window.RETENTION_JSON_LOADED_FROM = ret ? ret.path : null;
-
-      if(window.R && window.R.retentionSheets2026){
-        window.RETENTION_SHEETS_2026_READY = true;
-      }
-
-      if(window.R && Array.isArray(window.R.featuresPlanForUpselling)){
-        window.RETENTION_FEATURES_PLAN_READY = true;
-      }
-    }catch(e){
-      console.error('Dashboard data load failed:', e);
-      window.D = window.D || fallbackAcquisitionData();
-      window.R = window.R || null;
-    }
-
-    refreshCurrentView(options, previousState, previousScroll);
-
-    try{
-      var sub = document.getElementById('topbarSub');
-      if(sub && window.APP_MAIN_PANEL === 'retention'){
-        if(!window.R){
-          sub.textContent = 'Retention JSON was not loaded. Check data-retention.json.';
-        }else{
-          sub.textContent = 'Updated ' + (window.R.generatedAt || window.R.retentionSheets2026?.lastUpdated || '—') + ' · Loaded from ' + (window.RETENTION_JSON_LOADED_FROM || 'retention json');
-        }
-      }
-    }catch(e){}
-
-    if(ri) ri.classList.remove('spin');
-  };
-
-  setTimeout(function(){
-    if(typeof window.loadData === 'function'){
-      window.loadData({ keepView:true, keepScroll:true });
-    }
-  }, 50);
 })();
 </script>
 
@@ -7198,12 +6997,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   });
 })();
 </script>
-
-
-
-
-
-
 <script>
 /* ═══════════════════════════════════════════
    ACQUISITION REP TABS — NEEDS TO CONTACT SPLIT
@@ -7301,7 +7094,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 
     if(!rows.length && Array.isArray(contacts.noConnectedCallsList)) rows = contacts.noConnectedCallsList.filter(row => ownerMatch(row, rep));
 
-    // Fallback for old data.json: current dashboard "needs contact" list.
+    // Fallback for old Supabase: current dashboard "needs contact" list.
     if(!rows.length && Array.isArray(contacts.notContactedList)) rows = contacts.notContactedList.filter(row => ownerMatch(row, rep));
 
     return rows
@@ -7455,10 +7248,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   else setTimeout(renderAllRepNeedsContact, 300);
 })();
 </script>
-
-
-
-
 <script>
 (function(){
   window.RET_FIN_CHART_FILTERS = window.RET_FIN_CHART_FILTERS || { metric: 'all', mode: 'monthly', year: 'both' };
@@ -7577,7 +7366,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     if(!block) return;
     var fc = getFC();
     if(!fc){
-      block.querySelector('.ret-fin-comparison-grid').innerHTML = '<div class="ret-fin-chart-card" style="grid-column:1/-1"><div class="ret-fin-empty">No financeComparison found in data-retention.json. Run the Retention workflow first.</div></div>';
+      block.querySelector('.ret-fin-comparison-grid').innerHTML = '<div class="ret-fin-chart-card" style="grid-column:1/-1"><div class="ret-fin-empty">No financeComparison found in Supabase. Run the Retention workflow first.</div></div>';
       return;
     }
     if(typeof Chart === 'undefined') return;
@@ -7613,8 +7402,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   else { wrapRetentionFinancialRender(); setTimeout(window.renderFinanceComparisonCharts, 250); }
 })();
 </script>
-
-
 <script>
 (function(){
   if(window.__RET_REVENUE_ANALYSIS_TAB__) return;
@@ -7834,7 +7621,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
   setTimeout(fixRetentionKpis, 1500);
 })();
 </script>
-
 <script id="retention-financial-clean-v57">
 
 (function(){
@@ -8681,7 +8467,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     var product = f.product || 'All';
 
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -8722,8 +8508,6 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 })();
 
 </script>
-
-
 <style id="retention-final-layout-and-status-fix">
 body.retention-financial-wide .content{max-width:none!important;width:auto!important;padding-left:18px!important;padding-right:18px!important}
 body.retention-financial-wide #panel-retention-financial{width:100%!important;max-width:none!important;margin:0!important}
@@ -8751,12 +8535,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
 @media(max-width:1300px){#panel-retention-financial .ret-fin-top-grid{grid-template-columns:repeat(3,1fr)!important}.ret-fin-status-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:780px){#panel-retention-financial .ret-fin-top-grid,.ret-fin-status-grid{grid-template-columns:1fr!important}#panel-retention-financial .ret-sheet-select{width:100%!important}.ret-fin-status-hd{align-items:flex-start;flex-direction:column}}
 </style>
-
-
-
-
-
-
 <script id="safe-acquisition-render-guard">
 (function(){
   if(window.__safeAcquisitionRenderGuard) return;
@@ -8785,9 +8563,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   }
 })();
 </script>
-
- 
- 
 <script id="retention-financial-wide-state-v58">
 (function(){
   if(window.__retentionFinancialWideStateV58) return;
@@ -8836,7 +8611,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   syncWideClass();
 })();
 </script>
-
 <style id="retention-revenue-dynamic-v60-css">
 #panel-retention-revenue{max-width:1540px;margin:0 auto}.ret-revenue-exec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.ret-revenue-exec-card{background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.52));border:1px solid rgba(22,64,42,.10);border-radius:22px;box-shadow:var(--sh);padding:16px 15px;border-left:4px solid var(--fc,var(--green));backdrop-filter:blur(18px) saturate(155%);-webkit-backdrop-filter:blur(18px) saturate(155%)}.ret-revenue-exec-v{font-family:var(--mono);font-size:27px;font-weight:900;color:var(--fc,var(--green));line-height:1;letter-spacing:-.04em}.ret-revenue-exec-l{font-size:8px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:9px}.ret-revenue-exec-s{font-size:10px;color:var(--text2);font-weight:750;margin-top:5px;line-height:1.45}.ret-revenue-health-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.32)}.ret-revenue-health-card{background:rgba(255,255,255,.62);border:1px solid rgba(22,64,42,.09);border-radius:18px;padding:13px 14px}.ret-revenue-health-k{font-size:8px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.11em}.ret-revenue-health-v{font-family:var(--mono);font-size:22px;font-weight:900;color:var(--hc,var(--text));margin-top:6px}.ret-revenue-health-s{font-size:10px;font-weight:750;color:var(--muted);margin-top:4px;line-height:1.45}.ret-revenue-takeaways{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh);overflow:hidden;margin-bottom:14px;border-top:3px solid var(--green)}.ret-revenue-takeaway-list{padding:10px 16px}.ret-revenue-takeaway{display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--border);padding:10px 2px;font-size:11px;color:var(--text2);font-weight:700;line-height:1.55}.ret-revenue-takeaway:last-child{border-bottom:0}.ret-revenue-dot{width:8px;height:8px;border-radius:50%;background:var(--tc,var(--green));flex-shrink:0;margin-top:5px}.ret-fin-comparison-board{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.48))!important;border:1px solid rgba(22,64,42,.10)!important;border-top:3px solid var(--blue)!important;border-radius:24px!important;box-shadow:var(--sh);overflow:hidden;margin:0 0 14px;backdrop-filter:blur(18px) saturate(155%);-webkit-backdrop-filter:blur(18px) saturate(155%)}.ret-fin-comparison-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.30)}.ret-fin-comparison-kpi{background:rgba(255,255,255,.62);border:1px solid rgba(22,64,42,.09);border-radius:18px;padding:13px 11px;text-align:center;border-top:3px solid var(--fc,var(--green));box-shadow:var(--sh-xs)}.ret-fin-comparison-kpi-v{font-family:var(--mono);font-size:22px;font-weight:900;color:var(--fc,var(--green));line-height:1}.ret-fin-comparison-kpi-l{font-size:8px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:7px}.ret-fin-comparison-kpi-s{font-size:9px;color:var(--text2);font-weight:750;margin-top:3px}.ret-fin-chart-title small{display:block;font-size:9px;color:var(--muted);font-weight:750;margin-top:4px;text-transform:none;letter-spacing:0}.ret-fin-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px;font-style:italic}.ret-sheet-select{height:34px;padding:0 12px;border:1px solid rgba(22,64,42,.13);border-radius:999px;background:rgba(255,255,255,.88)!important;color:var(--text2);font-family:var(--font);font-size:11px;font-weight:850;outline:none;box-shadow:0 4px 14px rgba(17,47,31,.04)}@media(max-width:1200px){.ret-revenue-exec-grid,.ret-revenue-health-grid{grid-template-columns:repeat(2,1fr)}.ret-fin-comparison-kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:800px){.ret-revenue-exec-grid,.ret-revenue-health-grid,.ret-fin-comparison-kpis{grid-template-columns:1fr}.ret-fin-comparison-filters,.ret-fin-comparison-filters .ret-sheet-select{width:100%}}
 </style>
@@ -9136,7 +8910,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
       ['retCashingMonthChart','retBookingMonthChart','retCostMonthChart','retYearToYearChart'].forEach(destroyChart);
       var kpi = byId('retFinanceComparisonKpis');
       var health = byId('retRevenueHealthGrid');
-      if(kpi) kpi.innerHTML = '<div class="ret-fin-empty" style="grid-column:1/-1">No financeComparison found in data-retention.json. Run the Retention workflow and make sure Code — Merge Final Retention JSON writes financeComparison at the top level.</div>';
+      if(kpi) kpi.innerHTML = '<div class="ret-fin-empty" style="grid-column:1/-1">No financeComparison found in Supabase. Run the Retention workflow and make sure Code — Merge Final Retention JSON writes financeComparison at the top level.</div>';
       if(health) health.innerHTML = '';
       return;
     }
@@ -9260,8 +9034,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   setTimeout(function(){ if(window.APP_RETENTION_VIEW === 'revenue') window.renderFinanceComparisonCharts(); }, 1000);
 })();
 </script>
-
-
 <style id="retention-revenue-executive-v61-css">
 #panel-retention-revenue{max-width:1540px;margin:0 auto}.ret-exec-board{background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.50));border:1px solid rgba(22,64,42,.11);border-radius:28px;box-shadow:0 24px 80px rgba(15,42,26,.12);overflow:hidden;backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)}.ret-exec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid rgba(22,64,42,.10);background:linear-gradient(90deg,rgba(255,255,255,.72),rgba(231,250,240,.48))}.ret-exec-title{font-size:18px;font-weight:950;color:var(--text);letter-spacing:-.03em}.ret-exec-sub{font-size:11px;color:var(--muted);font-weight:750;margin-top:4px}.ret-exec-live{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.18);font-size:10px;font-weight:950;color:var(--green);white-space:nowrap}.ret-exec-pulse{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(22,163,74,.42);animation:retExecPulse 1.4s infinite}.ret-exec-filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.ret-exec-filters select{height:34px;padding:0 12px;border:1px solid rgba(22,64,42,.13);border-radius:999px;background:rgba(255,255,255,.88);font-size:11px;font-weight:850;color:var(--text2);outline:none}.ret-exec-loader{padding:16px 20px 22px}.ret-exec-loader-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--text2);font-size:12px;font-weight:850}.ret-exec-spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(22,163,74,.16);border-top-color:var(--green);animation:retExecSpin .75s linear infinite}.ret-exec-skeleton-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.ret-exec-skeleton{height:104px;border-radius:22px;background:linear-gradient(90deg,rgba(255,255,255,.42),rgba(255,255,255,.86),rgba(255,255,255,.42));background-size:220% 100%;animation:retExecShimmer 1.15s infinite;border:1px solid rgba(22,64,42,.08)}.ret-exec-skeleton.chart{height:300px}.ret-exec-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px}.ret-exec-kpi{position:relative;overflow:hidden;min-height:118px;background:rgba(255,255,255,.68);border:1px solid rgba(22,64,42,.10);border-radius:22px;padding:16px 16px 14px;border-left:4px solid var(--fc,var(--green));box-shadow:0 12px 34px rgba(15,42,26,.08);transform:translateY(8px);opacity:0;animation:retExecRise .55s ease forwards}.ret-exec-kpi:nth-child(2){animation-delay:.05s}.ret-exec-kpi:nth-child(3){animation-delay:.10s}.ret-exec-kpi:nth-child(4){animation-delay:.15s}.ret-exec-kpi:after{content:"";position:absolute;right:-36px;top:-42px;width:112px;height:112px;border-radius:50%;background:var(--fc,var(--green));opacity:.07}.ret-exec-kpi-label{font-size:8px;font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.13em}.ret-exec-kpi-value{font-family:var(--mono);font-size:30px;font-weight:950;letter-spacing:-.06em;color:var(--text);margin-top:12px;line-height:1}.ret-exec-kpi-note{font-size:10px;font-weight:800;color:var(--text2);margin-top:8px;line-height:1.45}.ret-exec-chip{display:inline-flex;align-items:center;gap:4px;margin-top:9px;padding:5px 8px;border-radius:999px;background:rgba(22,163,74,.10);color:var(--green);font-size:10px;font-weight:950}.ret-exec-chip.bad{background:rgba(220,38,38,.10);color:var(--red)}.ret-exec-body{display:grid;grid-template-columns:1.4fr .9fr;gap:14px;padding:0 20px 20px}.ret-exec-card{background:rgba(255,255,255,.66);border:1px solid rgba(22,64,42,.10);border-radius:24px;box-shadow:0 12px 34px rgba(15,42,26,.07);padding:16px;min-height:330px;position:relative;overflow:hidden}.ret-exec-card.wide{grid-column:span 1}.ret-exec-card-title{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:var(--text);margin-bottom:2px}.ret-exec-card-sub{font-size:10px;font-weight:750;color:var(--muted);margin-bottom:10px}.ret-exec-chart-wrap{height:280px;position:relative}.ret-exec-chart-wrap.tall{height:330px}.ret-exec-mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}.ret-exec-mini{border:1px solid rgba(22,64,42,.08);background:rgba(255,255,255,.62);border-radius:16px;padding:11px}.ret-exec-mini-k{font-size:8px;font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.10em}.ret-exec-mini-v{font-family:var(--mono);font-size:20px;font-weight:950;color:var(--mc,var(--text));margin-top:6px}.ret-exec-takeaways{grid-column:1/-1;min-height:auto}.ret-exec-takeaway{display:flex;gap:10px;border-bottom:1px solid rgba(22,64,42,.08);padding:11px 0;font-size:11px;line-height:1.55;color:var(--text2);font-weight:750}.ret-exec-takeaway:last-child{border-bottom:0}.ret-exec-dot{width:8px;height:8px;border-radius:50%;background:var(--tc,var(--green));flex:0 0 auto;margin-top:5px}.ret-exec-empty{padding:34px;text-align:center;color:var(--muted);font-size:13px;font-style:italic}.ret-exec-error{padding:18px;border-radius:18px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.14);color:var(--red);font-size:12px;font-weight:800}.ret-exec-canvas-loading canvas{opacity:.18}.ret-exec-canvas-loading:before{content:"Loading chart";position:absolute;inset:16px;border-radius:18px;background:linear-gradient(90deg,rgba(255,255,255,.45),rgba(255,255,255,.78),rgba(255,255,255,.45));background-size:220% 100%;animation:retExecShimmer 1.05s infinite;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;font-weight:900;z-index:2}@keyframes retExecSpin{to{transform:rotate(360deg)}}@keyframes retExecPulse{70%{box-shadow:0 0 0 9px rgba(22,163,74,0)}}@keyframes retExecShimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}@keyframes retExecRise{to{transform:translateY(0);opacity:1}}@media(max-width:1250px){.ret-exec-kpis,.ret-exec-skeleton-grid{grid-template-columns:repeat(2,1fr)}.ret-exec-body{grid-template-columns:1fr}}@media(max-width:780px){.ret-exec-head{align-items:flex-start;flex-direction:column}.ret-exec-filters,.ret-exec-filters select{width:100%}.ret-exec-kpis,.ret-exec-skeleton-grid,.ret-exec-mini-grid{grid-template-columns:1fr}.ret-exec-body{padding:0 12px 14px}.ret-exec-kpis{padding:14px 12px}.ret-exec-chart-wrap{height:260px}}
 </style>
@@ -9312,7 +9084,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
 
   function renderExecutive(animate){
     var block=mount(); if(!block)return;
-    var fc=getFC(); if(!fc){ block.innerHTML='<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    var fc=getFC(); if(!fc){ block.innerHTML='<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in Supabase</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     destroyAll();
     var s=fc.summary,b=fc.breakEven||{},coverage=n(b.cashCoverage!=null?b.cashCoverage:(s.cost2026Total?s.cashing2026Total/s.cost2026Total*100:0)),gap=n(b.ytdCashGap!=null?b.ytdCashGap:s.cashing2026Total-s.cost2026Total),avgCost=n(b.avgMonthlyCost2026||s.cost2026Total/(fc.activeMonthIndex+1)),avgCash=n(b.avgMonthlyCashing2026||s.cashing2026Total/(fc.activeMonthIndex+1));
     var cards=[{k:'Booking YTD',v:s.booking2026Total,sub:'vs '+money(s.booking2025Total)+' in 2025',chip:rate(s.bookingGrowth),c:'var(--blue)',bad:s.bookingGrowth<0},{k:'Cashing YTD',v:s.cashing2026Total,sub:'vs '+money(s.cashing2025Total)+' in 2025',chip:rate(s.cashingGrowth),c:'var(--green)',bad:s.cashingGrowth<0},{k:'Cost YTD',v:s.cost2026Total,sub:'vs '+money(s.cost2025Total)+' in 2025',chip:rate(s.costGrowth),c:'var(--amber)',bad:s.costGrowth>0},{k:'Cash Coverage',v:coverage,sub:'YTD cash vs cost · gap '+signedMoney(gap),chip:coverage>=100?'Healthy':'Below cost',c:coverage>=100?'var(--green)':'var(--red)',bad:coverage<100,rate:true}];
@@ -9347,8 +9119,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init); else init(); setTimeout(init,300);
 })();
 </script>
-
-
 <style id="retRevenueFiltersV70Style">
 .ret-exec-v70 .ret-exec-note{margin:0 20px 10px;padding:10px 12px;border-radius:16px;background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.12);color:var(--text2);font-size:11px;font-weight:800;line-height:1.55}.ret-exec-v70 .ret-exec-filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.ret-exec-v70 .ret-exec-filters select{min-width:132px}.ret-exec-v70 .ret-exec-chart-wrap canvas{max-width:100%}@media(max-width:780px){.ret-exec-v70 .ret-exec-note{margin:0 12px 10px}.ret-exec-v70 .ret-exec-filters select{min-width:100%}}
 </style>
@@ -9552,7 +9322,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function renderRevenue(animate){
     clearTimeout(renderTimer);
     var block = mount(), fc = getFC(), c = colors();
-    if(!fc){ block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    if(!fc){ block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in Supabase</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     var f = filters(), t = selectedTotals(fc,f), cards = buildCards(fc,f), avgCost = t.cost / Math.max(1,t.range.months), avgCash = t.cashing / Math.max(1,t.range.months), scope = scopeText(fc,f), monthActive = monthIndex(f) >= 0;
     block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Source: '+safe(fc.source)+' · Scope: '+safe(scope)+' · Updated '+safe(fc.lastUpdated || 'live')+'</div></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end"><div class="ret-exec-live"><span class="ret-exec-pulse"></span>Dynamic · ForReporting</div>'+selectHtml()+'</div></div><div class="ret-exec-note">2025 shows the full closed year when selected. 2026 uses actual available data to date and keeps the active month included. Future 2026 months will appear automatically when the sheet has values.</div><div class="ret-exec-kpis">'+cards.map(function(card){ return '<div class="ret-exec-kpi" style="--fc:'+card.c+'"><div class="ret-exec-kpi-label">'+safe(card.k)+'</div><div class="ret-exec-kpi-value" data-ret-count="'+safe(card.v)+'" data-ret-rate="'+(card.rate?'1':'0')+'">'+(card.rate?rate(card.v):shortMoney(card.v))+'</div><div class="ret-exec-kpi-note">'+safe(card.sub)+'</div><div class="ret-exec-chip '+(card.bad?'bad':'')+'">'+safe(card.chip)+'</div></div>'; }).join('')+'</div><div class="ret-exec-body"><div class="ret-exec-card"><div class="ret-exec-card-title">YTD / Period comparison</div><div class="ret-exec-card-sub">'+safe(scope)+'</div><div class="ret-exec-chart-wrap"><canvas id="retExecYtdChart"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Break-even analysis</div><div class="ret-exec-card-sub">Cash coverage against selected cost scope</div><div class="ret-exec-mini-grid"><div class="ret-exec-mini"><div class="ret-exec-mini-k">Avg cost / month</div><div class="ret-exec-mini-v" style="--mc:var(--amber)">'+money(avgCost)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Avg cashing / month</div><div class="ret-exec-mini-v" style="--mc:var(--green)">'+money(avgCash)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Monthly gap</div><div class="ret-exec-mini-v" style="--mc:'+(avgCash-avgCost>=0?'var(--green)':'var(--red)')+'">'+signedMoney(avgCash-avgCost)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Coverage</div><div class="ret-exec-mini-v" style="--mc:'+(t.coverage>=100?'var(--green)':'var(--red)')+'">'+rate(t.coverage)+'</div></div></div><div class="ret-exec-chart-wrap"><canvas id="retExecCoveragePie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Monthly trend</div><div class="ret-exec-card-sub">'+(f.mode === 'ytd' ? 'Cumulative YTD movement' : 'Month-by-month movement')+'</div><div class="ret-exec-chart-wrap tall"><canvas id="retExecTrendChart"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Value mix</div><div class="ret-exec-card-sub">Booking · Cashing · Cost share for '+safe(t.primaryYear)+'</div><div class="ret-exec-chart-wrap tall"><canvas id="retExecMixPie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Cost breakdown</div><div class="ret-exec-card-sub">COGS · Overheads · Support allocation</div><div class="ret-exec-chart-wrap"><canvas id="retExecCostPie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Cash vs cost gap</div><div class="ret-exec-card-sub">Gap trajectory for selected year view</div><div class="ret-exec-chart-wrap"><canvas id="retExecGapChart"></canvas></div></div><div class="ret-exec-card ret-exec-takeaways"><div class="ret-exec-card-title">Key takeaways</div><div class="ret-exec-card-sub">Auto-generated from current filters</div>'+takeaways(fc,f).map(function(x){ return '<div class="ret-exec-takeaway"><span class="ret-exec-dot" style="--tc:'+x.c+'"></span><div>'+safe(x.t)+'</div></div>'; }).join('')+'</div></div>';
     bindFilters();
@@ -9637,8 +9407,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
 })();
 
 </script>
-
-
 <script id="retention-financial-source-of-truth-v62">
 (function(){
   if(window.__RETENTION_FINANCIAL_SOURCE_OF_TRUTH_V62__) return;
@@ -10226,7 +9994,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
     updateSidebarBadge(all);
     var rows = filteredAccounts();
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -10260,8 +10028,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   }
 })();
 </script>
-
-
 <script id="retention-financial-dynamic-filters-v65">
 (function(){
   if(window.__RETENTION_FINANCIAL_DYNAMIC_FILTERS_V65__) return;
@@ -10850,7 +10616,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
     var f = filters();
     // Duplicate audit UI intentionally disabled by request. Totals still use the existing de-duplicated account logic.
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -10890,9 +10656,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   else setTimeout(function(){ if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'financial') window.renderRetentionFinancialDetails(); },0);
 })();
 </script>
-
-
-
 <script id="pnl-main-nav-final-patch">
 (function(){
   if(window.__PNL_MAIN_NAV_FINAL_PATCH__) return;
@@ -11039,8 +10802,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   else setTimeout(init, 0);
 })();
 </script>
-
-
 <script id="retention-financial-final-guard-no-audit-patch">
 (function(){
   if(window.__RETENTION_FINANCIAL_FINAL_GUARD_NO_AUDIT_PATCH__) return;
@@ -11171,8 +10932,6 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   }
 })();
 </script>
-
-
 <style id="pnl-executive-v80-style">
 /* P&L EXECUTIVE DASHBOARD v80 — scoped only to #panel-retention-revenue */
 #panel-retention-revenue{max-width:1600px;margin:0 auto}
@@ -11369,7 +11128,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function ensurePanel(){ var panel=byId('panel-retention-revenue'); if(!panel){ panel=document.createElement('div'); panel.className='panel'; panel.id='panel-retention-revenue'; var dash=byId('dashMain')||document.querySelector('.content'); if(dash) dash.appendChild(panel); } panel.innerHTML = panel.innerHTML || '<div class="ret-fin-hero" style="border-left-color:var(--blue)"><div class="ret-fin-hero-icon">📊</div><div><div class="ret-fin-hero-title">P&amp;L</div><div class="ret-fin-hero-sub">Executive dynamic view from ForReporting with revenue, booking, cashing, cost, and break-even charts.</div></div></div><div id="retRevenueAnalysisMount"></div>'; var title=panel.querySelector('.ret-fin-hero-title'); if(title) title.innerHTML='P&amp;L'; var sub=panel.querySelector('.ret-fin-hero-sub'); if(sub) sub.textContent='Executive dynamic view from ForReporting with Booking, Cashing, Total Cost, COGS, Overheads, Support Allocation, and break-even analysis.'; var mount=byId('retRevenueAnalysisMount'); if(!mount){ mount=document.createElement('div'); mount.id='retRevenueAnalysisMount'; panel.appendChild(mount); } return panel; }
   function mount(){ ensurePanel(); var m=byId('retRevenueAnalysisMount'); if(!m) return null; var block=byId('retFinanceComparisonBlock'); if(!block){ block=document.createElement('div'); block.id='retFinanceComparisonBlock'; m.appendChild(block); } if(block.parentNode!==m) m.appendChild(block); block.className='pnl-v80-board'; return block; }
   function renderRevenue(animate){
-    var block=mount(); if(!block) return; var fc=getFC(); if(!fc){ block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="pnl-v80-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    var block=mount(); if(!block) return; var fc=getFC(); if(!fc){ block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Waiting for financeComparison in Supabase</div></div></div><div class="pnl-v80-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     var f=filters(), t=selectedTotals(fc,f), c=colors(), cards=buildCards(fc,f), py=t.primaryYear, avgCost=t.cost/Math.max(1,t.range.months), avgCash=t.cashing/Math.max(1,t.range.months), parts=costParts(fc,py,t.range), totalParts=parts.cogs+parts.overheads+parts.support, scope=scopeText(fc,f), monthActive=monthIndex(f)>=0;
     block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Source: '+safe(fc.source)+' · Scope: '+safe(scope)+' · Updated '+safe(fc.lastUpdated||'live')+'</div></div><div class="pnl-v80-actions"><div class="pnl-v80-live"><span class="pnl-v80-pulse"></span>Dynamic · ForReporting</div>'+selectHtml(fc)+'</div></div><div class="pnl-v80-note"><strong>Total Cost = COGS + Overheads + Support Allocation.</strong> 2025 can be viewed as the full closed year. 2026 uses actual available months to date unless a specific month is selected.</div><div class="pnl-v80-kpis">'+cards.map(function(card){ return '<div class="pnl-v80-kpi" style="--kc:'+card.color+'"><div class="pnl-v80-kpi-label">'+safe(card.k)+'</div><div class="pnl-v80-kpi-value" data-pnl-count="'+safe(card.v)+'" data-pnl-rate="'+(card.rate?'1':'0')+'">'+(card.rate?rate(card.v):shortMoney(card.v))+'</div><div class="pnl-v80-kpi-note">'+safe(card.sub)+'</div><div class="pnl-v80-chip '+(card.bad?'bad':card.warn?'warn':'')+'">'+safe(card.chip)+'</div></div>'; }).join('')+'</div><div class="pnl-v80-body"><div class="pnl-v80-card"><div class="pnl-v80-card-title">YTD / Period comparison</div><div class="pnl-v80-card-sub">'+safe(scope)+'</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80YtdChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Break-even analysis</div><div class="pnl-v80-card-sub">Cash coverage against '+safe(costLabel(f))+'</div><div class="pnl-v80-mini-grid"><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Avg cost / month</div><div class="pnl-v80-mini-v" style="--mc:var(--amber)">'+money(avgCost)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Avg cashing / month</div><div class="pnl-v80-mini-v" style="--mc:var(--green)">'+money(avgCash)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Monthly gap</div><div class="pnl-v80-mini-v" style="--mc:'+(avgCash-avgCost>=0?'var(--green)':'var(--red)')+'">'+signedMoney(avgCash-avgCost)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Coverage</div><div class="pnl-v80-mini-v" style="--mc:'+(t.coverage>=100?'var(--green)':'var(--red)')+'">'+rate(t.coverage)+'</div></div></div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80CoverageChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Monthly trend</div><div class="pnl-v80-card-sub">'+(f.mode==='ytd'?'Cumulative YTD movement':'Month-by-month movement')+'</div><div class="pnl-v80-chart-wrap tall"><canvas id="pnlV80TrendChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Cost breakdown</div><div class="pnl-v80-card-sub">COGS · Overheads · Support Allocation for '+safe(py)+'</div><div class="pnl-v80-cost-grid"><div class="pnl-v80-cost-box" style="--cc:var(--blue)"><div class="pnl-v80-cost-v">'+shortMoney(parts.cogs)+'</div><div class="pnl-v80-cost-l">COGS</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.cogs/totalParts*100:0)+' of cost</div></div><div class="pnl-v80-cost-box" style="--cc:var(--amber)"><div class="pnl-v80-cost-v">'+shortMoney(parts.overheads)+'</div><div class="pnl-v80-cost-l">Overheads</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.overheads/totalParts*100:0)+' of cost</div></div><div class="pnl-v80-cost-box" style="--cc:var(--purple)"><div class="pnl-v80-cost-v">'+shortMoney(parts.support)+'</div><div class="pnl-v80-cost-l">Support Allocation</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.support/totalParts*100:0)+' of cost</div></div></div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80CostStackedChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Cash vs cost gap</div><div class="pnl-v80-card-sub">Cash - '+safe(costLabel(f))+' gap trajectory</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80GapChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Value mix</div><div class="pnl-v80-card-sub">Booking · Cashing · '+safe(costLabel(f))+' for '+safe(py)+'</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80MixChart"></canvas></div></div><div class="pnl-v80-card wide"><div class="pnl-v80-card-title">Monthly P&L table</div><div class="pnl-v80-card-sub">2025 and 2026 visible together, with '+safe(py)+' cost breakdown columns</div>'+buildTable(fc,f,t)+'</div><div class="pnl-v80-card wide"><div class="pnl-v80-card-title">Key takeaways</div><div class="pnl-v80-card-sub">Auto-generated from the selected filters</div>'+takeaways(fc,f).map(function(x){return '<div class="pnl-v80-takeaway"><span class="pnl-v80-dot" style="--tc:'+x.c+'"></span><div>'+safe(x.t)+'</div></div>';}).join('')+'</div></div>';
     bindFilters();
@@ -11406,271 +11165,12 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else setTimeout(init,0); setTimeout(init,500);
 })();
 </script>
-
-
-
 <!-- FINAL STABLE TAB STATE PATCH — keeps Acquisition / Retention / P&L fixed after refresh and auto-refresh -->
 <style id="final-stable-tab-state-patch-css">
 body.pnl-active #tabsBar{display:none!important}
 body.pnl-active #panel-retention-revenue{display:block}
 body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!important}
 </style>
-<script id="final-stable-tab-state-patch">
-(function(){
-  if(window.__FINAL_STABLE_TAB_STATE_PATCH__) return;
-  window.__FINAL_STABLE_TAB_STATE_PATCH__ = true;
-
-  var STORAGE_KEY = 'talentera_dashboard_active_view_v2';
-
-  function byId(id){ return document.getElementById(id); }
-  function all(sel, fn){ Array.prototype.slice.call(document.querySelectorAll(sel)).forEach(fn); }
-  function readSaved(){
-    try{ return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}') || {}; }catch(e){ return {}; }
-  }
-  function saveState(state){
-    var current = readSaved();
-    var next = Object.assign(current, state || {});
-    try{ sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next)); }catch(e){}
-    syncGlobals(next);
-    return next;
-  }
-  function syncGlobals(state){
-    if(!state) return;
-    if(state.main){
-      window.APP_MAIN_PANEL = state.main;
-      try{ APP_MAIN_PANEL = state.main; }catch(e){}
-    }
-    if(state.acqTab){
-      window.APP_ACQ_TAB_ID = state.acqTab;
-      try{ APP_ACQ_TAB_ID = state.acqTab; }catch(e){}
-    }
-    if(state.retView){
-      window.APP_RETENTION_VIEW = state.retView;
-      try{ APP_RETENTION_VIEW = state.retView; }catch(e){}
-    }
-    if(state.retOwner !== undefined){
-      window.APP_RETENTION_OWNER_ID = state.retOwner;
-      try{ APP_RETENTION_OWNER_ID = state.retOwner; }catch(e){}
-    }
-  }
-  function currentState(){
-    var s = readSaved();
-    var main = window.APP_MAIN_PANEL || (typeof APP_MAIN_PANEL !== 'undefined' ? APP_MAIN_PANEL : null);
-    var retView = window.APP_RETENTION_VIEW || (typeof APP_RETENTION_VIEW !== 'undefined' ? APP_RETENTION_VIEW : null);
-    var acqTab = window.APP_ACQ_TAB_ID || (typeof APP_ACQ_TAB_ID !== 'undefined' ? APP_ACQ_TAB_ID : null);
-    var retOwner = window.APP_RETENTION_OWNER_ID || (typeof APP_RETENTION_OWNER_ID !== 'undefined' ? APP_RETENTION_OWNER_ID : null);
-    return Object.assign({main:main || 'acquisition', acqTab:acqTab || 'team', retView:retView || 'overview', retOwner:retOwner || null}, s || {});
-  }
-
-  function ensurePnlPanel(){
-    var panel = byId('panel-retention-revenue');
-    if(panel) return panel;
-    panel = document.createElement('div');
-    panel.className = 'panel';
-    panel.id = 'panel-retention-revenue';
-    panel.innerHTML = '<div class="ret-fin-hero" style="border-left-color:var(--blue)"><div class="ret-fin-hero-icon" style="background:var(--blue-bg);border-color:var(--blue-bd)">📊</div><div><div class="ret-fin-hero-title">Revenue Analysis</div><div class="ret-fin-hero-sub">Dynamic revenue view from ForReporting with Booking, Cashing, Total Cost, COGS, Overheads, Support Allocation, and break-even analysis.</div></div></div><div id="retRevenueAnalysisMount"></div>';
-    var dash = byId('dashMain') || document.querySelector('.content');
-    if(dash) dash.appendChild(panel);
-    return panel;
-  }
-
-  function markPnlNav(active){
-    var sidePnl = byId('side-revenue-analysis-main');
-    if(sidePnl){
-      sidePnl.classList.toggle('active', !!active);
-      sidePnl.setAttribute('onclick','switchRetentionRevenueAnalysis()');
-    }
-    var oldRevenue = byId('side-ret-revenue-analysis');
-    if(oldRevenue) oldRevenue.classList.toggle('active', !!active);
-  }
-
-  function enforcePnlDom(renderCharts){
-    saveState({main:'retention', retView:'revenue', retOwner:null});
-    if(document.body) document.body.classList.add('pnl-active');
-
-    all('.tab-btn', function(x){ x.classList.remove('active'); });
-    all('.panel', function(x){ x.classList.remove('active'); });
-    all('.nav-item', function(x){ x.classList.remove('active'); });
-
-    var tabs = byId('tabsBar');
-    if(tabs) tabs.style.setProperty('display','none','important');
-
-    if(typeof window.setRetentionOwnerMode === 'function'){
-      try{ window.setRetentionOwnerMode(false); }catch(e){}
-    }else{
-      try{ setRetentionOwnerMode(false); }catch(e){}
-    }
-
-    var panel = ensurePnlPanel();
-    if(panel) panel.classList.add('active');
-
-    var sideRetention = byId('side-retention');
-    if(sideRetention) sideRetention.classList.add('active');
-    markPnlNav(true);
-
-    var title = byId('topbarTitle');
-    if(title) title.textContent = 'P&L · Revenue Analysis';
-    var sub = byId('topbarSub');
-    if(sub) sub.textContent = 'ForReporting · 2025 full year · 2026 actual to date · COGS + Overheads + Support Allocation';
-
-    if(typeof window.renderRetentionSidebar === 'function'){
-      try{ window.renderRetentionSidebar('revenue'); }catch(e){}
-      markPnlNav(true);
-    }
-
-    if(renderCharts !== false && typeof window.renderFinanceComparisonCharts === 'function'){
-      try{ window.renderFinanceComparisonCharts(); }catch(e){ console.warn('P&L render failed', e); }
-    }
-  }
-
-  function clearPnlDom(){
-    if(document.body) document.body.classList.remove('pnl-active');
-    markPnlNav(false);
-    var tabs = byId('tabsBar');
-    if(tabs) tabs.style.removeProperty('display');
-  }
-
-  function setAcqState(tab){
-    saveState({main:'acquisition', acqTab:tab || 'team', retView:'overview', retOwner:null});
-    clearPnlDom();
-  }
-  function setRetState(view, owner){
-    saveState({main:'retention', retView:view || 'overview', retOwner:owner || null});
-    if(view === 'revenue') enforcePnlDom(false);
-    else clearPnlDom();
-  }
-
-  var oldSwitchRetentionRevenueAnalysis = window.switchRetentionRevenueAnalysis;
-  window.switchRetentionRevenueAnalysis = function(){
-    setRetState('revenue', null);
-    if(typeof oldSwitchRetentionRevenueAnalysis === 'function'){
-      try{ oldSwitchRetentionRevenueAnalysis.apply(this, arguments); }catch(e){ console.warn('Original P&L switch failed, using stable fallback', e); }
-    }
-    enforcePnlDom(true);
-  };
-  try{ switchRetentionRevenueAnalysis = window.switchRetentionRevenueAnalysis; }catch(e){}
-
-  var oldSwitchMainPanel = window.switchMainPanel;
-  if(typeof oldSwitchMainPanel === 'function'){
-    window.switchMainPanel = function(panel){
-      if(panel === 'retention') setRetState('overview', null);
-      else setAcqState('team');
-      var out = oldSwitchMainPanel.apply(this, arguments);
-      if(panel === 'retention') clearPnlDom();
-      return out;
-    };
-    try{ switchMainPanel = window.switchMainPanel; }catch(e){}
-  }
-
-  var oldSwitchTab = window.switchTab;
-  if(typeof oldSwitchTab === 'function'){
-    window.switchTab = function(id){
-      setAcqState(id || 'team');
-      return oldSwitchTab.apply(this, arguments);
-    };
-    try{ switchTab = window.switchTab; }catch(e){}
-  }
-
-  var oldSwitchRetentionFinancial = window.switchRetentionFinancial;
-  if(typeof oldSwitchRetentionFinancial === 'function'){
-    window.switchRetentionFinancial = function(){
-      setRetState('financial', null);
-      var out = oldSwitchRetentionFinancial.apply(this, arguments);
-      clearPnlDom();
-      return out;
-    };
-    try{ switchRetentionFinancial = window.switchRetentionFinancial; }catch(e){}
-  }
-
-  var oldSelectRetentionOwner = window.selectRetentionOwner;
-  if(typeof oldSelectRetentionOwner === 'function'){
-    window.selectRetentionOwner = function(repId){
-      setRetState('owner', repId || null);
-      var out = oldSelectRetentionOwner.apply(this, arguments);
-      clearPnlDom();
-      return out;
-    };
-    try{ selectRetentionOwner = window.selectRetentionOwner; }catch(e){}
-  }
-
-  var oldSwitchUpsell = window.switchRetentionUpsellingFeaturesPlan;
-  if(typeof oldSwitchUpsell === 'function'){
-    window.switchRetentionUpsellingFeaturesPlan = function(){
-      setRetState('upselling', null);
-      var out = oldSwitchUpsell.apply(this, arguments);
-      clearPnlDom();
-      return out;
-    };
-    try{ switchRetentionUpsellingFeaturesPlan = window.switchRetentionUpsellingFeaturesPlan; }catch(e){}
-  }
-
-  var oldRestore = window.restoreCurrentView;
-  window.restoreCurrentView = function(options){
-    var s = currentState();
-    syncGlobals(s);
-    if(s.main === 'retention' && s.retView === 'revenue'){
-      enforcePnlDom(true);
-      return;
-    }
-    clearPnlDom();
-    if(typeof oldRestore === 'function') return oldRestore.apply(this, arguments);
-  };
-  try{ restoreCurrentView = window.restoreCurrentView; }catch(e){}
-
-  var oldLoad = window.loadData;
-  if(typeof oldLoad === 'function'){
-    window.loadData = async function(options){
-      var before = currentState();
-      syncGlobals(before);
-      var keepPnl = before.main === 'retention' && before.retView === 'revenue';
-      var out = oldLoad.apply(this, arguments);
-      if(out && typeof out.then === 'function') await out;
-      var after = currentState();
-      if(keepPnl || (after.main === 'retention' && after.retView === 'revenue')){
-        enforcePnlDom(true);
-      }else{
-        syncGlobals(after);
-        clearPnlDom();
-        if(typeof window.restoreCurrentView === 'function') window.restoreCurrentView({keepScroll:true});
-      }
-      return out;
-    };
-    try{ loadData = window.loadData; }catch(e){}
-  }
-
-  document.addEventListener('click', function(e){
-    var pnlBtn = e.target.closest && e.target.closest('#side-revenue-analysis-main,#side-ret-revenue-analysis');
-    if(pnlBtn){
-      saveState({main:'retention', retView:'revenue', retOwner:null});
-      setTimeout(function(){ enforcePnlDom(true); }, 0);
-      return;
-    }
-    var acqBtn = e.target.closest && e.target.closest('#side-acquisition,[id^="tab-"]:not(#side-ret-revenue-analysis)');
-    if(acqBtn && !e.target.closest('#side-revenue-analysis-main')){
-      if(acqBtn.id === 'side-acquisition') saveState({main:'acquisition', acqTab:'team', retView:'overview', retOwner:null});
-    }
-  }, true);
-
-  setInterval(function(){
-    var s = currentState();
-    if(s.main === 'retention' && s.retView === 'revenue'){
-      var tabs = byId('tabsBar');
-      var panel = byId('panel-retention-revenue');
-      if((tabs && tabs.style.display !== 'none') || (panel && !panel.classList.contains('active')) || !document.body.classList.contains('pnl-active')){
-        enforcePnlDom(false);
-      }
-    }
-  }, 900);
-
-  var initial = currentState();
-  syncGlobals(initial);
-  if(initial.main === 'retention' && initial.retView === 'revenue'){
-    setTimeout(function(){ enforcePnlDom(true); }, 0);
-  }
-})();
-</script>
-
-
 
 <!-- FINAL ROUTER LOCK PATCH — fixes Acquisition/Retention sticky state conflict -->
 <script id="final-router-lock-patch-v3">
@@ -11906,8 +11406,6 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
   setTimeout(function(){ applySaved({keepScroll:true, instant:true}); }, 900);
 })();
 </script>
-
-
 <script>
 /* RETENTION TEAM OVERVIEW · SUPABASE ONLY DATA BRIDGE */
 (function(){
@@ -12302,60 +11800,40 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
     return R2;
   }
 
-  var previousLoadData = window.loadData;
-  window.loadData = async function(options){
+  async function loadRetentionTeamSupabaseOnly(options){
     options = options || {};
     var scrollY = window.scrollY;
-    var oldRetention = window.R || (typeof R !== 'undefined' ? R : null);
-    var result;
-    try{
-      if(typeof previousLoadData === 'function'){
-        result = previousLoadData.call(this, Object.assign({}, options, { keepScroll:true }));
-        if(result && typeof result.then === 'function') await result;
-      }
-    }catch(e){
-      console.warn('Base dashboard load had an issue before Retention Supabase bridge.', e);
-    }
-    oldRetention = oldRetention || window.R || null;
     try{
       var supa = await fetchSupabaseRetentionTeamOverview();
-      var built = buildRetentionFromSupabaseTeam(supa, oldRetention || {});
+      var built = buildRetentionFromSupabaseTeam(supa, window.R || {});
+      built.meta = built.meta || {};
+      built.meta.source = 'Supabase only';
       window.R = built;
       try{ R = built; }catch(e){}
       window.RETENTION_SUPABASE_TEAM_DATA = supa;
     }catch(e){
-      console.error('Retention Team Overview Supabase load failed. Rendering empty Supabase-only Retention state.', e);
+      console.error('Retention Team Overview Supabase load failed.', e);
       var empty = buildRetentionFromSupabaseTeam({}, {});
+      empty.meta = empty.meta || {};
+      empty.meta.source = 'Supabase only';
       empty.meta.error = String(e && e.message || e);
       window.R = empty;
       try{ R = empty; }catch(err){}
     }
-
     try{
       if(typeof renderRetention === 'function') renderRetention();
       if(window.APP_MAIN_PANEL === 'retention'){
-        if(window.APP_RETENTION_VIEW === 'financial' && typeof renderRetentionFinancialDetails === 'function') renderRetentionFinancialDetails();
         if(typeof renderRetentionSidebar === 'function'){
-          renderRetentionSidebar(window.APP_RETENTION_VIEW === 'financial' ? 'financial' : window.APP_RETENTION_VIEW === 'owner' ? 'owner' : 'overview');
+          renderRetentionSidebar(window.APP_RETENTION_VIEW === 'financial' ? 'financial' : window.APP_RETENTION_VIEW === 'owner' ? 'owner' : window.APP_RETENTION_VIEW === 'upselling' ? 'upselling' : 'overview');
         }
       }
-      if(typeof restoreCurrentView === 'function') restoreCurrentView({keepScroll:true});
-    }catch(e){
-      console.error('Retention Supabase render failed', e);
-    }
-
-    if(!options || options.keepScroll !== false){
-      requestAnimationFrame(function(){ window.scrollTo(0, scrollY); });
-    }
-    return result;
-  };
-  window.loadData.__retentionSupabaseTeamOverview = true;
-  try{ loadData = window.loadData; }catch(e){}
+    }catch(e){ console.error('Retention Supabase render failed', e); }
+    if(!options || options.keepScroll !== false){ requestAnimationFrame(function(){ window.scrollTo(0, scrollY); }); }
+    return window.R;
+  }
+  window.loadRetentionTeamSupabaseOnly = loadRetentionTeamSupabaseOnly;
 })();
 </script>
-
-
-
 <script id="retention-financial-supabase-bridge-v1">
 (function(){
   if(window.__RETENTION_FINANCIAL_SUPABASE_BRIDGE_V1__) return;
@@ -12648,8 +12126,9 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
       var scrollY = window.scrollY;
       var out = oldLoad.apply(this, arguments);
       if(out && typeof out.then === 'function') await out;
-      await rfEnsureFinancialData(true);
-      if(wasFinancial || (window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'financial')){
+      var nowFinancial = wasFinancial || (window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'financial');
+      if(nowFinancial) await rfEnsureFinancialData(true);
+      if(nowFinancial){
         if(typeof window.renderRetentionFinancialDetails === 'function') window.renderRetentionFinancialDetails();
         requestAnimationFrame(function(){ window.scrollTo(0, scrollY); });
       }
@@ -12693,9 +12172,6 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
   }
 })();
 </script>
-
-
-
 <!-- P&L SUPABASE LAZY LOAD PATCH — fetches P&L views only when P&L is opened -->
 <script id="pnl-supabase-lazy-load-v1">
 (function(){
@@ -12882,9 +12358,6 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
   else setTimeout(function(){ if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'revenue') activateSupabasePnl({keepScroll:true,instant:true}); }, 0);
 })();
 </script>
-
-
-
 <!-- SMOOTH NAVIGATION PATCH — stable tabs, no hard auto-refresh, manual smooth reload only -->
 <style id="smooth-navigation-patch-css">
   body.smooth-nav-lock .panel{animation:none!important}
@@ -13139,6 +12612,149 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
   setTimeout(function(){ if(window.__dashboardAutoRefreshTimer){ clearInterval(window.__dashboardAutoRefreshTimer); window.__dashboardAutoRefreshTimer=null; } }, 1000);
 })();
 </script>
+</div><script id="supabase-only-lazy-cleanup-v1">
+(function(){
+  if(window.__SUPABASE_ONLY_LAZY_CLEANUP_V1__) return;
+  window.__SUPABASE_ONLY_LAZY_CLEANUP_V1__ = true;
 
-</body>
+  window.TALENTERA_SUPABASE_ONLY = true;
+  window.TALENTERA_AUTO_REFRESH_DISABLED = true;
+  if(window.__dashboardAutoRefreshTimer){ clearInterval(window.__dashboardAutoRefreshTimer); window.__dashboardAutoRefreshTimer = null; }
+
+  var SUPA_URL = window.SUPABASE_URL || 'https://czaxtwbmborxwzaboqxl.supabase.co';
+  var SUPA_KEY = window.SUPABASE_KEY || 'sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX';
+  var CACHE = window.__SUPABASE_TAB_CACHE__ = window.__SUPABASE_TAB_CACHE__ || {};
+
+  function byId(id){ return document.getElementById(id); }
+  function fetchView(view, limit){
+    if(typeof window.supabaseView === 'function') return window.supabaseView(view, limit || 10000);
+    var url = SUPA_URL + '/rest/v1/' + encodeURIComponent(view) + '?select=*&limit=' + (limit || 10000);
+    return fetch(url, { cache:'no-store', headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY } })
+      .then(function(res){ if(!res.ok) throw new Error(view + ' HTTP ' + res.status); return res.json(); });
+  }
+
+  window.retentionUpsellEnsureSupabase = function(force){
+    if(CACHE.upsell && !force){ window.RETENTION_UPSELL_SUPABASE_READY = true; return Promise.resolve(CACHE.upsell); }
+    return Promise.all([
+      fetchView('vw_upsell_feature_details', 20000),
+      fetchView('vw_upsell_dashboard_summary', 1000),
+      fetchView('vw_upsell_company_summary', 20000),
+      fetchView('vw_upsell_feature_status_summary', 10000)
+    ]).then(function(parts){
+      var details = parts[0] || [];
+      CACHE.upsell = { details: details, dashboard: parts[1] || [], companies: parts[2] || [], statuses: parts[3] || [] };
+      window.RETENTION_UPSELL_SUPABASE_ROWS = details.map(function(r){
+        return {
+          product: r.product || r.product_line || '',
+          clientName: r.client_name || r.company_name || '',
+          csm: r.csm || r.csm_owner || '',
+          rm: r.rm_owner || r.owner_name || '',
+          renewalMonth: r.renewal_month || r.expected_month || '',
+          renewalValue: Number(r.renewal_value_clean || r.renewal_value || 0),
+          feature: r.feature || r.feature_name || '',
+          ownership: r.ownership || '',
+          status: r.status || r.feature_status || '',
+          timeline: r.timeline || '',
+          upsellValue: Number(r.upsell_value_clean || r.upsell_value || 0),
+          notes: r.notes || '',
+          _row: r.source_row_number || r.row_key || ''
+        };
+      });
+      window.RETENTION_UPSELL_SUPABASE_READY = true;
+      return CACHE.upsell;
+    });
+  };
+
+  async function ensureTabData(options){
+    options = options || {};
+    var main = window.APP_MAIN_PANEL || 'acquisition';
+    var ret = window.APP_RETENTION_VIEW || 'overview';
+
+    if(main === 'retention'){
+      if((ret === 'overview' || ret === 'owner') && typeof window.loadRetentionTeamSupabaseOnly === 'function'){
+        await window.loadRetentionTeamSupabaseOnly({keepScroll:true});
+      }
+      if(ret === 'financial' && typeof window.retentionFinancialEnsureSupabase === 'function'){
+        await window.retentionFinancialEnsureSupabase(!!options.force);
+      }
+      if(ret === 'upselling'){
+        await window.retentionUpsellEnsureSupabase(!!options.force);
+      }
+      if(ret === 'revenue' && typeof window.loadPnlFromSupabase === 'function'){
+        await window.loadPnlFromSupabase(!!options.force);
+      }
+    }else{
+      // Acquisition only.
+      if(typeof window.fetchSupabaseAcquisition === 'function'){
+        var supa = await window.fetchSupabaseAcquisition();
+        window.D = acqEnhanceSupabaseData(buildAcquisitionFromSupabase(supa), supa);
+        try{ D = window.D; }catch(e){}
+      }
+    }
+  }
+  window.ensureCurrentTabSupabaseData = ensureTabData;
+
+  var previousLoadData = window.loadData;
+  window.loadData = async function(options){
+    options = Object.assign({keepScroll:true, force:true}, options || {});
+    var y = window.scrollY;
+    var ri = byId('ri');
+    var btn = ri && ri.closest ? ri.closest('.refresh-btn') : null;
+    if(ri) ri.classList.add('spin');
+    if(btn) btn.classList.add('is-loading');
+    try{
+      await ensureTabData(options);
+      if(typeof window.render === 'function' && (window.APP_MAIN_PANEL || 'acquisition') === 'acquisition') window.render();
+      if(typeof window.restoreCurrentView === 'function') window.restoreCurrentView({keepScroll:true, instant:true});
+    }catch(e){ console.error('Supabase-only refresh failed', e); }
+    finally{
+      requestAnimationFrame(function(){ if(options.keepScroll !== false) window.scrollTo(0, y); });
+      if(ri) ri.classList.remove('spin');
+      if(btn) btn.classList.remove('is-loading');
+    }
+  };
+  try{ loadData = window.loadData; }catch(e){}
+
+  function wrap(name, loader){
+    var old = window[name];
+    if(typeof old !== 'function' || old.__supabaseOnlyLazyWrapped) return;
+    window[name] = function(){
+      var args = arguments;
+      var result = old.apply(this, args);
+      Promise.resolve().then(loader).then(function(){
+        try{
+          if(name === 'switchRetentionUpsellingFeaturesPlan' && typeof window.renderRetentionUpsellingFeaturesPlan === 'function') window.renderRetentionUpsellingFeaturesPlan();
+          if(name === 'switchRetentionFinancial' && typeof window.renderRetentionFinancialDetails === 'function') window.renderRetentionFinancialDetails();
+          if((name === 'switchMainPanel' || name === 'selectRetentionOwner') && typeof window.restoreCurrentView === 'function') window.restoreCurrentView({keepScroll:true, instant:true});
+        }catch(e){}
+      }).catch(function(e){ console.error(name + ' lazy Supabase load failed', e); });
+      return result;
+    };
+    window[name].__supabaseOnlyLazyWrapped = true;
+    try{ eval(name + '=window[name]'); }catch(e){}
+  }
+
+  wrap('switchRetentionFinancial', function(){ return window.retentionFinancialEnsureSupabase ? window.retentionFinancialEnsureSupabase(false) : null; });
+  wrap('switchRetentionUpsellingFeaturesPlan', function(){ return window.retentionUpsellEnsureSupabase(false); });
+  wrap('switchRetentionRevenueAnalysis', function(){ return window.loadPnlFromSupabase ? window.loadPnlFromSupabase(false) : null; });
+  wrap('switchMainPanel', function(){ return (window.APP_MAIN_PANEL === 'retention' && typeof window.loadRetentionTeamSupabaseOnly === 'function') ? window.loadRetentionTeamSupabaseOnly({keepScroll:true}) : null; });
+  wrap('selectRetentionOwner', function(){ return (typeof window.loadRetentionTeamSupabaseOnly === 'function') ? window.loadRetentionTeamSupabaseOnly({keepScroll:true}) : null; });
+
+  // Remove legacy wording from the UI when old empty states are hit.
+  function scrubLegacyText(){
+    document.querySelectorAll('body *').forEach(function(el){
+      if(el.childNodes && el.childNodes.length === 1 && el.childNodes[0].nodeType === 3){
+        var txt = el.textContent || '';
+        if(/data-retention\.json|Data Retention\.json|data\.json|fallback/i.test(txt)){
+          el.textContent = txt
+            .replace(/data-retention\.json|Data Retention\.json|retention-data\.json/gi,'Supabase')
+            .replace(/data\.json/gi,'Supabase')
+            .replace(/fallback/gi,'Supabase only');
+        }
+      }
+    });
+  }
+  setTimeout(scrubLegacyText, 500);
+})();
+</script></body>
 </html>

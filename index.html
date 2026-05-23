@@ -4024,13 +4024,154 @@ function buildAcquisitionFromSupabase(SUPA){
 function fallbackAcquisition(){
   return {meta:{yesterdayLabel:'No data',generatedAt:'--',portalId:HS_PORTAL_ID,source:'Supabase'},kpi:{yesterday:{},mtd:{},ytd:{}},team:{},repData:[],stageData:[],topInactiveRankAccounts:[],rankTotals:{},outreachCoverage:{},autoRecs:[],closedWon:[],closedLost:[],lostByReason:{},marketNews:[]};
 }
+
+
+/* ACQUISITION SUPABASE REFLECTION REPAIR — fills old dashboard sections safely */
+function acqDeepValue(obj,path,def){
+  try{return path.split('.').reduce((o,k)=>o&&o[k],obj) ?? def;}catch(e){return def;}
+}
+function acqHasRows(v){return Array.isArray(v)&&v.length>0;}
+function acqHasNumber(v){return Number(v||0)>0;}
+function acqCloneJSON(v){try{return JSON.parse(JSON.stringify(v));}catch(e){return v;}}
+function acqFindLegacyRep(legacy,name){
+  const reps=legacy&&Array.isArray(legacy.repData)?legacy.repData:[];
+  return reps.find(r=>acqNormText(r.name||r.ownerName)===acqNormText(name))||null;
+}
+function acqRepairRankFromSupabaseViews(d,SUPA){
+  if(!d)return d;
+  const rankRows=(SUPA&&SUPA.rank)||[];
+  const noTouchRows=(SUPA&&SUPA.rankNoTouch)||[];
+  const byOwnerRank={};
+  const totals={A:{total:0,no:0},B:{total:0,no:0}};
+  const ensure=(owner,rank)=>{
+    const k=acqNormText(owner||'Unknown')+'||'+rank;
+    if(!byOwnerRank[k])byOwnerRank[k]={owner,rank,total:0,no:0,rows:[]};
+    return byOwnerRank[k];
+  };
+  rankRows.forEach(r=>{
+    const rank=acqCleanRank(r.rank_group||r.rank);
+    if(rank!=='A'&&rank!=='B')return;
+    ensure(r.owner_name,rank).total++;
+    totals[rank].total++;
+  });
+  noTouchRows.forEach(r=>{
+    const rank=acqCleanRank(r.rank_group||r.rank);
+    if(rank!=='A'&&rank!=='B')return;
+    const x=ensure(r.owner_name,rank);
+    x.no++;
+    x.rows.push(r);
+    totals[rank].no++;
+  });
+  (d.repData||[]).forEach(rep=>{
+    const a=byOwnerRank[acqNormText(rep.name)+'||A'];
+    const b=byOwnerRank[acqNormText(rep.name)+'||B'];
+    if(a){
+      if(!acqHasNumber(rep.rankA))rep.rankA=a.total||rep.rankA||0;
+      if(!acqHasNumber(rep.rankANotContacted))rep.rankANotContacted=a.no||rep.rankANotContacted||0;
+      if(!acqHasRows(rep.rankAUntouched)&&a.rows.length)rep.rankAUntouched=a.rows.map(r=>acqRankCompanyRow(r,rep));
+      if(!acqHasNumber(rep.rankAContacted))rep.rankAContacted=Math.max(0,(rep.rankA||0)-(rep.rankANotContacted||0));
+    }
+    if(b){
+      if(!acqHasNumber(rep.rankB))rep.rankB=b.total||rep.rankB||0;
+      if(!acqHasNumber(rep.rankBNotContacted))rep.rankBNotContacted=b.no||rep.rankBNotContacted||0;
+      if(!acqHasRows(rep.rankBUntouched)&&b.rows.length)rep.rankBUntouched=b.rows.map(r=>acqRankCompanyRow(r,rep));
+      if(!acqHasNumber(rep.rankBContacted))rep.rankBContacted=Math.max(0,(rep.rankB||0)-(rep.rankBNotContacted||0));
+    }
+  });
+  const rt=d.rankTotals||{};
+  if(!acqHasNumber(rt.total)&&((totals.A.total+totals.B.total)>0||(totals.A.no+totals.B.no)>0)){
+    rt.A=totals.A.total||0;
+    rt.B=totals.B.total||0;
+    rt.ANotContacted=totals.A.no||0;
+    rt.BNotContacted=totals.B.no||0;
+    rt.AContacted=Math.max(0,rt.A-rt.ANotContacted);
+    rt.BContacted=Math.max(0,rt.B-rt.BNotContacted);
+    rt.total=rt.A+rt.B;
+    d.rankTotals=rt;
+  }
+  if(!acqHasRows(d.topInactiveRankAccounts)&&noTouchRows.length){
+    d.topInactiveRankAccounts=noTouchRows.map(r=>{
+      const row=acqRankCompanyRow(r,{});
+      return {rank:row.rank,name:row.name,rep:row.ownerName,repColor:row.ownerColor,daysSinceActivity:row.daysSinceActivity,hubspotUrl:row.hubspotUrl};
+    }).sort((a,b)=>(b.daysSinceActivity||0)-(a.daysSinceActivity||0)).slice(0,20);
+  }
+  return d;
+}
+function acqRepairTeamLeadSplits(d){
+  if(!d||!Array.isArray(d.repData))return d;
+  const team=d.team=d.team||{};
+  team.leadsYest=d.repData.reduce((s,r)=>s+acqNum(r.leadsYest),0);
+  team.leadsYestInbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsYestInbound),0);
+  team.leadsYestOutbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsYestOutbound),0);
+  team.leadsMTD=d.repData.reduce((s,r)=>s+acqNum(r.leadsMTD),0);
+  team.leadsMTDInbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsMTDInbound),0);
+  team.leadsMTDOutbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsMTDOutbound),0);
+  team.leadsYTD=d.repData.reduce((s,r)=>s+acqNum(r.leadsYTD),0);
+  team.leadsYTDInbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsYTDInbound),0);
+  team.leadsYTDOutbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsYTDOutbound),0);
+  return d;
+}
+function acqMergeLegacyFallback(d,legacy){
+  if(!d||!legacy)return d;
+  const mark=[];
+  const copyIfEmpty=(key,checker)=>{
+    if(checker(d[key])&&legacy[key]!==undefined){d[key]=acqCloneJSON(legacy[key]);mark.push(key);}
+  };
+  copyIfEmpty('marketNews',v=>!acqHasRows(v));
+  if((!d.aiInsights||(!d.aiInsights.summary&&!acqHasRows(d.aiInsights.patterns)))&&legacy.aiInsights){d.aiInsights=acqCloneJSON(legacy.aiInsights);mark.push('aiInsights');}
+  if((!d.outreachCoverage||!acqHasNumber(acqDeepValue(d,'outreachCoverage.contacts.total',0)))&&legacy.outreachCoverage){d.outreachCoverage=acqCloneJSON(legacy.outreachCoverage);mark.push('outreachCoverage');}
+  const supaRankTotal=acqDeepValue(d,'rankTotals.total',0);
+  const legacyRankTotal=acqDeepValue(legacy,'rankTotals.total',0);
+  if(!acqHasNumber(supaRankTotal)&&acqHasNumber(legacyRankTotal)){
+    d.rankTotals=acqCloneJSON(legacy.rankTotals||{});
+    if(acqHasRows(legacy.topInactiveRankAccounts))d.topInactiveRankAccounts=acqCloneJSON(legacy.topInactiveRankAccounts);
+    mark.push('rankTotals');
+  }
+  if(!acqHasRows(d.stageData)&&acqHasRows(legacy.stageData)){d.stageData=acqCloneJSON(legacy.stageData);mark.push('stageData');}
+  if(!acqHasRows(d.closedWon)&&acqHasRows(legacy.closedWon)){d.closedWon=acqCloneJSON(legacy.closedWon);mark.push('closedWon');}
+  if(!acqHasRows(d.closedLost)&&acqHasRows(legacy.closedLost)){d.closedLost=acqCloneJSON(legacy.closedLost);d.lostByReason=acqCloneJSON(legacy.lostByReason||d.lostByReason||{});mark.push('closedLost');}
+  if(Array.isArray(d.repData)&&Array.isArray(legacy.repData)){
+    d.repData.forEach(rep=>{
+      const old=acqFindLegacyRep(legacy,rep.name);
+      if(!old)return;
+      ['topDeals','stuck','cold','needsAttention','rankAUntouched','rankBUntouched'].forEach(k=>{
+        if(!acqHasRows(rep[k])&&acqHasRows(old[k]))rep[k]=acqCloneJSON(old[k]);
+      });
+      if(!(acqNum(rep.rankA)+acqNum(rep.rankB))&&(acqNum(old.rankA)+acqNum(old.rankB))){
+        ['rankA','rankAContacted','rankANotContacted','rankB','rankBContacted','rankBNotContacted','rankAByCountry','rankBByCountry','rankRows'].forEach(k=>{if(old[k]!==undefined)rep[k]=acqCloneJSON(old[k]);});
+      }
+      if(!(acqNum(rep.leadsYTD)||acqNum(rep.leadsMTD))&&(acqNum(old.leadsYTD)||acqNum(old.leadsMTD))){
+        ['leadsYest','leadsYestInbound','leadsYestOutbound','leadsMTD','leadsMTDInbound','leadsMTDOutbound','leadsYTD','leadsYTDInbound','leadsYTDOutbound'].forEach(k=>{if(old[k]!==undefined)rep[k]=old[k];});
+      }
+    });
+  }
+  d.meta=d.meta||{};
+  if(mark.length)d.meta.fallbackMerged=mark.join(', ');
+  acqRepairTeamLeadSplits(d);
+  return d;
+}
+function acqEnhanceSupabaseData(d,SUPA){
+  d=acqRepairRankFromSupabaseViews(d,SUPA||{});
+  d=acqRepairTeamLeadSplits(d);
+  return d;
+}
 async function loadData(options={}){
   const ri=$('ri');
   if(ri) ri.classList.add('spin');
   const previousScroll=window.scrollY;
   try{
     const supa=await fetchSupabaseAcquisition();
-    D=buildAcquisitionFromSupabase(supa);
+    D=acqEnhanceSupabaseData(buildAcquisitionFromSupabase(supa),supa);
+    try{
+      const legacy=await fetchJsonFromSources([
+        './data.json','data.json',
+        'https://amohamed-alt.github.io/talentera-huddle/data.json',
+        'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/data.json'
+      ],false);
+      D=acqMergeLegacyFallback(D,legacy);
+    }catch(fallbackErr){
+      console.warn('Legacy Acquisition fallback was not loaded; using Supabase-only data.', fallbackErr);
+    }
     window.D=D;
   }catch(e){
     console.error('Supabase Acquisition data failed to load',e);

@@ -1,0 +1,62 @@
+/* base.css — CSS variables and global reset */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Palette */
+  --bg:        #ecf8f1;
+  --bg2:       #f4fdf8;
+  --panel:     rgba(255,255,255,0.82);
+  --panel-solid: #ffffff;
+  --line:      #d4e8dc;
+  --line2:     #e8f5ee;
+
+  --text:      #0d1f16;
+  --text2:     #3a5244;
+  --muted:     #6b8a78;
+
+  --green:     #14a84a;
+  --green-lt:  #dcfce7;
+  --green-dk:  #086b2e;
+  --blue:      #2563eb;
+  --blue-lt:   #dbeafe;
+  --red:       #dc2626;
+  --red-lt:    #fee2e2;
+  --orange:    #d97706;
+  --orange-lt: #fef3c7;
+  --purple:    #7c3aed;
+  --purple-lt: #ede9fe;
+  --teal:      #0d9488;
+  --teal-lt:   #ccfbf1;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(14,32,22,.07);
+  --shadow:    0 12px 40px rgba(14,32,22,.10);
+  --shadow-lg: 0 24px 64px rgba(14,32,22,.14);
+
+  /* Geometry */
+  --radius-sm: 12px;
+  --radius:    20px;
+  --radius-lg: 28px;
+
+  /* Layout */
+  --sidebar-w: 264px;
+  --topbar-h:  64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: linear-gradient(145deg, #ecf8f1 0%, #f4fdf7 50%, #eaf4ff 100%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+code, .mono { font-family: 'DM Mono', monospace; font-size: 0.85em; }

@@ -1695,7 +1695,7 @@ body::after{
           <div class="compact-section" id="leadFunnelSection">
             <div class="compact-hd">
               <div class="compact-title">🔻 Lead Funnel & Source Performance</div>
-              <span class="badge bb">Fallback from outreachCoverage</span>
+              <span class="badge bb">Supabase mapped coverage</span>
             </div>
             <div class="funnel" id="leadFunnelGrid"></div>
           </div>
@@ -1785,7 +1785,7 @@ body::after{
           </div>
           <!-- ═══════════════════════════════════════════════ -->
           <!-- OUTREACH COVERAGE — under Leads Overview       -->
-          <!-- reads D.outreachCoverage from data.json        -->
+          <!-- reads D.outreachCoverage from Supabase mapped views -->
           <!-- ═══════════════════════════════════════════════ -->
           <div class="manager-section-label">Coverage Control</div>
 
@@ -2601,7 +2601,7 @@ function openAcqCompletedMeetingDetails(repKey, countryKey, rankKey, label){
       <div><span class="acq-detail-pill">${contacts.length.toLocaleString()} meeting contact${contacts.length === 1 ? "" : "s"}</span></div>
       <div style="font-size:11px;font-weight:800;color:var(--text2);text-align:right">${contactText}${esc(more)}</div>
     </div>`;
-  }).join("") : `<div class="acq-detail-empty">No completed meeting rows found for this filter in the current data.json.</div>`;
+  }).join("") : `<div class="acq-detail-empty">No completed meeting rows found for this filter in the current Supabase view.</div>`;
   const more = rows.length > 120 ? `<div class="acq-detail-empty" style="padding:12px">Showing first 120 of ${rows.length.toLocaleString()} companies.</div>` : "";
   document.getElementById("acqCompletedMeetingsBackdrop")?.remove();
   const node = document.createElement("div");
@@ -2877,7 +2877,7 @@ function renderFinancialDetails(){
       const meta = `${row.stage || ''} · Date entered current stage: ${stageDate}`;
       const status = row.riskLabel || row.status || row.stage || 'Deal';
       return `<div class="acq-detail-row"><div class="acq-detail-name">${recordLink(name,url)}<div class="acq-detail-meta">${esc(meta)}</div></div><div>${esc(row.rep || '—')}</div><div><span class="acq-detail-pill">${esc(status)}</span></div><div style="font-family:var(--mono);font-weight:900;text-align:right">${esc(money(row.amount || 0))}</div></div>`;
-    }).join('') : `<div class="acq-detail-empty">No ${esc(periodLabel)} deals available for this number in the current data.json.</div>`;
+    }).join('') : `<div class="acq-detail-empty">No ${esc(periodLabel)} deals available for this number in the current Supabase view.</div>`;
     const more = safeRows.length > 100 ? `<div class="acq-detail-empty" style="padding:12px">Showing first 100 of ${safeRows.length.toLocaleString()} rows.</div>` : '';
     const node = document.createElement('div');
     node.id = 'acqFinancialBackdrop';
@@ -3039,9 +3039,9 @@ function renderManagerAddons(){
   if(!total) dq.push(['Missing outreachCoverage.contacts','Lead outreach data is empty or not generated.']);
   if((ct.notContactedList||[]).some(x=>!x.ownerName&&!x.ownerId)) dq.push(['Leads without owner','Some not-contacted leads do not have a clear owner.']);
   if((co.notContactedList||[]).some(x=>!x.rank)) dq.push(['Companies without rank','Some company rows do not include Rank A/B info.']);
-  if(!ss.online&&!ss.offline&&!ss.inbound&&!ss.outbound) dq.push(['Missing source split','Online/offline split is not available in data.json.']);
+  if(!ss.online&&!ss.offline&&!ss.inbound&&!ss.outbound) dq.push(['Missing source split','Online/offline split is not available in Supabase view.']);
   setHTML('dataQualityBadge', `${dq.length} warnings`);
-  setHTML('dataQualityList', dq.length?dq.map((x,i)=>`<div class="mini-row"><div class="mini-main"><div class="mini-name">${x[0]}</div><div class="mini-meta">${x[1]}</div></div><div class="mini-score" style="color:var(--amber)">!</div></div>`).join(''):`<div class="mini-row"><div class="mini-main"><div class="mini-name">Data quality looks good</div><div class="mini-meta">No major warnings detected from current data.json.</div></div><div class="mini-score" style="color:var(--green)">✓</div></div>`);
+  setHTML('dataQualityList', dq.length?dq.map((x,i)=>`<div class="mini-row"><div class="mini-main"><div class="mini-name">${x[0]}</div><div class="mini-meta">${x[1]}</div></div><div class="mini-score" style="color:var(--amber)">!</div></div>`).join(''):`<div class="mini-row"><div class="mini-main"><div class="mini-name">Data quality looks good</div><div class="mini-meta">No major warnings detected from current Supabase view.</div></div><div class="mini-score" style="color:var(--green)">✓</div></div>`);
 }
 
 function renderCommandPreview(){
@@ -3172,10 +3172,10 @@ function acqConnectedCallsCount(row){
   if(row?.hasConnectedCall === false || row?.hasConnectedCalls === false) return 0;
   return null;
 }
-function acqLeadHasConnectedCall(row, fallbackNoConnected=false){
+function acqLeadHasConnectedCall(row, noConnectedDefault=false){
   const count = acqConnectedCallsCount(row);
   if(count !== null) return count > 0;
-  if(fallbackNoConnected) return false;
+  if(noConnectedDefault) return false;
   return false;
 }
 function acqLeadDaysWithoutContact(row){
@@ -3285,7 +3285,7 @@ function renderRepNoConnectedLeadsBlock(rep){
 
 /* ════════════════════════════════════════
    OUTREACH COVERAGE RENDERER
-   reads D.outreachCoverage from data.json
+   reads D.outreachCoverage from Supabase
    ════════════════════════════════════════ */
 function renderOutreach(){
   const card = $("outreachCard");
@@ -3295,7 +3295,7 @@ function renderOutreach(){
   card.style.display = "block";
 
   if(!oc){
-    card.innerHTML = `<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">⚠️</div>Lead Outreach Coverage</div></div><div style="padding:16px 18px;color:var(--red);font-size:12px;font-weight:700">outreachCoverage is missing from loaded data.json</div>`;
+    card.innerHTML = `<div class="card-hd"><div class="card-title"><div class="card-title-icon" style="background:var(--red-bg)">⚠️</div>Lead Outreach Coverage</div></div><div style="padding:16px 18px;color:var(--red);font-size:12px;font-weight:700">outreachCoverage is missing from loaded Supabase</div>`;
     return;
   }
 
@@ -3485,7 +3485,7 @@ function openAcqMetricCard(kind,opts={}){
     const value = type==='lead' ? (leadDays !== null ? leadDays + 'd' : '—') : acqFirstValue(row,["amount"]) !== null ? fmt(acqFirstValue(row,["amount"])||0) : (row.score!==undefined ? row.score : (row.ageDays!==undefined ? row.ageDays+'d' : ''));
     const status = type==='lead' ? `${acqConnectedCallsCount(row) ?? 0} connected calls` : (acqFirstValue(row,["leadStatus","status","reason","priority"]) || (type==='deal'?'Deal':'Company'));
     return `<div class="acq-detail-row"><div class="acq-detail-name">${recordLink(name,url)}<div class="acq-detail-meta">${esc(meta||'')}</div></div><div>${esc(owner)}</div><div><span class="acq-detail-pill">${esc(status||'—')}</span></div><div style="font-family:var(--mono);font-weight:900;text-align:right">${esc(value||'—')}</div></div>`;
-  }).join('') : `<div class="acq-detail-empty">No strict zero-connected-call rows found in current data.json. Export outreachCoverage.contacts.noConnectedCallsList from n8n first.</div>`;
+  }).join('') : `<div class="acq-detail-empty">No strict zero-connected-call rows found in current Supabase view. Export outreachCoverage.contacts.noConnectedCallsList from n8n first.</div>`;
   const more=rows.length>80?`<div class="acq-detail-empty" style="padding:12px">Showing first 80 of ${rows.length.toLocaleString()} rows.</div>`:'';
   const node=document.createElement('div');
   node.id='acqMetricBackdrop';
@@ -3605,31 +3605,10 @@ function restoreCurrentView(options={}){
   }
 }
 
-async function fetchJsonFromSources(urls, required){
-  const stamp = Date.now();
-  let lastError = null;
-
-  for(const baseUrl of urls){
-    if(!baseUrl) continue;
-
-    try{
-      const sep = baseUrl.includes("?") ? "&" : "?";
-      const res = await fetch(baseUrl + sep + "t=" + stamp, { cache: "no-store" });
-
-      if(!res.ok){
-        lastError = new Error("HTTP " + res.status + " from " + baseUrl);
-        continue;
-      }
-
-      return await res.json();
-    }catch(e){
-      lastError = e;
-    }
-  }
-
-  if(required) throw lastError || new Error("No dashboard data source loaded");
-  return null;
+async function fetchJsonFromSources(){
+  throw new Error('Legacy JSON loader is disabled. Supabase is the only source.');
 }
+
 
 
 const SUPABASE_URL='https://czaxtwbmborxwzaboqxl.supabase.co';
@@ -4021,7 +4000,7 @@ function buildAcquisitionFromSupabase(SUPA){
     financialDetails
   };
 }
-function fallbackAcquisition(){
+function emptyAcquisitionState(){
   return {meta:{yesterdayLabel:'No data',generatedAt:'--',portalId:HS_PORTAL_ID,source:'Supabase'},kpi:{yesterday:{},mtd:{},ytd:{}},team:{},repData:[],stageData:[],topInactiveRankAccounts:[],rankTotals:{},outreachCoverage:{},autoRecs:[],closedWon:[],closedLost:[],lostByReason:{},marketNews:[]};
 }
 
@@ -4111,7 +4090,7 @@ function acqRepairTeamLeadSplits(d){
   team.leadsYTDOutbound=d.repData.reduce((s,r)=>s+acqNum(r.leadsYTDOutbound),0);
   return d;
 }
-function acqMergeLegacyFallback(d,legacy){
+function acqMergeLegacyDisabled(d,legacy){
   if(!d||!legacy)return d;
   const mark=[];
   const copyIfEmpty=(key,checker)=>{
@@ -4146,7 +4125,7 @@ function acqMergeLegacyFallback(d,legacy){
     });
   }
   d.meta=d.meta||{};
-  if(mark.length)d.meta.fallbackMerged=mark.join(', ');
+  if(mark.length)d.meta.legacyMerged=mark.join(', ');
   acqRepairTeamLeadSplits(d);
   return d;
 }
@@ -4156,49 +4135,10 @@ function acqEnhanceSupabaseData(d,SUPA){
   return d;
 }
 async function loadData(options={}){
-  const ri=$('ri');
-  if(ri) ri.classList.add('spin');
-  const previousScroll=window.scrollY;
-  try{
-    const supa=await fetchSupabaseAcquisition();
-    D=acqEnhanceSupabaseData(buildAcquisitionFromSupabase(supa),supa);
-    try{
-      const legacy=await fetchJsonFromSources([
-        './data.json','data.json',
-        'https://amohamed-alt.github.io/talentera-huddle/data.json',
-        'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/data.json'
-      ],false);
-      D=acqMergeLegacyFallback(D,legacy);
-    }catch(fallbackErr){
-      console.warn('Legacy Acquisition fallback was not loaded; using Supabase-only data.', fallbackErr);
-    }
-    window.D=D;
-  }catch(e){
-    console.error('Supabase Acquisition data failed to load',e);
-    D=fallbackAcquisition();
-    window.D=D;
+  if(window.loadData && window.loadData !== loadData){
+    return window.loadData(options || {});
   }
-
-  const retentionSources=[
-    './data-retention.json','data-retention.json','./Data%20Retention.json','Data%20Retention.json',
-    'https://amohamed-alt.github.io/talentera-huddle/data-retention.json',
-    'https://amohamed-alt.github.io/talentera-huddle/Data%20Retention.json',
-    'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/data-retention.json',
-    'https://raw.githubusercontent.com/amohamed-alt/talentera-huddle/refs/heads/main/Data%20Retention.json'
-  ];
-  try{
-    R=await fetchJsonFromSources(retentionSources,false);
-    window.R=R;
-  }catch(e){
-    console.warn('Retention JSON data was not loaded; keeping Retention empty until source is available.',e);
-    R=R||null;
-    window.R=R;
-  }
-  window.__acqCompletedMeetingCompanyIndex=null;
-  render();
-  restoreCurrentView({keepScroll:true});
-  if(options&&options.keepScroll!==false) requestAnimationFrame(()=>window.scrollTo(0,previousScroll));
-  if(ri) ri.classList.remove('spin');
+  throw new Error('Supabase-only loader is not initialized yet.');
 }
 
 function render(){
@@ -4885,11 +4825,11 @@ function renderRetention(){
     const pct = (hit,total) => total ? Math.round((hit / total) * 100) : 0;
     const totalAccounts = accounts.length || num(coverage.totalAccounts) || num(summary.activeAccounts) || accountsAll.length || 0;
     const hasAny = v => v !== undefined && v !== null && String(v).trim() !== '' && String(v).trim() !== '—';
-    const getRate = (keys, fallbackHitFn) => {
+    const getRate = (keys, hitFn) => {
       for(const k of keys){
         if(coverage && coverage[k] !== undefined && coverage[k] !== null && coverage[k] !== '') return num(coverage[k]);
       }
-      return pct(accounts.filter(fallbackHitFn).length, totalAccounts);
+      return pct(accounts.filter(hitFn).length, totalAccounts);
     };
     const callCoverage = getRate(['callCoverage','callsCoverage','callCoverageRate'], a => hasAny(a.lastCallDate) || hasAny(a.rmLastCall) || hasAny(a.csmLastCall) || hasAny(a.lastConnectedCall));
     const meetingCoverage = getRate(['meetingCoverage','meetingsCoverage','meetingCoverageRate'], a => hasAny(a.lastMeetingDate) || hasAny(a.rmLastMeeting) || hasAny(a.csmLastMeeting) || hasAny(a.lastCompletedMeeting));
@@ -5003,7 +4943,7 @@ function renderRetention(){
   if($('retRenewalUnifiedToggle')) $('retRenewalUnifiedToggle').style.display = unifiedRenewalRows.length>5?'block':'none';
 
   // Churn reasons
-  if($('retUpsellCoverageBody')) $('retUpsellCoverageBody').innerHTML = churnReasons.length ? churnReasons.map((r,i)=>`<tr class="${i>=5?'ret-hidden':''}"><td><div style="font-weight:800">${textSafe(r.reason||'Not specified')}</div></td><td class="c">${num(r.count)}</td><td class="c" style="font-family:var(--mono);font-weight:700">${money(r.amount)}</td><td class="c">${recordLink(r.deals?.[0]?.companyName||r.deals?.[0]?.name||'—',r.deals?.[0]?.companyUrl||r.deals?.[0]?.hubspotUrl)}</td><td class="c"><span class="badge br">Churn</span></td></tr>`).join('') : empty(5,'No churn reason data in the current retention JSON.');
+  if($('retUpsellCoverageBody')) $('retUpsellCoverageBody').innerHTML = churnReasons.length ? churnReasons.map((r,i)=>`<tr class="${i>=5?'ret-hidden':''}"><td><div style="font-weight:800">${textSafe(r.reason||'Not specified')}</div></td><td class="c">${num(r.count)}</td><td class="c" style="font-family:var(--mono);font-weight:700">${money(r.amount)}</td><td class="c">${recordLink(r.deals?.[0]?.companyName||r.deals?.[0]?.name||'—',r.deals?.[0]?.companyUrl||r.deals?.[0]?.hubspotUrl)}</td><td class="c"><span class="badge br">Churn</span></td></tr>`).join('') : empty(5,'No churn reason data in the current Supabase retention model.');
   if($('retChurnReasonsToggle')) $('retChurnReasonsToggle').style.display = churnReasons.length>5?'block':'none';
 
   // RM/CSM follow-up metrics — company_tier cadence, based on company + associated renewal deals
@@ -5212,7 +5152,7 @@ function renderRetentionOwnerDetails(repId){
     return (Array.isArray(rows) ? rows : []).filter(row => ownerDateInRange(ownerActivityDate(row), from, to)).length;
   }
 
-  function buildOwnerActivityFallback(){
+  function buildOwnerActivityEstimate(){
     const bounds = ownerDateBoundaries();
     const loggedCalls = Array.isArray(details.loggedCalls) ? details.loggedCalls : (Array.isArray(details.calls) ? details.calls : []);
     const connectedCalls = Array.isArray(details.connectedCalls) ? details.connectedCalls : (Array.isArray(details.calls) ? details.calls : []);
@@ -5241,11 +5181,11 @@ function renderRetentionOwnerDetails(repId){
     };
   }
 
-  const activityFallback = buildOwnerActivityFallback();
+  const activityEstimate = buildOwnerActivityEstimate();
   const activityKpis = details.activityKpis || {};
-  const akY = activityKpis.yesterday || activityFallback.yesterday;
-  const akM = activityKpis.mtd || activityFallback.mtd;
-  const akT = activityKpis.ytd || activityFallback.ytd;
+  const akY = activityKpis.yesterday || activityEstimate.yesterday;
+  const akM = activityKpis.mtd || activityEstimate.mtd;
+  const akT = activityKpis.ytd || activityEstimate.ytd;
 
   function ownerActivityCard(value, label, subtitle, colorVar){
     return `
@@ -5651,12 +5591,12 @@ function toggleRetMore(bodyId, btn){
     data = data || {};
 
     // IMPORTANT: do not invent owners from ownerDetails/accounts/deals.
-    // The retention JSON already has the correct official owner list in repData
+    // The Supabase retention model already has the correct official owner list in repData
     // with the real role (RM or CSM). Building owners from account rows caused
     // CSMs to appear again as RM and created duplicated sidebar rows.
     var source = asArray(data.repData);
 
-    // Fallback only if repData is missing. Keep role-specific sources separated.
+    // Estimate only if repData is missing. Keep role-specific sources separated.
     if(!source.length){
       source = [].concat(
         asArray(data.rmMatrix).map(function(r){ return Object.assign({}, r, { role: 'RM' }); }),
@@ -5725,7 +5665,7 @@ function toggleRetMore(bodyId, btn){
       '<div class="sidebar-section" style="padding:12px 10px 5px;margin:0;font-size:8px">Retention Team</div>'
     ];
     if(!repData.length){
-      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in data-retention.json</div>');
+      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in Supabase retention views</div>');
     }
     repData.forEach(function(r){
       var color = r.color || 'var(--cyan)';
@@ -6106,7 +6046,7 @@ function toggleRetMore(bodyId, btn){
       '<div class="sidebar-section" style="padding:12px 10px 5px;margin:0;font-size:8px">Retention Team</div>'
     ];
     if(!repData.length){
-      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in data-retention.json</div>');
+      links.push('<div style="padding:8px 16px;color:rgba(139,173,138,.72);font-size:10px;line-height:1.45">No RM / CSM owners in Supabase retention views</div>');
     }
     repData.forEach(function(r){
       var color = r.color || 'var(--cyan)';
@@ -6149,7 +6089,7 @@ function toggleRetMore(bodyId, btn){
     var monthText = monthLabel(m);
 
     if(!rs || !all.length){
-      set('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Sheet Data</div><div class="ret-fin-card-l">retentionSheets2026 missing</div><div class="ret-fin-card-s">Run the n8n sheet workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      set('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Sheet Data</div><div class="ret-fin-card-l">retentionSheets2026 missing</div><div class="ret-fin-card-s">Run the n8n sheet workflow and make sure Supabase retention views contains retentionSheets2026.accounts.</div></div>');
       set('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retentionSheets2026.accounts is empty.</div>');
       set('retFinCashedBody', empty(6,'No collection rows from sheets.'));
       set('retFinBookedBody', empty(6,'No booking rows from sheets.'));
@@ -6262,7 +6202,7 @@ function updateClock(){
 setInterval(updateClock,60000);
 window.__dashboardAutoRefreshTimer && clearInterval(window.__dashboardAutoRefreshTimer);
 
-loadData({ keepView:true, keepScroll:true });
+window.addEventListener('DOMContentLoaded', function(){ if(typeof window.loadData === 'function') window.loadData({ keepView:true, keepScroll:true }); }, { once:true });
 
 // Smooth mode: full auto-refresh disabled. Use the Refresh button for a controlled data reload.
 window.__dashboardAutoRefreshTimer = null;
@@ -6551,7 +6491,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 <script>
 /* ═══════════════════════════════════════════
    RETENTION ADDON — Features Plan for Upselling
-   Source expected from n8n Google Sheets node in retention JSON:
+   Source expected from n8n Google Sheets node in Supabase retention model:
    R.featuresPlanForUpselling OR R.upsellingFeaturesPlan OR R.sheetData.featuresPlanForUpselling
    This addon is read-only and does not touch Acquisition.
    ═══════════════════════════════════════════ */
@@ -6678,7 +6618,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
         <div class="ret-upsell-icon">🚀</div>
         <div>
           <div class="ret-upsell-title">Features Plan for Upselling</div>
-          <div class="ret-upsell-sub">Read-only view from Google Sheet. n8n reads the sheet and updates this section inside the Retention JSON only.</div>
+          <div class="ret-upsell-sub">Read-only view from Google Sheet. n8n reads the sheet and updates this section inside the Supabase Retention only.</div>
         </div>
       </div>
       <div class="ret-upsell-kpis" id="retUpsellKpis"></div>
@@ -6805,7 +6745,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     var body = byId('retUpsellBody');
     if(!body) return;
     if(!rows.length){
-      body.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">No Google Sheet rows found yet. Add featuresPlanForUpselling to the Retention JSON from n8n.</div></td></tr>';
+      body.innerHTML = '<tr><td colspan="11"><div class="ret-upsell-empty">No Google Sheet rows found yet. Add featuresPlanForUpselling to the Supabase Retention from n8n.</div></td></tr>';
       return;
     }
     if(!filtered.length){
@@ -6852,7 +6792,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     byId('panel-retention-upselling') && byId('panel-retention-upselling').classList.add('active');
     if(typeof renderRetentionSidebar === 'function') renderRetentionSidebar('upselling');
     if(byId('topbarTitle')) byId('topbarTitle').textContent = 'Retention · Features Plan for Upselling';
-    if(byId('topbarSub')) byId('topbarSub').textContent = 'Read-only Google Sheet tab · updated by n8n into Retention JSON';
+    if(byId('topbarSub')) byId('topbarSub').textContent = 'Read-only Google Sheet tab · updated by n8n into Supabase Retention';
     window.renderRetentionUpsellingFeaturesPlan();
     window.scrollTo({top:0, behavior:'smooth'});
   };
@@ -6911,153 +6851,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 
 
 <script>
-(function(){
-  if(window.__ROBUST_RETENTION_JSON_READER_FIXED__) return;
-  window.__ROBUST_RETENTION_JSON_READER_FIXED__ = true;
-
-  var RETENTION_JSON_PATHS = [
-    './data-retention.json',
-    './Data Retention.json',
-    './Data%20Retention.json',
-    './retention-data.json',
-    './data_retention.json',
-    './retention.json'
-  ];
-
-  async function readJson(path){
-    var url = path + (path.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
-    var res = await fetch(url, { cache: 'no-store' });
-    if(!res.ok) throw new Error('HTTP ' + res.status + ' for ' + path);
-    var text = await res.text();
-    text = String(text || '').replace(/^\uFEFF/, '').trim();
-    if(!text) throw new Error('Empty JSON file: ' + path);
-    return { data: JSON.parse(text), path: path };
-  }
-
-  async function readFirst(paths){
-    var errors = [];
-    for(var i = 0; i < paths.length; i++){
-      try{
-        return await readJson(paths[i]);
-      }catch(e){
-        errors.push(paths[i] + ': ' + (e && e.message ? e.message : e));
-      }
-    }
-    console.warn('JSON load failed:', errors.join(' | '));
-    return null;
-  }
-
-  function fallbackAcquisitionData(){
-    return {
-      meta:{yesterdayLabel:'No data',generatedAt:'--'},
-      kpi:{yesterday:{},mtd:{},ytd:{}},
-      team:{},
-      repData:[],
-      stageData:[],
-      topInactiveRankAccounts:[],
-      rankTotals:{},
-      outreachCoverage:{},
-      autoRecs:[],
-      closedWon:[],
-      closedLost:[],
-      lostByReason:{},
-      marketNews:[]
-    };
-  }
-
-  function refreshCurrentView(options, previousState, previousScroll){
-    try{
-      if(typeof window.render === 'function') window.render();
-    }catch(e){
-      console.error('Main render failed', e);
-    }
-
-    try{
-      if(window.restoreDashboardState && previousState){
-        window.restoreDashboardState(previousState);
-      }else if(typeof window.restoreCurrentView === 'function'){
-        window.restoreCurrentView({ keepScroll:true });
-      }
-    }catch(e){
-      console.error('Restore view failed', e);
-    }
-
-    try{
-      if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'financial' && typeof window.renderRetentionFinancialDetails === 'function'){
-        window.renderRetentionFinancialDetails();
-      }
-
-      if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'upselling' && typeof window.renderRetentionUpsellingFeaturesPlan === 'function'){
-        window.renderRetentionUpsellingFeaturesPlan();
-      }
-
-      if(window.APP_MAIN_PANEL === 'retention' && typeof window.renderRetentionSidebar === 'function'){
-        window.renderRetentionSidebar(window.APP_RETENTION_VIEW || 'overview');
-      }
-    }catch(e){
-      console.error('Retention post-render failed', e);
-    }
-
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        if(!options || options.keepScroll !== false) window.scrollTo(0, previousScroll || 0);
-      });
-    });
-  }
-
-  window.loadData = async function(options){
-    options = options || {};
-
-    var ri = document.getElementById('ri');
-    if(ri) ri.classList.add('spin');
-
-    var previousScroll = options.keepScroll === false ? 0 : window.scrollY;
-    var previousState = window.getDashboardState ? window.getDashboardState() : null;
-
-    try{
-      var acq = await readFirst(['./data.json']);
-      window.D = acq && acq.data ? acq.data : fallbackAcquisitionData();
-      window.DATA_LOADED_FROM = acq ? acq.path : null;
-
-      var ret = await readFirst(RETENTION_JSON_PATHS);
-      window.R = ret && ret.data ? ret.data : null;
-      window.RETENTION_JSON_LOADED_FROM = ret ? ret.path : null;
-
-      if(window.R && window.R.retentionSheets2026){
-        window.RETENTION_SHEETS_2026_READY = true;
-      }
-
-      if(window.R && Array.isArray(window.R.featuresPlanForUpselling)){
-        window.RETENTION_FEATURES_PLAN_READY = true;
-      }
-    }catch(e){
-      console.error('Dashboard data load failed:', e);
-      window.D = window.D || fallbackAcquisitionData();
-      window.R = window.R || null;
-    }
-
-    refreshCurrentView(options, previousState, previousScroll);
-
-    try{
-      var sub = document.getElementById('topbarSub');
-      if(sub && window.APP_MAIN_PANEL === 'retention'){
-        if(!window.R){
-          sub.textContent = 'Retention JSON was not loaded. Check data-retention.json.';
-        }else{
-          sub.textContent = 'Updated ' + (window.R.generatedAt || window.R.retentionSheets2026?.lastUpdated || '—') + ' · Loaded from ' + (window.RETENTION_JSON_LOADED_FROM || 'retention json');
-        }
-      }
-    }catch(e){}
-
-    if(ri) ri.classList.remove('spin');
-  };
-
-  setTimeout(function(){
-    if(typeof window.loadData === 'function'){
-      window.loadData({ keepView:true, keepScroll:true });
-    }
-  }, 50);
-})();
+/* Legacy JSON reader removed. Supabase-only hard lock owns loadData. */
 </script>
 
 <script>
@@ -7301,7 +7095,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
 
     if(!rows.length && Array.isArray(contacts.noConnectedCallsList)) rows = contacts.noConnectedCallsList.filter(row => ownerMatch(row, rep));
 
-    // Fallback for old data.json: current dashboard "needs contact" list.
+    // Compatibility for older Supabase mapping: current dashboard "needs contact" list.
     if(!rows.length && Array.isArray(contacts.notContactedList)) rows = contacts.notContactedList.filter(row => ownerMatch(row, rep));
 
     return rows
@@ -7577,7 +7371,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     if(!block) return;
     var fc = getFC();
     if(!fc){
-      block.querySelector('.ret-fin-comparison-grid').innerHTML = '<div class="ret-fin-chart-card" style="grid-column:1/-1"><div class="ret-fin-empty">No financeComparison found in data-retention.json. Run the Retention workflow first.</div></div>';
+      block.querySelector('.ret-fin-comparison-grid').innerHTML = '<div class="ret-fin-chart-card" style="grid-column:1/-1"><div class="ret-fin-empty">No financeComparison found in Supabase retention views. Run the Retention workflow first.</div></div>';
       return;
     }
     if(typeof Chart === 'undefined') return;
@@ -8138,10 +7932,10 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
           if(selectedMonth !== 'All' && m !== selectedMonth) return;
           var bucket = map[rawMonth];
           if(typeof bucket === 'number' || typeof bucket === 'string'){
-            var fallbackProduct = productOf(row);
-            if(selectedProduct !== 'All' && fallbackProduct !== selectedProduct) return;
+            var derivedProduct = productOf(row);
+            if(selectedProduct !== 'All' && derivedProduct !== selectedProduct) return;
             var directValue = num(bucket);
-            if(directValue !== 0) entries.push({kind:kind,row:row,month:m,product:fallbackProduct,value:directValue});
+            if(directValue !== 0) entries.push({kind:kind,row:row,month:m,product:derivedProduct,value:directValue});
             return;
           }
           bucket = asObject(bucket) || {};
@@ -8153,12 +7947,12 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
           });
         });
       }else{
-        var fallbackMonth = financialKindMonth(row, kind, selectedMonth);
-        var fallbackProduct = productOf(row);
-        if(selectedMonth !== 'All' && fallbackMonth !== selectedMonth) return;
-        if(selectedProduct !== 'All' && fallbackProduct !== selectedProduct) return;
-        var fallbackValue = financialKindValue(row, kind, selectedMonth, selectedProduct);
-        if(fallbackValue !== 0) entries.push({kind:kind,row:row,month:fallbackMonth,product:fallbackProduct,value:fallbackValue});
+        var derivedMonth = financialKindMonth(row, kind, selectedMonth);
+        var derivedProduct = productOf(row);
+        if(selectedMonth !== 'All' && derivedMonth !== selectedMonth) return;
+        if(selectedProduct !== 'All' && derivedProduct !== selectedProduct) return;
+        var derivedValue = financialKindValue(row, kind, selectedMonth, selectedProduct);
+        if(derivedValue !== 0) entries.push({kind:kind,row:row,month:derivedMonth,product:derivedProduct,value:derivedValue});
       }
     });
 
@@ -8681,7 +8475,7 @@ window.TALENTERA_AUTO_REFRESH_DISABLED = true;
     var product = f.product || 'All';
 
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase retention views contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -9136,7 +8930,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
       ['retCashingMonthChart','retBookingMonthChart','retCostMonthChart','retYearToYearChart'].forEach(destroyChart);
       var kpi = byId('retFinanceComparisonKpis');
       var health = byId('retRevenueHealthGrid');
-      if(kpi) kpi.innerHTML = '<div class="ret-fin-empty" style="grid-column:1/-1">No financeComparison found in data-retention.json. Run the Retention workflow and make sure Code — Merge Final Retention JSON writes financeComparison at the top level.</div>';
+      if(kpi) kpi.innerHTML = '<div class="ret-fin-empty" style="grid-column:1/-1">No financeComparison found in Supabase retention views. Run the Retention workflow and make sure Code — Merge Final Supabase Retention writes financeComparison at the top level.</div>';
       if(health) health.innerHTML = '';
       return;
     }
@@ -9312,7 +9106,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
 
   function renderExecutive(animate){
     var block=mount(); if(!block)return;
-    var fc=getFC(); if(!fc){ block.innerHTML='<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    var fc=getFC(); if(!fc){ block.innerHTML='<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for Supabase P&L views</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     destroyAll();
     var s=fc.summary,b=fc.breakEven||{},coverage=n(b.cashCoverage!=null?b.cashCoverage:(s.cost2026Total?s.cashing2026Total/s.cost2026Total*100:0)),gap=n(b.ytdCashGap!=null?b.ytdCashGap:s.cashing2026Total-s.cost2026Total),avgCost=n(b.avgMonthlyCost2026||s.cost2026Total/(fc.activeMonthIndex+1)),avgCash=n(b.avgMonthlyCashing2026||s.cashing2026Total/(fc.activeMonthIndex+1));
     var cards=[{k:'Booking YTD',v:s.booking2026Total,sub:'vs '+money(s.booking2025Total)+' in 2025',chip:rate(s.bookingGrowth),c:'var(--blue)',bad:s.bookingGrowth<0},{k:'Cashing YTD',v:s.cashing2026Total,sub:'vs '+money(s.cashing2025Total)+' in 2025',chip:rate(s.cashingGrowth),c:'var(--green)',bad:s.cashingGrowth<0},{k:'Cost YTD',v:s.cost2026Total,sub:'vs '+money(s.cost2025Total)+' in 2025',chip:rate(s.costGrowth),c:'var(--amber)',bad:s.costGrowth>0},{k:'Cash Coverage',v:coverage,sub:'YTD cash vs cost · gap '+signedMoney(gap),chip:coverage>=100?'Healthy':'Below cost',c:coverage>=100?'var(--green)':'var(--red)',bad:coverage<100,rate:true}];
@@ -9368,7 +9162,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function signedMoney(v){ v = n(v); return v < 0 ? '(' + money(Math.abs(v)) + ')' : money(v); }
   function rate(v){ return n(v).toFixed(1).replace('.0','') + '%'; }
   function pct(now, prev){ now = n(now); prev = n(prev); return prev ? ((now - prev) / Math.abs(prev)) * 100 : 0; }
-  function css(name, fallback){ var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); return v || fallback; }
+  function css(name, defaultValue){ var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); return v || defaultValue; }
   function colors(){ return {green:css('--green','#16A34A'), purple:css('--purple','#7C3AED'), amber:css('--amber','#D97706'), blue:css('--blue','#2563EB'), cyan:css('--cyan','#0891B2'), red:css('--red','#DC2626'), muted:'#9CA3AF'}; }
   function sourceData(){
     var candidates = [];
@@ -9552,7 +9346,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function renderRevenue(animate){
     clearTimeout(renderTimer);
     var block = mount(), fc = getFC(), c = colors();
-    if(!fc){ block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    if(!fc){ block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Waiting for Supabase P&L views</div></div></div><div class="ret-exec-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     var f = filters(), t = selectedTotals(fc,f), cards = buildCards(fc,f), avgCost = t.cost / Math.max(1,t.range.months), avgCash = t.cashing / Math.max(1,t.range.months), scope = scopeText(fc,f), monthActive = monthIndex(f) >= 0;
     block.innerHTML = '<div class="ret-exec-head"><div><div class="ret-exec-title">Executive Revenue Dashboard</div><div class="ret-exec-sub">Source: '+safe(fc.source)+' · Scope: '+safe(scope)+' · Updated '+safe(fc.lastUpdated || 'live')+'</div></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end"><div class="ret-exec-live"><span class="ret-exec-pulse"></span>Dynamic · ForReporting</div>'+selectHtml()+'</div></div><div class="ret-exec-note">2025 shows the full closed year when selected. 2026 uses actual available data to date and keeps the active month included. Future 2026 months will appear automatically when the sheet has values.</div><div class="ret-exec-kpis">'+cards.map(function(card){ return '<div class="ret-exec-kpi" style="--fc:'+card.c+'"><div class="ret-exec-kpi-label">'+safe(card.k)+'</div><div class="ret-exec-kpi-value" data-ret-count="'+safe(card.v)+'" data-ret-rate="'+(card.rate?'1':'0')+'">'+(card.rate?rate(card.v):shortMoney(card.v))+'</div><div class="ret-exec-kpi-note">'+safe(card.sub)+'</div><div class="ret-exec-chip '+(card.bad?'bad':'')+'">'+safe(card.chip)+'</div></div>'; }).join('')+'</div><div class="ret-exec-body"><div class="ret-exec-card"><div class="ret-exec-card-title">YTD / Period comparison</div><div class="ret-exec-card-sub">'+safe(scope)+'</div><div class="ret-exec-chart-wrap"><canvas id="retExecYtdChart"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Break-even analysis</div><div class="ret-exec-card-sub">Cash coverage against selected cost scope</div><div class="ret-exec-mini-grid"><div class="ret-exec-mini"><div class="ret-exec-mini-k">Avg cost / month</div><div class="ret-exec-mini-v" style="--mc:var(--amber)">'+money(avgCost)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Avg cashing / month</div><div class="ret-exec-mini-v" style="--mc:var(--green)">'+money(avgCash)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Monthly gap</div><div class="ret-exec-mini-v" style="--mc:'+(avgCash-avgCost>=0?'var(--green)':'var(--red)')+'">'+signedMoney(avgCash-avgCost)+'</div></div><div class="ret-exec-mini"><div class="ret-exec-mini-k">Coverage</div><div class="ret-exec-mini-v" style="--mc:'+(t.coverage>=100?'var(--green)':'var(--red)')+'">'+rate(t.coverage)+'</div></div></div><div class="ret-exec-chart-wrap"><canvas id="retExecCoveragePie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Monthly trend</div><div class="ret-exec-card-sub">'+(f.mode === 'ytd' ? 'Cumulative YTD movement' : 'Month-by-month movement')+'</div><div class="ret-exec-chart-wrap tall"><canvas id="retExecTrendChart"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Value mix</div><div class="ret-exec-card-sub">Booking · Cashing · Cost share for '+safe(t.primaryYear)+'</div><div class="ret-exec-chart-wrap tall"><canvas id="retExecMixPie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Cost breakdown</div><div class="ret-exec-card-sub">COGS · Overheads · Support allocation</div><div class="ret-exec-chart-wrap"><canvas id="retExecCostPie"></canvas></div></div><div class="ret-exec-card"><div class="ret-exec-card-title">Cash vs cost gap</div><div class="ret-exec-card-sub">Gap trajectory for selected year view</div><div class="ret-exec-chart-wrap"><canvas id="retExecGapChart"></canvas></div></div><div class="ret-exec-card ret-exec-takeaways"><div class="ret-exec-card-title">Key takeaways</div><div class="ret-exec-card-sub">Auto-generated from current filters</div>'+takeaways(fc,f).map(function(x){ return '<div class="ret-exec-takeaway"><span class="ret-exec-dot" style="--tc:'+x.c+'"></span><div>'+safe(x.t)+'</div></div>'; }).join('')+'</div></div>';
     bindFilters();
@@ -10226,7 +10020,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
     updateSidebarBadge(all);
     var rows = filteredAccounts();
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase retention views contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -10850,7 +10644,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
     var f = filters();
     // Duplicate audit UI intentionally disabled by request. Totals still use the existing de-duplicated account logic.
     if(!all.length){
-      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure data-retention.json contains retentionSheets2026.accounts.</div></div>');
+      setHtml('retFinTopGrid','<div class="ret-fin-card" style="--fc:var(--red);grid-column:1/-1"><div class="ret-fin-card-v">No Data</div><div class="ret-fin-card-l">Retention financial source is empty</div><div class="ret-fin-card-s">Run the retention n8n workflow and make sure Supabase retention views contains retentionSheets2026.accounts.</div></div>');
       setHtml('retFinOwnerGrid','<div class="ret-fin-empty" style="grid-column:1/-1">No owner summary because retention financial data is empty.</div>');
       setHtml('retFinBookedBody',empty(8,'No booked rows found.'));
       setHtml('retFinCashedBody',empty(8,'No cash collected rows found.'));
@@ -10874,6 +10668,10 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
     setTimeout(window.renderRetentionFinancialDetails,0);
   };
   try{ switchRetentionFinancial = window.switchRetentionFinancial; }catch(e){}
+  window.fetchSupabaseRetentionTeamOverview = fetchSupabaseRetentionTeamOverview;
+  window.buildRetentionFromSupabaseTeamOnly = function(supa){ return buildRetentionFromSupabaseTeam(supa || {}, {}); };
+  window.__RETENTION_TEAM_SUPABASE_BUILDERS_READY__ = true;
+
   var previousLoadData = window.loadData;
   if(typeof previousLoadData === 'function' && !previousLoadData.__retFinDynamicFiltersV65){
     window.loadData = async function(){
@@ -11214,7 +11012,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function signedMoney(v){ v = parseNum(v); return v < 0 ? '(' + money(Math.abs(v)) + ')' : money(v); }
   function rate(v){ return parseNum(v).toFixed(1).replace('.0','') + '%'; }
   function pct(now, prev){ now = parseNum(now); prev = parseNum(prev); return prev ? ((now - prev) / Math.abs(prev)) * 100 : 0; }
-  function css(name, fallback){ var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); return v || fallback; }
+  function css(name, defaultValue){ var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); return v || defaultValue; }
   function colors(){ return {green:css('--green','#16A34A'), purple:css('--purple','#7C3AED'), amber:css('--amber','#D97706'), blue:css('--blue','#2563EB'), cyan:css('--cyan','#0891B2'), red:css('--red','#DC2626'), muted:'#9CA3AF'}; }
 
   function sourceData(){
@@ -11369,7 +11167,7 @@ body.retention-financial-wide #panel-retention-financial .ret-fin-split{max-widt
   function ensurePanel(){ var panel=byId('panel-retention-revenue'); if(!panel){ panel=document.createElement('div'); panel.className='panel'; panel.id='panel-retention-revenue'; var dash=byId('dashMain')||document.querySelector('.content'); if(dash) dash.appendChild(panel); } panel.innerHTML = panel.innerHTML || '<div class="ret-fin-hero" style="border-left-color:var(--blue)"><div class="ret-fin-hero-icon">📊</div><div><div class="ret-fin-hero-title">P&amp;L</div><div class="ret-fin-hero-sub">Executive dynamic view from ForReporting with revenue, booking, cashing, cost, and break-even charts.</div></div></div><div id="retRevenueAnalysisMount"></div>'; var title=panel.querySelector('.ret-fin-hero-title'); if(title) title.innerHTML='P&amp;L'; var sub=panel.querySelector('.ret-fin-hero-sub'); if(sub) sub.textContent='Executive dynamic view from ForReporting with Booking, Cashing, Total Cost, COGS, Overheads, Support Allocation, and break-even analysis.'; var mount=byId('retRevenueAnalysisMount'); if(!mount){ mount=document.createElement('div'); mount.id='retRevenueAnalysisMount'; panel.appendChild(mount); } return panel; }
   function mount(){ ensurePanel(); var m=byId('retRevenueAnalysisMount'); if(!m) return null; var block=byId('retFinanceComparisonBlock'); if(!block){ block=document.createElement('div'); block.id='retFinanceComparisonBlock'; m.appendChild(block); } if(block.parentNode!==m) m.appendChild(block); block.className='pnl-v80-board'; return block; }
   function renderRevenue(animate){
-    var block=mount(); if(!block) return; var fc=getFC(); if(!fc){ block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Waiting for financeComparison in data-retention.json</div></div></div><div class="pnl-v80-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
+    var block=mount(); if(!block) return; var fc=getFC(); if(!fc){ block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Waiting for Supabase P&L views</div></div></div><div class="pnl-v80-empty">No financeComparison found yet. Run the Retention workflow, then refresh the dashboard.</div>'; return; }
     var f=filters(), t=selectedTotals(fc,f), c=colors(), cards=buildCards(fc,f), py=t.primaryYear, avgCost=t.cost/Math.max(1,t.range.months), avgCash=t.cashing/Math.max(1,t.range.months), parts=costParts(fc,py,t.range), totalParts=parts.cogs+parts.overheads+parts.support, scope=scopeText(fc,f), monthActive=monthIndex(f)>=0;
     block.innerHTML='<div class="pnl-v80-head"><div><div class="pnl-v80-title">Executive P&L Dashboard</div><div class="pnl-v80-sub">Source: '+safe(fc.source)+' · Scope: '+safe(scope)+' · Updated '+safe(fc.lastUpdated||'live')+'</div></div><div class="pnl-v80-actions"><div class="pnl-v80-live"><span class="pnl-v80-pulse"></span>Dynamic · ForReporting</div>'+selectHtml(fc)+'</div></div><div class="pnl-v80-note"><strong>Total Cost = COGS + Overheads + Support Allocation.</strong> 2025 can be viewed as the full closed year. 2026 uses actual available months to date unless a specific month is selected.</div><div class="pnl-v80-kpis">'+cards.map(function(card){ return '<div class="pnl-v80-kpi" style="--kc:'+card.color+'"><div class="pnl-v80-kpi-label">'+safe(card.k)+'</div><div class="pnl-v80-kpi-value" data-pnl-count="'+safe(card.v)+'" data-pnl-rate="'+(card.rate?'1':'0')+'">'+(card.rate?rate(card.v):shortMoney(card.v))+'</div><div class="pnl-v80-kpi-note">'+safe(card.sub)+'</div><div class="pnl-v80-chip '+(card.bad?'bad':card.warn?'warn':'')+'">'+safe(card.chip)+'</div></div>'; }).join('')+'</div><div class="pnl-v80-body"><div class="pnl-v80-card"><div class="pnl-v80-card-title">YTD / Period comparison</div><div class="pnl-v80-card-sub">'+safe(scope)+'</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80YtdChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Break-even analysis</div><div class="pnl-v80-card-sub">Cash coverage against '+safe(costLabel(f))+'</div><div class="pnl-v80-mini-grid"><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Avg cost / month</div><div class="pnl-v80-mini-v" style="--mc:var(--amber)">'+money(avgCost)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Avg cashing / month</div><div class="pnl-v80-mini-v" style="--mc:var(--green)">'+money(avgCash)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Monthly gap</div><div class="pnl-v80-mini-v" style="--mc:'+(avgCash-avgCost>=0?'var(--green)':'var(--red)')+'">'+signedMoney(avgCash-avgCost)+'</div></div><div class="pnl-v80-mini"><div class="pnl-v80-mini-k">Coverage</div><div class="pnl-v80-mini-v" style="--mc:'+(t.coverage>=100?'var(--green)':'var(--red)')+'">'+rate(t.coverage)+'</div></div></div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80CoverageChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Monthly trend</div><div class="pnl-v80-card-sub">'+(f.mode==='ytd'?'Cumulative YTD movement':'Month-by-month movement')+'</div><div class="pnl-v80-chart-wrap tall"><canvas id="pnlV80TrendChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Cost breakdown</div><div class="pnl-v80-card-sub">COGS · Overheads · Support Allocation for '+safe(py)+'</div><div class="pnl-v80-cost-grid"><div class="pnl-v80-cost-box" style="--cc:var(--blue)"><div class="pnl-v80-cost-v">'+shortMoney(parts.cogs)+'</div><div class="pnl-v80-cost-l">COGS</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.cogs/totalParts*100:0)+' of cost</div></div><div class="pnl-v80-cost-box" style="--cc:var(--amber)"><div class="pnl-v80-cost-v">'+shortMoney(parts.overheads)+'</div><div class="pnl-v80-cost-l">Overheads</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.overheads/totalParts*100:0)+' of cost</div></div><div class="pnl-v80-cost-box" style="--cc:var(--purple)"><div class="pnl-v80-cost-v">'+shortMoney(parts.support)+'</div><div class="pnl-v80-cost-l">Support Allocation</div><div class="pnl-v80-cost-s">'+rate(totalParts?parts.support/totalParts*100:0)+' of cost</div></div></div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80CostStackedChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Cash vs cost gap</div><div class="pnl-v80-card-sub">Cash - '+safe(costLabel(f))+' gap trajectory</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80GapChart"></canvas></div></div><div class="pnl-v80-card"><div class="pnl-v80-card-title">Value mix</div><div class="pnl-v80-card-sub">Booking · Cashing · '+safe(costLabel(f))+' for '+safe(py)+'</div><div class="pnl-v80-chart-wrap"><canvas id="pnlV80MixChart"></canvas></div></div><div class="pnl-v80-card wide"><div class="pnl-v80-card-title">Monthly P&L table</div><div class="pnl-v80-card-sub">2025 and 2026 visible together, with '+safe(py)+' cost breakdown columns</div>'+buildTable(fc,f,t)+'</div><div class="pnl-v80-card wide"><div class="pnl-v80-card-title">Key takeaways</div><div class="pnl-v80-card-sub">Auto-generated from the selected filters</div>'+takeaways(fc,f).map(function(x){return '<div class="pnl-v80-takeaway"><span class="pnl-v80-dot" style="--tc:'+x.c+'"></span><div>'+safe(x.t)+'</div></div>';}).join('')+'</div></div>';
     bindFilters();
@@ -11544,7 +11342,7 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
   window.switchRetentionRevenueAnalysis = function(){
     setRetState('revenue', null);
     if(typeof oldSwitchRetentionRevenueAnalysis === 'function'){
-      try{ oldSwitchRetentionRevenueAnalysis.apply(this, arguments); }catch(e){ console.warn('Original P&L switch failed, using stable fallback', e); }
+      try{ oldSwitchRetentionRevenueAnalysis.apply(this, arguments); }catch(e){ console.warn('Original P&L switch failed, using Supabase stable renderer', e); }
     }
     enforcePnlDom(true);
   };
@@ -11900,7 +11698,7 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
     }
   }, true);
 
-  setInterval(function(){ applySaved({keepScroll:true, instant:true}); }, 1500);
+  // Supabase-only stable mode: disabled repeating route re-apply interval to prevent flicker/jump.
 
   setTimeout(function(){ applySaved({keepScroll:true, instant:true}); }, 0);
   setTimeout(function(){ applySaved({keepScroll:true, instant:true}); }, 900);
@@ -11975,8 +11773,8 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
     if(/lost|churn/i.test(s)) return s || 'Churn';
     return s || 'Upcoming';
   }
-  function rtHubspotCompanyUrl(id, fallback){
-    if(fallback) return fallback;
+  function rtHubspotCompanyUrl(id, urlOverride){
+    if(urlOverride) return urlOverride;
     return id ? 'https://app-eu1.hubspot.com/contacts/145742477/company/' + encodeURIComponent(String(id)) : '';
   }
   function rtView(name, limit){
@@ -12255,7 +12053,7 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
       meta: {
         generatedAt: new Date().toISOString(),
         source: 'Supabase',
-        fallback: false
+        legacyJson: false
       },
       source: 'Supabase',
       summary: {
@@ -12617,7 +12415,7 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
       var r = window.R || {};
       r.retentionSheets2026 = {
         source: 'Supabase',
-        fallback: false,
+        legacyJson: false,
         lastUpdated: new Date().toISOString(),
         sourceSheets: {
           budget: 'vw_retention_renewal_logic',
@@ -13137,6 +12935,203 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
 
   setTimeout(function(){ applySaved({keepScroll:true, instant:true}); }, 150);
   setTimeout(function(){ if(window.__dashboardAutoRefreshTimer){ clearInterval(window.__dashboardAutoRefreshTimer); window.__dashboardAutoRefreshTimer=null; } }, 1000);
+})();
+</script>
+
+
+<script id="supabase-only-hard-lock-v1">
+/* HARD LOCK: Supabase-only runtime. No legacy JSON reads. */
+(function(){
+  if(window.__TALENTERA_SUPABASE_ONLY_HARD_LOCK_V1__) return;
+  window.__TALENTERA_SUPABASE_ONLY_HARD_LOCK_V1__ = true;
+  window.TALENTERA_SUPABASE_ONLY = true;
+  window.TALENTERA_AUTO_REFRESH_DISABLED = true;
+  if(window.__dashboardAutoRefreshTimer){ clearInterval(window.__dashboardAutoRefreshTimer); window.__dashboardAutoRefreshTimer = null; }
+
+  var SUPA_URL = 'https://czaxtwbmborxwzaboqxl.supabase.co';
+  var SUPA_KEY = 'sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX';
+  var ACQ_VIEWS = {
+    acqReps:'vw_acquisition_sidebar_reps',
+    acqRep:'vw_acquisition_rep_kpi_periods',
+    acqTeam:'vw_acquisition_team_snapshot',
+    rank:'vw_acquisition_rank_details',
+    rankTouch:'vw_acquisition_rank_ab_touch_summary',
+    rankNoTouch:'vw_acquisition_rank_ab_no_touch_details',
+    need:'vw_acquisition_leads_need_contact_v2',
+    pipe:'vw_acquisition_pipeline_by_owner',
+    pipeSnapshot:'vw_acquisition_pipeline_snapshot',
+    deals:'vw_acquisition_pipeline_details',
+    stage:'vw_acquisition_pipeline_by_stage',
+    stuck:'vw_acquisition_stuck_deals',
+    cold:'vw_acquisition_cold_deals',
+    dashboardSummary:'vw_acquisition_dashboard_summary',
+    kpiPeriods:'vw_acquisition_kpi_snapshot_periods',
+    ownerCoverage:'vw_acquisition_owner_coverage',
+    countryCoverage:'vw_acquisition_country_coverage',
+    rankCoverageV2:'vw_acquisition_rank_coverage_v2',
+    dealSummary:'vw_acquisition_deal_summary',
+    attentionDetails:'vw_acquisition_pipeline_attention_details',
+    attentionSummary:'vw_acquisition_pipeline_attention_summary'
+  };
+
+  function byId(id){ return document.getElementById(id); }
+  function spin(on){ var ri=byId('ri'); if(ri) ri.classList.toggle('spin', !!on); }
+  function setTop(title, sub){ var t=byId('topbarTitle'), s=byId('topbarSub'); if(t) t.textContent=title; if(s) s.textContent=sub; }
+  function num(v){ var x=Number(String(v == null ? 0 : v).replace(/[^0-9.-]/g,'')); return Number.isFinite(x)?x:0; }
+  function text(v){ return String(v == null ? '' : v).trim(); }
+  function escLocal(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+
+  async function view(name, limit){
+    if(typeof window.supabaseView === 'function') return window.supabaseView(name, limit || 10000);
+    if(typeof supabaseView === 'function') return supabaseView(name, limit || 10000);
+    var url = SUPA_URL + '/rest/v1/' + encodeURIComponent(name) + '?select=*&limit=' + (limit || 10000);
+    var res = await fetch(url, { cache:'no-store', headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY } });
+    if(!res.ok) throw new Error(name + ' HTTP ' + res.status);
+    return await res.json();
+  }
+
+  async function fetchAcquisitionOnly(){
+    var out = {};
+    await Promise.all(Object.keys(ACQ_VIEWS).map(async function(key){
+      try{ out[key] = await view(ACQ_VIEWS[key], 20000); }
+      catch(e){ console.warn('Supabase Acquisition view failed:', ACQ_VIEWS[key], e); out[key] = []; }
+    }));
+    return out;
+  }
+
+  function mapFeaturesPlanRows(rows){
+    return (Array.isArray(rows) ? rows : []).map(function(r){
+      return {
+        product: r.product_line || r.product || '',
+        productLine: r.product_line || r.product || '',
+        clientName: r.company_name || r.client_name || r.company || '',
+        companyName: r.company_name || r.client_name || r.company || '',
+        csm: r.csm_owner || r.csm || '',
+        csmOwner: r.csm_owner || r.csm || '',
+        rm: r.owner_name || r.rm_owner || r.rm || '',
+        rmOwner: r.owner_name || r.rm_owner || r.rm || '',
+        renewalMonth: r.expected_month || r.renewal_month || r.month || '',
+        expectedMonth: r.expected_month || r.renewal_month || r.month || '',
+        renewalValue: num(r.renewal_value),
+        feature: r.feature_name || r.feature || '',
+        featureName: r.feature_name || r.feature || '',
+        ownership: r.ownership || '',
+        status: r.feature_status || r.status || '',
+        featureStatus: r.feature_status || r.status || '',
+        timeline: r.proposal_sent_date || r.timeline || '',
+        proposalSentDate: r.proposal_sent_date || '',
+        upsellValue: num(r.upsell_value),
+        notes: r.notes || '',
+        raw: r
+      };
+    });
+  }
+
+  async function loadRetentionOnly(){
+    var supa = {};
+    if(typeof window.fetchSupabaseRetentionTeamOverview === 'function'){
+      supa = await window.fetchSupabaseRetentionTeamOverview();
+    }else{
+      var views = {
+        focus:'vw_retention_team_overview_focus', smartActions:'vw_retention_smart_actions', kpi:'vw_retention_kpi_snapshot',
+        monthly:'vw_retention_monthly_renewal_pipeline', logic:'vw_retention_renewal_logic', bridge:'vw_retention_company_activity_bridge',
+        coverage:'vw_retention_coverage_quality', churnReasons:'vw_retention_churn_reasons', followupDetails:'vw_retention_followup_due_details', followupSummary:'vw_retention_followup_due_summary'
+      };
+      await Promise.all(Object.keys(views).map(async function(key){
+        try{ supa[key] = await view(views[key], 20000); }
+        catch(e){ console.warn('Supabase Retention view failed:', views[key], e); supa[key] = []; }
+      }));
+    }
+    var built;
+    if(typeof window.buildRetentionFromSupabaseTeamOnly === 'function'){
+      built = window.buildRetentionFromSupabaseTeamOnly(supa);
+    }else{
+      built = { generatedAt:new Date().toISOString(), meta:{source:'Supabase'}, source:'Supabase', summary:{}, kpi:{}, accounts:[], repData:[], ownerMatrix:[], dealsSplit:{booked:[],cashed:[],renewed:[],churn:[]}, supabaseViews:supa };
+    }
+    window.RETENTION_SUPABASE_TEAM_DATA = supa;
+
+    try{
+      var features = await view('features_plan_rows', 20000);
+      built.featuresPlanForUpselling = mapFeaturesPlanRows(features);
+      built.upsellingFeaturesPlan = built.featuresPlanForUpselling;
+      built.featuresPlanRows = built.featuresPlanForUpselling;
+      window.RETENTION_FEATURES_PLAN_READY = true;
+    }catch(e){
+      console.warn('Supabase Features Plan table failed:', e);
+      built.featuresPlanForUpselling = [];
+      built.upsellingFeaturesPlan = [];
+      built.featuresPlanRows = [];
+    }
+
+    built.meta = Object.assign({}, built.meta || {}, { source:'Supabase', legacyJson:false });
+    built.source = 'Supabase';
+    return built;
+  }
+
+  async function loadPnlIfActive(){
+    try{
+      if(window.APP_MAIN_PANEL === 'retention' && window.APP_RETENTION_VIEW === 'revenue' && typeof window.switchRetentionRevenueAnalysis === 'function'){
+        window.switchRetentionRevenueAnalysis();
+      }
+    }catch(e){ console.warn('P&L lazy reload skipped:', e); }
+  }
+
+  function renderCurrent(options, scrollY){
+    try{ if(typeof window.render === 'function') window.render(); }catch(e){ console.error('Render failed:', e); }
+    try{
+      if(window.APP_MAIN_PANEL === 'retention'){
+        if(window.APP_RETENTION_VIEW === 'financial' && typeof window.renderRetentionFinancialDetails === 'function') window.renderRetentionFinancialDetails();
+        if(window.APP_RETENTION_VIEW === 'upselling' && typeof window.renderRetentionUpsellingFeaturesPlan === 'function') window.renderRetentionUpsellingFeaturesPlan();
+        if(window.APP_RETENTION_VIEW === 'owner' && typeof window.renderRetentionOwnerDetails === 'function' && window.APP_RETENTION_OWNER_ID) window.renderRetentionOwnerDetails(window.APP_RETENTION_OWNER_ID);
+      }
+      if(typeof window.restoreCurrentView === 'function') window.restoreCurrentView({ keepScroll:true, instant:true });
+    }catch(e){ console.warn('Restore current view skipped:', e); }
+    if(options && options.keepScroll !== false){ requestAnimationFrame(function(){ window.scrollTo(0, scrollY || 0); }); }
+  }
+
+  async function supabaseOnlyLoadData(options){
+    options = Object.assign({ keepScroll:true, keepView:true, manual:true }, options || {});
+    var scrollY = window.scrollY;
+    spin(true);
+    try{
+      var acqSupa = await fetchAcquisitionOnly();
+      if(typeof window.buildAcquisitionFromSupabase === 'function'){
+        window.D = window.buildAcquisitionFromSupabase(acqSupa);
+        if(typeof window.acqEnhanceSupabaseData === 'function') window.D = window.acqEnhanceSupabaseData(window.D, acqSupa);
+      }else if(typeof buildAcquisitionFromSupabase === 'function'){
+        window.D = buildAcquisitionFromSupabase(acqSupa);
+        if(typeof acqEnhanceSupabaseData === 'function') window.D = acqEnhanceSupabaseData(window.D, acqSupa);
+      }else{
+        throw new Error('Acquisition Supabase mapper is not available');
+      }
+      window.D.meta = Object.assign({}, window.D.meta || {}, { source:'Supabase', legacyJson:false });
+      try{ D = window.D; }catch(e){}
+
+      window.R = await loadRetentionOnly();
+      try{ R = window.R; }catch(e){}
+      window.DATA_LOADED_FROM = 'Supabase';
+      window.RETENTION_JSON_LOADED_FROM = 'Supabase';
+      window.__acqCompletedMeetingCompanyIndex = null;
+      renderCurrent(options, scrollY);
+      await loadPnlIfActive();
+      setTop(
+        window.APP_MAIN_PANEL === 'retention' ? (window.APP_RETENTION_VIEW === 'financial' ? 'Retention · Financial Details' : window.APP_RETENTION_VIEW === 'revenue' ? 'P&L · Revenue Analysis' : window.APP_RETENTION_VIEW === 'upselling' ? 'Retention · Features Plan' : 'Retention · Team Overview') : 'Acquisition · Team Overview',
+        'Supabase only · manual refresh · no legacy JSON'
+      );
+    }catch(e){
+      console.error('Supabase-only load failed:', e);
+      setTop('Dashboard · Supabase load error', e && e.message ? e.message : String(e));
+    }finally{
+      spin(false);
+    }
+  }
+
+  // Block legacy JSON loader usage from this point onward.
+  window.fetchJsonFromSources = async function(){ throw new Error('Legacy JSON is disabled. Supabase is the only data source.'); };
+  window.loadData = supabaseOnlyLoadData;
+  try{ loadData = window.loadData; }catch(e){}
+
+  window.addEventListener('DOMContentLoaded', function(){ window.loadData({ keepView:true, keepScroll:true }); }, { once:true });
 })();
 </script>
 

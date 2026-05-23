@@ -1,62 +1,48 @@
-/* base.css — CSS variables and global reset */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
-
-:root {
-  /* Palette */
-  --bg:        #ecf8f1;
-  --bg2:       #f4fdf8;
-  --panel:     rgba(255,255,255,0.82);
-  --panel-solid: #ffffff;
-  --line:      #d4e8dc;
-  --line2:     #e8f5ee;
-
-  --text:      #0d1f16;
-  --text2:     #3a5244;
-  --muted:     #6b8a78;
-
-  --green:     #14a84a;
-  --green-lt:  #dcfce7;
-  --green-dk:  #086b2e;
-  --blue:      #2563eb;
-  --blue-lt:   #dbeafe;
-  --red:       #dc2626;
-  --red-lt:    #fee2e2;
-  --orange:    #d97706;
-  --orange-lt: #fef3c7;
-  --purple:    #7c3aed;
-  --purple-lt: #ede9fe;
-  --teal:      #0d9488;
-  --teal-lt:   #ccfbf1;
-
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(14,32,22,.07);
-  --shadow:    0 12px 40px rgba(14,32,22,.10);
-  --shadow-lg: 0 24px 64px rgba(14,32,22,.14);
-
-  /* Geometry */
-  --radius-sm: 12px;
-  --radius:    20px;
-  --radius-lg: 28px;
-
-  /* Layout */
-  --sidebar-w: 264px;
-  --topbar-h:  64px;
+/* base.css */
+:root{
+  --primary:#16A34A;--primary-dk:#15803D;
+  --sb-bg:rgba(255,255,255,.72);--sb-text:#60786B;--sb-accent:#0F7A3C;--sb-border:rgba(22,64,42,.10);--sb-w:230px;
+  --page-bg:#EEF6F1;--surface:rgba(255,255,255,.82);--surface2:rgba(255,255,255,.52);
+  --border:rgba(22,64,42,.11);--text:#0B1F16;--text2:#263C31;--muted:#6E8378;
+  --green:#16A34A;--green-bg:rgba(22,163,74,.09);--green-bd:rgba(22,163,74,.18);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.08);--red-bd:rgba(220,38,38,.16);
+  --amber:#D97706;--amber-bg:rgba(217,119,6,.08);--amber-bd:rgba(217,119,6,.16);
+  --blue:#2563EB;--blue-bg:rgba(37,99,235,.08);--blue-bd:rgba(37,99,235,.16);
+  --purple:#7C3AED;--purple-bg:rgba(124,58,237,.08);--purple-bd:rgba(124,58,237,.16);
+  --cyan:#0891B2;--cyan-bg:rgba(8,145,178,.08);--cyan-bd:rgba(8,145,178,.16);
+  --r-sm:12px;--r:18px;--r-lg:24px;
+  --sh-xs:0 8px 24px rgba(17,47,31,.06);
+  --sh:0 16px 45px rgba(17,47,31,.09),0 2px 8px rgba(17,47,31,.05);
+  --sh-md:0 22px 70px rgba(17,47,31,.13),0 4px 14px rgba(17,47,31,.06);
+  --font:"Plus Jakarta Sans",system-ui,sans-serif;
+  --mono:"DM Mono",monospace;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { font-size: 15px; -webkit-font-smoothing: antialiased; }
-
-body {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  background: linear-gradient(145deg, #ecf8f1 0%, #f4fdf7 50%, #eaf4ff 100%);
-  color: var(--text);
-  min-height: 100vh;
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;-webkit-font-smoothing:antialiased}
+body{
+  font-family:var(--font);color:var(--text);min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 8%,rgba(22,163,74,.18),transparent 30%),
+    radial-gradient(circle at 86% 14%,rgba(8,145,178,.13),transparent 28%),
+    radial-gradient(circle at 72% 86%,rgba(217,119,6,.08),transparent 26%),
+    linear-gradient(135deg,#F8FCFA 0%,#EEF6F1 46%,#E7F1EC 100%);
 }
-
-a { color: var(--blue); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-button { font: inherit; cursor: pointer; border: none; background: none; }
-
-code, .mono { font-family: 'DM Mono', monospace; font-size: 0.85em; }
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;
+  background:linear-gradient(115deg,rgba(255,255,255,.55),transparent 32%,transparent 70%,rgba(255,255,255,.38)),
+    radial-gradient(circle at 24% 82%,rgba(255,255,255,.58),transparent 34%);
+  mix-blend-mode:soft-light;
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;
+  background-image:linear-gradient(rgba(15,122,60,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(15,122,60,.16) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at center,black 12%,transparent 78%);
+}
+button{font:inherit;cursor:pointer;border:none;background:none}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.app{display:flex;min-height:100vh}

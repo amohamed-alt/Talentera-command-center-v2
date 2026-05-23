@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Talentera Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- CSS -->
+  <link rel="stylesheet" href="./assets/css/base.css" />
+  <link rel="stylesheet" href="./assets/css/layout.css" />
+  <link rel="stylesheet" href="./assets/css/components.css" />
+  <link rel="stylesheet" href="./assets/css/acquisition.css" />
+  <link rel="stylesheet" href="./assets/css/retention.css" />
+  <link rel="stylesheet" href="./assets/css/pnl.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">T</div>
+      <div>
+        <h1>Talentera</h1>
+        <span>Command Center</span>
+      </div>
+    </div>
+
+    <!-- Main navigation -->
+    <div class="side-group">
+      <span class="group-label">Main</span>
+      <button class="nav-btn active" data-route="acquisition">📊 Acquisition</button>
+      <button class="nav-btn" data-route="retention-team">🛡️ Retention</button>
+      <button class="nav-btn sub" data-route="retention-financial">🔥 Financial Details</button>
+      <button class="nav-btn sub" data-route="features-plan">🚀 Features Plan</button>
+      <button class="nav-btn" data-route="pnl">📊 P&amp;L</button>
+    </div>
+
+    <!-- Live team reps -->
+    <div class="side-group">
+      <span class="group-label">Team Activity</span>
+      <div id="sidebarReps" class="rep-list">
+        <div class="rep-item" style="opacity:.5"><b>Loading…</b></div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="sidebar-profile">
+      <div class="avatar">SM</div>
+      <div class="profile-info">
+        <b>Sales Manager</b>
+        <span>Admin · Riyadh</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div>
+        <h2 id="pageTitle">Acquisition · Team Overview</h2>
+        <p id="pageSub">Supabase-only modular dashboard</p>
+      </div>
+      <div class="top-actions">
+        <span class="live-badge"><span class="live-dot">●</span> LIVE · SUPABASE</span>
+        <button id="refreshBtn">↻ Refresh</button>
+      </div>
+    </header>
+
+    <!-- Tab bar -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-route="acquisition">🏠 Team Overview</button>
+      <button class="tab-btn" data-route="retention-team">🛡️ Retention</button>
+      <button class="tab-btn" data-route="retention-financial">🔥 Financial</button>
+      <button class="tab-btn" data-route="features-plan">🚀 Features</button>
+      <button class="tab-btn" data-route="pnl">📊 P&amp;L</button>
+    </nav>
+
+    <!-- Dynamic page content -->
+    <section id="app" class="app">
+      <div class="loading-state"><div class="spinner"></div><span>Loading dashboard…</span></div>
+    </section>
+
+  </main>
+
+  <!-- Modal (empty shell — built by modal.js) -->
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS — order matters
+  ═══════════════════════════════════════════════ -->
+  <!-- Config -->
+  <script src="./assets/js/config.js"></script>
+  <!-- Core layer -->
+  <script src="./assets/js/core/supabase.js"></script>
+  <script src="./assets/js/core/state.js"></script>
+  <script src="./assets/js/core/formatters.js"></script>
+  <script src="./assets/js/core/utils.js"></script>
+  <script src="./assets/js/core/components.js"></script>
+  <script src="./assets/js/core/modal.js"></script>
+  <!-- Modules -->
+  <script src="./assets/js/modules/acquisition.js"></script>
+  <script src="./assets/js/modules/retention-team.js"></script>
+  <script src="./assets/js/modules/retention-financial.js"></script>
+  <script src="./assets/js/modules/features-plan.js"></script>
+  <script src="./assets/js/modules/pnl.js"></script>
+  <!-- Router (init last — wires everything together) -->
+  <script src="./assets/js/core/router.js"></script>
+
+  <script>
+    // Boot sequence
+    (function () {
+      // Sidebar rep list
+      async function loadSidebar() {
+        const el = document.getElementById('sidebarReps');
+        try {
+          const reps = await AppState.get('vw_dash_acq_sidebar_fast', 50);
+          if (!reps.length) { el.innerHTML = '<div class="rep-item">No reps</div>'; return; }
+          el.innerHTML = reps.map(r =>
+            `<div class="rep-item">
+              <b>${Fmt.esc(r.owner_name)}</b>
+              <span class="rep-pill">${Fmt.num(r.meetings_completed || 0)}</span>
+            </div>`
+          ).join('');
+        } catch (_) {
+          el.innerHTML = '<div class="rep-item" style="opacity:.5">Unavailable</div>';
+        }
+      }
+
+      // Init router (renders active route)
+      Router.init();
+      // Load sidebar (non-blocking)
+      loadSidebar();
+    })();
+  </script>
+
+</body>
+</html>

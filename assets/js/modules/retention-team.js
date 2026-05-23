@@ -1,204 +1,210 @@
-/**
- * modules/retention-team.js
- */
-(function () {
-  'use strict';
-  const { card, table, section, hero } = Components;
-  const { money, num, pct, esc, hsLink, relativeDate } = Fmt;
-  const { get } = AppState;
-  const { setTitle, sectionUnavailable } = Utils;
+(function(){
+'use strict';
+const {esc,money,num,pct,date,relDate,hsLink,setTitle,setContent,showLoading,unavailable,statusClass}=window.U;
+const {card,table}=window.Components;
+const {get}=window.State;
 
-  // ─── column definitions ──────────────────────────────────────────────────
-  const smartCols = [
-    { label: '#', key: 'sort_order' },
-    { label: 'Action', key: 'title' },
-    { label: 'Description', key: 'description' },
-    { label: 'Accounts', key: 'accounts', render: r => num(r.accounts) },
-    { label: 'Status', key: 'status' }
-  ];
+const RENEWAL_COLS=[
+  {label:'Account',key:'company_name',render:r=>r.hubspot_search_url?`<a class="record-link" href="${esc(r.hubspot_search_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Product',key:'product'},{label:'RM',key:'rm_owner'},{label:'CSM',key:'csm_owner'},
+  {label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Month',key:'month',center:true},{label:'Renewal Date',key:'renewal_date',center:true,render:r=>date(r.renewal_date)},
+  {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Collected',key:'collected_value',center:true,render:r=>money(r.collected_value)},
+  {label:'Status',key:'status',center:true,render:r=>{const s=r.renewal_status||r.status||'';const c=statusClass(s);return `<span class="fin-status ${c}">${esc(s)}</span>`;}},
+  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url)},
+];
+const FOLLOW_COLS=[
+  {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
+  {label:'Account',key:'company_name',render:r=>r.hubspot_company_url?`<a class="record-link" href="${esc(r.hubspot_company_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Tier',key:'tier_group'},{label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Last Activity',key:'last_activity_at',center:true,render:r=>relDate(r.last_activity_at)},
+  {label:'Days',key:'days_since_last_activity',center:true,render:r=>num(r.days_since_last_activity)},
+  {label:'Alert',key:'alert'},{label:'Open',key:'hubspot_company_url',center:true,render:r=>hsLink(r.hubspot_company_url)},
+];
+const MONTH_COLS=[
+  {label:'Month',key:'month'},{label:'Year',key:'year',center:true},
+  {label:'Due',key:'due_accounts',center:true,render:r=>num(r.due_accounts)},
+  {label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Booked',key:'booked_accounts',center:true,render:r=>num(r.booked_accounts)},
+  {label:'Cashed',key:'cashed_accounts',center:true,render:r=>num(r.cashed_accounts)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--green)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
+  {label:'Renewed Late',key:'renewed_late_accounts',center:true,render:r=>num(r.renewed_late_accounts||0)},
+  {label:'Lost',key:'lost_accounts',center:true,render:r=>num(r.lost_accounts||0)},
+];
+const CHURN_COLS=[
+  {label:'Reason',key:'reason'},
+  {label:'Deals',key:'deals',center:true,render:r=>num(r.deals)},
+  {label:'Value',key:'value',center:true,render:r=>money(r.value)},
+  {label:'Top Account',key:'top_account'},{label:'Status',key:'status'},
+];
+const COV_COLS=[
+  {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
+  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--green)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
+  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
+  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
+  {label:'Call Coverage',key:'call_coverage_score',center:true,render:r=>`<span style="color:${r.call_coverage_score>=70?'var(--green)':r.call_coverage_score>=40?'var(--amber)':'var(--red)'}">${pct(r.call_coverage_score)}</span>`},
+  {label:'Status',key:'coverage_status'},
+];
+const KPI_COLS=[
+  {label:'Period',key:'period'},
+  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
+  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
+  {label:'Booked',key:'booked_count',center:true,render:r=>`${num(r.booked_count)} / ${money(r.booked_value)}`},
+  {label:'Cashed',key:'cashed_count',center:true,render:r=>`${num(r.cashed_count)} / ${money(r.cash_collected)}`},
+  {label:'Delayed',key:'delayed_count',center:true,render:r=>`<span style="color:var(--red);font-weight:900">${num(r.delayed_count)}</span>`},
+];
+const SMART_COLS=[
+  {label:'#',key:'sort_order',center:true},
+  {label:'Action',key:'title',render:r=>`<strong>${esc(r.title)}</strong>`},
+  {label:'Description',key:'description'},
+  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
+  {label:'Value',key:'value',center:true,render:r=>money(r.value||0)},
+  {label:'Status',key:'status',center:true},
+];
 
-  const kpiCols = [
-    { label: 'Period', key: 'period' },
-    { label: 'Calls', key: 'calls_logged', render: r => num(r.calls_logged) },
-    { label: 'Meetings', key: 'meetings_completed', render: r => num(r.meetings_completed) },
-    { label: 'Booked', key: 'booked_count', render: r => num(r.booked_count) },
-    { label: 'Cashed', key: 'cashed_count', render: r => num(r.cashed_count) },
-    { label: 'Delayed', key: 'delayed_count', render: r => num(r.delayed_count) }
-  ];
+async function render(){
+  setTitle('Retention · Team Overview','Renewal movement and follow-up focus');
+  showLoading('Loading Retention…');
 
-  const monthCols = [
-    { label: 'Month', key: 'month' },
-    { label: 'Due', key: 'due_accounts', render: r => num(r.due_accounts) },
-    { label: 'Booked', key: 'booked_accounts', render: r => num(r.booked_accounts) },
-    { label: 'Cashed', key: 'cashed_accounts', render: r => num(r.cashed_accounts) },
-    { label: 'Delayed', key: 'delayed_accounts', render: r => num(r.delayed_accounts) },
-    { label: 'Value', key: 'renewal_value', render: r => money(r.renewal_value) }
-  ];
+  const [focusR,smartR,kpiR,logicR,monthR,churnR,covR,followR]=await Promise.allSettled([
+    get('vw_retention_team_overview_focus',1).catch(()=>get('vw_dash_ret_focus_fast',1)),
+    get('vw_retention_smart_actions',20).catch(()=>get('vw_dash_ret_smart_fast',20)),
+    get('vw_retention_kpi_snapshot',10),
+    get('vw_retention_renewal_logic',500),
+    get('vw_retention_monthly_renewal_pipeline',20),
+    get('vw_retention_churn_reasons',30),
+    get('vw_retention_coverage_quality',50),
+    get('vw_retention_followup_due_details',300),
+  ]);
 
-  const renewalCols = [
-    { label: 'Account', key: 'company_name' },
-    { label: 'Tier', key: 'tier_group' },
-    { label: 'Renewal Value', key: 'renewal_value', render: r => money(r.renewal_value) },
-    { label: 'Month', key: 'month' },
-    { label: 'Renewal Date', key: 'renewal_date', render: r => r.renewal_date ? r.renewal_date.slice(0, 10) : '—' },
-    { label: 'RM', key: 'rm_owner' },
-    { label: 'CSM', key: 'csm_owner' },
-    { label: 'Status', key: 'renewal_status', render: r => {
-      const s = String(r.renewal_status || r.status || '').toLowerCase();
-      const cls = r.is_delayed ? 'bad' : s.includes('lost') ? 'bad' : s.includes('booked') || s.includes('cashed') ? 'ok' : 'warn';
-      return `<span class="status-pill ${cls}">${esc(r.renewal_status || r.status || '—')}</span>`;
-    }},
-    { label: 'HubSpot', key: 'hubspot_company_id', render: r => hsLink(r.hubspot_company_id || r.hs_object_id, 'company') }
-  ];
+  const renewals=logicR.status==='fulfilled'?logicR.value:[];
+  const delayed=renewals.filter(r=>r.is_delayed===true);
+  const snap=focusR.status==='fulfilled'?focusR.value[0]||{}:{};
+  const f={
+    delayed_renewals:snap.delayed_renewals||delayed.length,
+    tier_a_overdue:snap.tier_a_overdue||delayed.filter(r=>Number(r.renewal_value)>5000).length,
+    csm_follow_up_due:snap.csm_follow_up_due||delayed.filter(r=>r.csm_owner).length,
+    rm_follow_up_due:snap.rm_follow_up_due||delayed.filter(r=>r.rm_owner).length,
+    delayed_value:snap.delayed_value||delayed.reduce((s,r)=>s+Number(r.renewal_value||0),0),
+  };
+  const smart=smartR.status==='fulfilled'?smartR.value:[];
+  const kpi=kpiR.status==='fulfilled'?kpiR.value:null;
+  const monthly=monthR.status==='fulfilled'?monthR.value:[];
+  const churn=churnR.status==='fulfilled'?churnR.value:[];
+  const coverage=covR.status==='fulfilled'?covR.value:[];
+  const followup=followR.status==='fulfilled'?followR.value:[];
 
-  const covCols = [
-    { label: 'Role', key: 'role' },
-    { label: 'Owner', key: 'owner_name' },
-    { label: 'Accounts', key: 'accounts', render: r => num(r.accounts) },
-    { label: 'Delayed', key: 'delayed_accounts', render: r => num(r.delayed_accounts) },
-    { label: 'Score', key: 'call_coverage_score', render: r => pct(r.call_coverage_score) }
-  ];
-
-  const churnCols = [
-    { label: 'Reason', key: 'reason' },
-    { label: 'Deals', key: 'deals', render: r => num(r.deals) },
-    { label: 'Value', key: 'value', render: r => money(r.value) },
-    { label: 'Top Account', key: 'top_account' }
-  ];
-
-  const followCols = [
-    { label: 'Role', key: 'role' },
-    { label: 'Owner', key: 'owner_name' },
-    { label: 'Account', key: 'company_name' },
-    { label: 'Tier', key: 'tier_group' },
-    { label: 'Days', key: 'days_since_last_activity', render: r => num(r.days_since_last_activity) },
-    { label: 'Alert', key: 'alert' },
-    { label: 'HubSpot', key: 'hubspot_company_id', render: r => hsLink(r.hubspot_company_id || r.hs_object_id, 'company') }
-  ];
-
-  // ─── client-side derivations ─────────────────────────────────────────────
-  function buildFocusFromLogic(renewals) {
-    const delayed = renewals.filter(r => r.is_delayed);
-    return {
-      delayed_renewals: delayed.length,
-      tier_a_overdue: delayed.filter(r => Number(r.renewal_value) > 5000).length,
-      csm_follow_up_due: delayed.filter(r => r.csm_owner).length,
-      rm_follow_up_due: delayed.filter(r => r.rm_owner).length
-    };
+  // Sidebar
+  const repEl=document.getElementById('sideRepLinks');
+  if(repEl&&coverage.length){
+    repEl.innerHTML=coverage.slice(0,12).map(r=>`<button class="nav-item nav-sub" style="font-size:11px">
+      <span class="nav-icon">${r.role==='RM'?'◆':'●'}</span>${esc(r.owner_name)}<span class="ret-tag">${esc(r.role)}</span><span class="nav-badge">${r.accounts||0}</span>
+    </button>`).join('');
+    document.getElementById('sideRepTitle').textContent='Retention Team';
   }
 
-  function buildSmartActions(f) {
-    return [
-      { sort_order: 1, title: 'Work delayed renewals', description: 'Renewal date passed, no movement detected.', accounts: f.delayed_renewals, status: 'Delayed' },
-      { sort_order: 2, title: 'Clear high-value overdue', description: 'High-value accounts need urgent action.', accounts: f.tier_a_overdue, status: 'Overdue' },
-      { sort_order: 3, title: 'CSM follow-up due', description: 'Delayed accounts with assigned CSM.', accounts: f.csm_follow_up_due, status: 'CSM' },
-      { sort_order: 4, title: 'RM follow-up due', description: 'Delayed accounts with assigned RM.', accounts: f.rm_follow_up_due, status: 'RM' }
-    ];
-  }
+  // Retention KPI focus cards
+  const focusCards=`<div class="ret-kpi-bar" style="grid-template-columns:repeat(4,1fr)">
+    <div class="ret-kpi" style="border-left:4px solid var(--red)" onclick="window._ret.delayedModal()">
+      <div class="ret-kpi-v" style="color:var(--red)">${num(f.delayed_renewals)}</div>
+      <div class="ret-kpi-l">Delayed Renewals</div>
+      <div class="ret-kpi-s">${money(f.delayed_value)} exposure</div>
+    </div>
+    <div class="ret-kpi" style="border-left:4px solid var(--amber)" onclick="window._ret.tierAModal()">
+      <div class="ret-kpi-v" style="color:var(--amber)">${num(f.tier_a_overdue)}</div>
+      <div class="ret-kpi-l">High Value Overdue</div>
+      <div class="ret-kpi-s">Over $5K value</div>
+    </div>
+    <div class="ret-kpi" style="border-left:4px solid var(--cyan)" onclick="window._ret.csmModal()">
+      <div class="ret-kpi-v" style="color:var(--cyan)">${num(f.csm_follow_up_due)}</div>
+      <div class="ret-kpi-l">CSM Follow-up Due</div>
+      <div class="ret-kpi-s">Assigned CSM accounts</div>
+    </div>
+    <div class="ret-kpi" style="border-left:4px solid var(--blue)" onclick="window._ret.rmModal()">
+      <div class="ret-kpi-v" style="color:var(--blue)">${num(f.rm_follow_up_due)}</div>
+      <div class="ret-kpi-l">RM Follow-up Due</div>
+      <div class="ret-kpi-s">Assigned RM accounts</div>
+    </div>
+  </div>`;
 
-  function buildKpiFromLogic(renewals) {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth();
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yStr = yesterday.toDateString();
-    return [
-      { period: 'Yesterday', calls_logged: 0, meetings_completed: 0, booked_count: renewals.filter(r => { const d = new Date(r.first_booked_date || r.renewal_date); return d.toDateString() === yStr && Number(r.booked_value) > 0; }).length, cashed_count: renewals.filter(r => { const d = new Date(r.first_collection_date || r.renewal_date); return d.toDateString() === yStr && Number(r.collected_value) > 0; }).length, delayed_count: renewals.filter(r => r.is_delayed && new Date(r.renewal_date).toDateString() === yStr).length },
-      { period: 'MTD', calls_logged: 0, meetings_completed: 0, booked_count: renewals.filter(r => { const d = new Date(r.first_booked_date || r.renewal_date); return d.getFullYear() === y && d.getMonth() === m && Number(r.booked_value) > 0; }).length, cashed_count: renewals.filter(r => { const d = new Date(r.first_collection_date || r.renewal_date); return d.getFullYear() === y && d.getMonth() === m && Number(r.collected_value) > 0; }).length, delayed_count: renewals.filter(r => r.is_delayed && new Date(r.renewal_date).getFullYear() === y && new Date(r.renewal_date).getMonth() === m).length },
-      { period: 'YTD', calls_logged: 0, meetings_completed: 0, booked_count: renewals.filter(r => { const d = new Date(r.first_booked_date || r.renewal_date); return d.getFullYear() === y && Number(r.booked_value) > 0; }).length, cashed_count: renewals.filter(r => { const d = new Date(r.first_collection_date || r.renewal_date); return d.getFullYear() === y && Number(r.collected_value) > 0; }).length, delayed_count: renewals.filter(r => r.is_delayed && new Date(r.renewal_date).getFullYear() === y).length }
-    ];
-  }
+  // Register modal helpers
+  window._ret={
+    delayedModal:()=>window.Modal.open({title:'Delayed Renewals',rows:delayed,cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+    tierAModal:()=>window.Modal.open({title:'High Value Overdue',rows:delayed.filter(r=>Number(r.renewal_value)>5000),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+    csmModal:()=>window.Modal.open({title:'CSM Follow-up Due',rows:delayed.filter(r=>r.csm_owner),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+    rmModal:()=>window.Modal.open({title:'RM Follow-up Due',rows:delayed.filter(r=>r.rm_owner),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+    renewalModal:()=>window.Modal.open({title:'All Renewals',rows:renewals,cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+    monthlyModal:(m)=>window.Modal.open({title:`Renewals — ${m}`,rows:renewals.filter(r=>r.month===m),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
+  };
 
-  function buildCovFromLogic(renewals) {
-    const ownerMap = {};
-    renewals.forEach(r => {
-      [['RM', r.rm_owner], ['CSM', r.csm_owner]].forEach(([role, name]) => {
-        if (!name) return;
-        const k = role + '|' + name;
-        ownerMap[k] = ownerMap[k] || { role, owner_name: name, accounts: 0, delayed_accounts: 0 };
-        ownerMap[k].accounts++;
-        if (r.is_delayed) ownerMap[k].delayed_accounts++;
-      });
-    });
-    return Object.values(ownerMap).map(x => ({
-      ...x,
-      call_coverage_score: ((x.accounts - x.delayed_accounts) / Math.max(1, x.accounts)) * 100
-    }));
-  }
+  // Smart actions
+  const smartSection=smart.length?
+    `<div class="manager-section-label">Smart Actions</div>
+     ${card('<div class="card-title-icon" style="background:var(--green-bg)">⚡</div> Prioritised Actions','',table(smart,SMART_COLS,10))}`:
+    '';
 
-  // ─── render ──────────────────────────────────────────────────────────────
-  async function render() {
-    setTitle('Retention · Team Overview', 'Renewal movement and follow-up focus');
+  // KPI snapshot
+  const kpiSection=kpi?
+    `<div class="manager-section-label">KPI Snapshot — Yesterday · MTD · YTD</div>
+     ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Retention KPIs','',
+       `<div class="ret-period-grid">
+         ${kpi.map(p=>`<div class="ret-period-card">
+           <div class="ret-period-label">${esc(p.period)}</div>
+           ${[['Calls',num(p.calls_logged)],['Meetings',num(p.meetings_completed)],['Booked',`${num(p.booked_count)} / ${money(p.booked_value)}`],['Cashed',`${num(p.cashed_count)} / ${money(p.cash_collected)}`],['Delayed',`<span style="color:var(--red);font-weight:900">${num(p.delayed_count)}</span>`]].map(([k,v])=>
+             `<div class="ret-period-row"><div class="ret-period-key">${k}</div><div class="ret-period-val">${v}</div></div>`).join('')}
+         </div>`).join('')}
+       </div>`)}`:
+    (kpiR.status!=='fulfilled'?`<div class="manager-section-label">KPI Snapshot</div>${unavailable('vw_retention_kpi_snapshot',kpiR.reason?.message)}`:'' );
 
-    const results = await Promise.allSettled([
-      get('vw_dash_ret_focus_fast', 1),
-      get('vw_dash_ret_smart_fast', 20),
-      get('vw_retention_kpi_snapshot', 10),
-      get('vw_retention_renewal_logic', 500),
-      get('vw_retention_monthly_renewal_pipeline', 30),
-      get('vw_retention_churn_reasons', 30),
-      get('vw_retention_coverage_quality', 50),
-      get('vw_retention_followup_due_details', 200)
-    ]);
+  // Monthly renewal pipeline
+  const monthSection=monthly.length?
+    `<div class="manager-section-label">Monthly Renewal Pipeline</div>
+     ${card('<div class="card-title-icon" style="background:var(--amber-bg)">📅</div> Monthly Renewal Pipeline',
+       `<span class="badge ba">${monthly.length} months</span>`,
+       table(monthly,MONTH_COLS,13))}`:
+    '';
 
-    const [focusR, smartR, kpiR, logicR, monthR, churnR, covR, followR] = results;
+  // Coverage quality + churn reasons
+  const covHtml=coverage.length?
+    `<div class="ret-coverage">${coverage.map(o=>`
+      <div class="ret-coverage-line">
+        <div class="ret-coverage-label">${esc(o.owner_name)} <span class="ret-tag">${esc(o.role)}</span></div>
+        <div class="ret-bar"><div class="ret-fill" style="--rc:${o.role==='RM'?'var(--blue)':'var(--cyan)'};width:${Math.min(100,Number(o.call_coverage_score||0))}%"></div></div>
+        <div class="ret-pct">${pct(o.call_coverage_score||0)}</div>
+      </div>`).join('')}</div>`
+    :`<div style="padding:14px;color:var(--muted);font-size:12px">No coverage data</div>`;
 
-    const renewals = logicR.status === 'fulfilled' ? logicR.value : [];
+  const sideSection=`<div class="manager-section-label">Coverage & Churn</div>
+  <div class="two-col">
+    ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📊</div> Coverage Quality',
+      `<button class="badge bc" onclick="window.Modal.open({title:'Coverage Quality',rows:window._retData.coverage,cols:${JSON.stringify(COV_COLS.map(c=>({...c,render:null})))}})">Details</button>`,
+      covHtml)}
+    ${churn.length?card('<div class="card-title-icon" style="background:var(--blue-bg)">📉</div> Churn Reasons','',table(churn,CHURN_COLS,8)):''}
+  </div>`;
 
-    // Focus stats: prefer dedicated view, fall back to logic derivation
-    const focusSnap = focusR.status === 'fulfilled' ? focusR.value[0] || buildFocusFromLogic(renewals) : buildFocusFromLogic(renewals);
-    const f = {
-      delayed_renewals: focusSnap.delayed_renewals || 0,
-      tier_a_overdue: focusSnap.tier_a_overdue || 0,
-      csm_follow_up_due: focusSnap.csm_follow_up_due || 0,
-      rm_follow_up_due: focusSnap.rm_follow_up_due || 0
-    };
+  // Unified Renewal Table
+  const renewalSection=renewals.length?
+    `<div class="manager-section-label">Unified Renewal Table</div>
+     ${card('<div class="card-title-icon" style="background:var(--red-bg)">🔁</div> Unified Renewal Table',
+       `<button class="badge br" onclick="window._ret.renewalModal()">Open All ${renewals.length}</button>`,
+       `<div style="font-size:11px;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border)">One row per renewal. Delayed, upcoming, and all renewal statuses in one table.</div>
+       ${table(renewals,RENEWAL_COLS,8,r=>r.hubspot_search_url)}`)}`:
+    unavailable('vw_retention_renewal_logic',logicR.reason?.message);
 
-    const smart = smartR.status === 'fulfilled' ? smartR.value : buildSmartActions(f);
-    const kpi = kpiR.status === 'fulfilled' ? kpiR.value : buildKpiFromLogic(renewals);
-    const monthly = monthR.status === 'fulfilled' ? monthR.value : [];
-    const churn = churnR.status === 'fulfilled' ? churnR.value : [];
-    const coverage = covR.status === 'fulfilled' ? covR.value : buildCovFromLogic(renewals);
-    const followup = followR.status === 'fulfilled' ? followR.value
-      : renewals.filter(r => r.is_delayed).slice(0, 150).map(r => ({
-          role: 'RM/CSM', owner_name: r.rm_owner || r.csm_owner || 'Unassigned',
-          company_name: r.company_name, tier_group: r.tier_group || '—',
-          days_since_last_activity: 0, alert: 'Follow-up due',
-          hubspot_company_id: r.hubspot_company_id
-        }));
+  // Follow-up metrics
+  const followSection=followup.length?
+    `<div class="manager-section-label">RM / CSM Follow-up Metrics</div>
+     ${card('<div class="card-title-icon" style="background:var(--purple-bg)">👥</div> Follow-up Metrics',
+       `<button class="badge bp" onclick="window.Modal.open({title:'Follow-up Due',rows:window._retData.followup,cols:${JSON.stringify(FOLLOW_COLS.map(c=>({...c,render:null})))}})">Open All ${followup.length}</button>`,
+       table(followup,FOLLOW_COLS,8,r=>r.hubspot_company_url))}`:
+    '';
 
-    const delayed = renewals.filter(r => r.is_delayed);
-    const kpiCards = [
-      card('Delayed Renewals', num(f.delayed_renewals), 'Need action', 'red',
-        delayed.length ? { title: 'Delayed Renewals', columns: renewalCols, rows: delayed } : null),
-      card('High Value Overdue', num(f.tier_a_overdue), 'Over $5K value', 'orange',
-        { title: 'High Value Overdue', columns: renewalCols, rows: delayed.filter(r => Number(r.renewal_value) > 5000) }),
-      card('CSM Follow-up Due', num(f.csm_follow_up_due), 'By owner', 'purple',
-        { title: 'CSM Follow-up Due', columns: renewalCols, rows: delayed.filter(r => r.csm_owner) }),
-      card('RM Follow-up Due', num(f.rm_follow_up_due), 'By owner', 'blue',
-        { title: 'RM Follow-up Due', columns: renewalCols, rows: delayed.filter(r => r.rm_owner) })
-    ];
+  window._retData={coverage,followup};
 
-    const app = document.getElementById('app');
-    app.innerHTML = [
-      hero("Today's Retention Focus", 'Delayed renewals and RM/CSM follow-up cadence.', 'Retention Snapshot'),
-      `<div class="kpi-grid four">${kpiCards.join('')}</div>`,
-      section('Smart Actions', 'Prioritised work list', table(smart, smartCols)),
-      section('Retention KPI Snapshot', kpiR.status !== 'fulfilled' ? '⚠ Activity from Supabase logic (calls/meetings unavailable)' : 'Yesterday · MTD · YTD', table(kpi, kpiCols)),
-      `<div class="two-col">
-        ${section('Monthly Renewal Pipeline', 'Contract renewal dates', table(monthly, monthCols), monthly.length + ' months')}
-        ${section('Coverage Quality', 'Owner-level renewal health', table(coverage, covCols), coverage.length + ' owners')}
-      </div>`,
-      renewals.length
-        ? section('Unified Renewal Table', 'Full renewal logic view', table(renewals, renewalCols, 50), renewals.length + ' rows')
-        : section('Unified Renewal Table', 'Unavailable', sectionUnavailable('vw_retention_renewal_logic', logicR.reason?.message)),
-      `<div class="two-col">
-        ${churn.length ? section('Churn Reasons', 'Lost/churn reasons', table(churn, churnCols)) : ''}
-        ${section('RM / CSM Follow-up', 'Delayed accounts due for follow-up', table(followup, followCols, 30), followup.length + ' rows')}
-      </div>`
-    ].join('');
-  }
+  setContent(focusCards+smartSection+kpiSection+monthSection+sideSection+renewalSection+followSection);
+}
 
-  window.RetentionTeamModule = { render };
+window.RetentionTeamModule={render};
 })();

@@ -13173,8 +13173,34 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
       ensureRepPanelsLocation();
     }
   }
+  function ensureUpsellSidebarLink(activeMode){
+    var holder = byId('sideRepLinks');
+    if(!holder) return null;
+    var existing = byId('side-ret-upselling');
+    if(!existing){
+      var badge = 0;
+      try{
+        if(window.R){
+          var rows = window.R.featuresPlanForUpselling || window.R.upsellingFeaturesPlan || window.R.featuresPlan || window.R.featuresPlanRows || (window.R.sheetData && (window.R.sheetData.featuresPlanForUpselling || window.R.sheetData.upsellingFeaturesPlan)) || [];
+          badge = Array.isArray(rows) ? rows.length : 0;
+        }
+      }catch(e){}
+      var html = '<button class="nav-item" id="side-ret-upselling" onclick="switchRetentionUpsellingFeaturesPlan();return false;"><span class="nav-icon" style="color:var(--purple)">🚀</span>Features Plan<span class="view-tag">SHEET</span><span class="nav-badge">' + badge + '</span></button>';
+      var fin = byId('side-ret-financial');
+      if(fin && fin.parentNode === holder) fin.insertAdjacentHTML('afterend', html);
+      else holder.insertAdjacentHTML('afterbegin', html);
+      existing = byId('side-ret-upselling');
+    }
+    if(existing){
+      existing.setAttribute('onclick','switchRetentionUpsellingFeaturesPlan();return false;');
+      existing.classList.toggle('active', activeMode === 'upselling');
+    }
+    return existing;
+  }
+
   function markRetentionNav(mode, ownerId){
     try{ if(typeof window.renderRetentionSidebar === 'function') window.renderRetentionSidebar(mode || 'overview'); }catch(e){}
+    ensureUpsellSidebarLink(mode);
     byId('side-retention')?.classList.add('active');
     if(mode === 'overview') byId('side-ret-overview')?.classList.add('active');
     if(mode === 'financial') byId('side-ret-financial')?.classList.add('active');
@@ -13237,12 +13263,39 @@ body:not(.pnl-active) #panel-retention-revenue:not(.active){display:none!importa
     saveState({main:'retention', retView:'upselling', retOwner:null});
     keepScroll(function(){
       try{ if(typeof window.setRetentionOwnerMode === 'function') window.setRetentionOwnerMode(false); }catch(e){}
-      clearActive(); showTabs(false); sideTitle('Retention');
-      try{ if(typeof window.renderRetentionSidebar === 'function') window.renderRetentionSidebar('upselling'); }catch(e){}
-      byId('panel-retention-upselling')?.classList.add('active');
+      showTabs(false);
+      sideTitle('Retention');
+
+      // The features panel is created lazily by renderRetentionUpsellingFeaturesPlan().
+      // Render first, then activate the panel. Otherwise the router activates a panel
+      // that does not exist yet and the UI appears to jump back to Retention Overview.
       try{ if(typeof window.renderRetentionUpsellingFeaturesPlan === 'function') window.renderRetentionUpsellingFeaturesPlan(); }catch(e){ console.warn('Features plan render skipped', e); }
+
+      clearActive();
+      var panel = byId('panel-retention-upselling');
+      if(!panel){
+        var dash = byId('dashMain') || document.querySelector('.content');
+        if(dash){
+          panel = document.createElement('div');
+          panel.className = 'panel';
+          panel.id = 'panel-retention-upselling';
+          panel.innerHTML = '<div class="card"><div class="empty">Features Plan panel is loading. Press Refresh if it does not appear.</div></div>';
+          dash.appendChild(panel);
+        }
+      }
+      if(panel) panel.classList.add('active');
+      try{ if(typeof window.renderRetentionSidebar === 'function') window.renderRetentionSidebar('upselling'); }catch(e){}
+      ensureUpsellSidebarLink('upselling');
       markRetentionNav('upselling');
       setTop('Retention · Features Plan','Upsell opportunities · Sheet/Supabase view · Manual refresh');
+
+      requestAnimationFrame(function(){
+        clearActive();
+        var p = byId('panel-retention-upselling');
+        if(p) p.classList.add('active');
+        markRetentionNav('upselling');
+        showTabs(false);
+      });
     }, options);
   }
 

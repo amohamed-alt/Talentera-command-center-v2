@@ -1,154 +1,228 @@
-/**
- * modules/retention-financial.js
- */
-(function () {
-  'use strict';
-  const { card, table, section, hero } = Components;
-  const { money, num, pct, esc, hsLink } = Fmt;
-  const { get } = AppState;
-  const { setTitle, sectionUnavailable } = Utils;
+(function(){
+'use strict';
+const {esc,money,num,pct,date,hsLink,setTitle,setContent,showLoading,unavailable,statusClass}=window.U;
+const {card,table}=window.Components;
+const {get}=window.State;
 
-  const ownerCols = [
-    { label: 'Role', key: 'role' },
-    { label: 'Owner', key: 'owner_name' },
-    { label: 'Accounts', key: 'accounts', render: r => num(r.accounts) },
-    { label: 'Renewal', key: 'renewal_value', render: r => money(r.renewal_value) },
-    { label: 'Booked', key: 'booked_value', render: r => money(r.booked_value) },
-    { label: 'Cash', key: 'cash_collected', render: r => money(r.cash_collected) },
-    { label: 'Remaining', key: 'remaining_collection', render: r => money(r.remaining_collection) },
-    { label: 'Delayed', key: 'delayed_accounts', render: r => num(r.delayed_accounts) }
-  ];
+const STATUS_COLS=[
+  {label:'Account',key:'company_name',render:r=>r.hubspot_search_url?`<a class="record-link" href="${esc(r.hubspot_search_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Product',key:'product'},{label:'RM',key:'rm_owner'},{label:'CSM',key:'csm_owner'},
+  {label:'Month',key:'month',center:true},
+  {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Collected',key:'collected_value',center:true,render:r=>money(r.collected_value)},
+  {label:'Remaining',key:'remaining_collection_value',center:true,render:r=>money(r.remaining_collection_value||0)},
+  {label:'Status',key:'status',center:true,render:r=>{const s=r.renewal_status||r.status||'';return `<span class="fin-status ${statusClass(s)}">${esc(s)}</span>`;}},
+  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url)},
+];
+const OWNER_COLS=[
+  {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
+  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
+  {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
+  {label:'Booked Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
+  {label:'Remaining',key:'remaining_collection',center:true,render:r=>money(r.remaining_collection||0)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--text2)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
+];
+const PRODUCT_COLS=[
+  {label:'Product',key:'product'},
+  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
+  {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
+  {label:'Booked Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>num(r.delayed_accounts)},
+  {label:'Lost',key:'lost_accounts',center:true,render:r=>num(r.lost_accounts||0)},
+];
+const NOT_BUDGET_COLS=[
+  {label:'Source',key:'source'},{label:'Company',key:'company_name'},
+  {label:'Product',key:'product'},{label:'Owner',key:'owner_name'},
+  {label:'Date',key:'event_date',center:true,render:r=>date(r.event_date)},
+  {label:'Value',key:'value',center:true,render:r=>money(r.value)},
+  {label:'Flag',key:'flag'},
+];
 
-  const productCols = [
-    { label: 'Product', key: 'product' },
-    { label: 'Accounts', key: 'accounts', render: r => num(r.accounts) },
-    { label: 'Renewal', key: 'renewal_value', render: r => money(r.renewal_value) },
-    { label: 'Booked', key: 'booked_value', render: r => money(r.booked_value) },
-    { label: 'Cash', key: 'cash_collected', render: r => money(r.cash_collected) }
-  ];
+async function render(){
+  setTitle('Retention · Financial Details','Booked, cash collected, delayed and renewal exposure');
+  showLoading('Loading Retention Financial…');
 
-  const monthCols = [
-    { label: 'Month', key: 'month' },
-    { label: 'Due', key: 'due_accounts', render: r => num(r.due_accounts) },
-    { label: 'Value', key: 'renewal_value', render: r => money(r.renewal_value) },
-    { label: 'Booked', key: 'booked_value', render: r => money(r.booked_value) },
-    { label: 'Cash', key: 'cash_collected', render: r => money(r.cash_collected) }
-  ];
+  const [sumR,ownersR,productsR,logicR,monthR,notBudR]=await Promise.allSettled([
+    get('vw_retention_team_summary',1),
+    get('vw_retention_owner_financial_summary',50),
+    get('vw_retention_product_financial_summary',20),
+    get('vw_retention_renewal_logic',500),
+    get('vw_retention_monthly_renewal_pipeline',20),
+    get('vw_retention_not_in_budget',200),
+  ]);
 
-  const statusCols = [
-    { label: 'Account', key: 'company_name' },
-    { label: 'RM', key: 'rm_owner' },
-    { label: 'CSM', key: 'csm_owner' },
-    { label: 'Month', key: 'month' },
-    { label: 'Renewal', key: 'renewal_value', render: r => money(r.renewal_value) },
-    { label: 'Booked', key: 'booked_value', render: r => money(r.booked_value) },
-    { label: 'Cash', key: 'collected_value', render: r => money(r.collected_value) },
-    { label: 'Status', key: 'renewal_status', render: r => {
-      const s = String(r.renewal_status || r.status || '').toLowerCase();
-      const cls = r.is_delayed ? 'bad' : s.includes('lost') ? 'bad' : s.includes('booked') || s.includes('cashed') ? 'ok' : 'warn';
-      return `<span class="status-pill ${cls}">${esc(r.renewal_status || r.status || '—')}</span>`;
-    }},
-    { label: 'HubSpot', key: 'hubspot_company_id', render: r => hsLink(r.hubspot_company_id || r.hs_object_id, 'company') }
-  ];
+  const s=sumR.status==='fulfilled'?sumR.value[0]||{}:{};
+  const owners=ownersR.status==='fulfilled'?ownersR.value:null;
+  const products=productsR.status==='fulfilled'?productsR.value:null;
+  const logic=logicR.status==='fulfilled'?logicR.value:[];
+  const monthly=monthR.status==='fulfilled'?monthR.value:[];
+  const notBud=notBudR.status==='fulfilled'?notBudR.value:null;
 
-  const notBudgetCols = [
-    { label: 'Source', key: 'source' },
-    { label: 'Company', key: 'company_name' },
-    { label: 'Product', key: 'product' },
-    { label: 'Owner', key: 'owner_name' },
-    { label: 'Value', key: 'value', render: r => money(r.value) },
-    { label: 'HubSpot', key: 'hubspot_company_id', render: r => hsLink(r.hubspot_company_id || r.hs_object_id, 'company') }
-  ];
+  // Status groups
+  const booked=logic.filter(r=>Number(r.booked_value)>0);
+  const cashed=logic.filter(r=>Number(r.collected_value)>0);
+  const delayed=logic.filter(r=>r.is_delayed===true);
+  const lostRows=logic.filter(r=>/lost|churn/i.test(r.renewal_status||r.status||''));
+  const expected=logic.filter(r=>/expected/i.test(r.renewal_status||r.status||''));
+  const late=logic.filter(r=>r.renewed_late===true||/renewed late/i.test(r.renewal_status||''));
+  const remaining=logic.filter(r=>Number(r.remaining_collection_value||0)>0);
 
-  function statusFilter(logic, predicate) {
-    return logic.filter(predicate);
+  window._fin={booked,cashed,delayed,lostRows,expected,late,remaining,logic};
+
+  // Top financial cards
+  const finCards=`<div class="ret-fin-top-grid">
+    <div class="ret-fin-card" style="--fc:var(--cyan)" onclick="window.Modal.open({title:'All Renewals',rows:window._fin.logic,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">💎</div>
+      <div class="ret-fin-card-v">${money(s.renewal_value)}</div>
+      <div class="ret-fin-card-l">Renewal Value</div>
+      <div class="ret-fin-card-s">${num(s.accounts||logic.length)} accounts</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--purple)" onclick="window.Modal.open({title:'Booked Value',rows:window._fin.booked,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">📝</div>
+      <div class="ret-fin-card-v">${money(s.booked_value)}</div>
+      <div class="ret-fin-card-l">Booked Value Total</div>
+      <div class="ret-fin-card-s">${num(s.booked_accounts||booked.length)} booking rows</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--green)" onclick="window.Modal.open({title:'Cash Collected',rows:window._fin.cashed,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">💵</div>
+      <div class="ret-fin-card-v">${money(s.cash_collected)}</div>
+      <div class="ret-fin-card-l">Cash Collected</div>
+      <div class="ret-fin-card-s">${num(s.cashed_accounts||cashed.length)} collection rows</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--blue)" onclick="window.Modal.open({title:'Booked Not Cash',rows:window._fin.remaining,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">⏳</div>
+      <div class="ret-fin-card-v">${money(s.booked_not_cash||s.remaining_collection)}</div>
+      <div class="ret-fin-card-l">Booked Not Cash</div>
+      <div class="ret-fin-card-s">Collection pending</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--red)" onclick="window.Modal.open({title:'Delayed Accounts',rows:window._fin.delayed,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">🚨</div>
+      <div class="ret-fin-card-v">${num(s.delayed_accounts||delayed.length)}</div>
+      <div class="ret-fin-card-l">Delayed Accounts</div>
+      <div class="ret-fin-card-s">${money(s.delayed_value||delayed.reduce((a,r)=>a+Number(r.renewal_value||0),0))} value</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--amber)" onclick="window.Modal.open({title:'Renewed Late',rows:window._fin.late,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">⚠️</div>
+      <div class="ret-fin-card-v">${num(s.renewed_late_accounts||late.length)}</div>
+      <div class="ret-fin-card-l">Renewed Late</div>
+      <div class="ret-fin-card-s">${money(s.renewed_late_value||0)}</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--amber)" onclick="window.Modal.open({title:'Expected to be Lost',rows:window._fin.expected,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">⚡</div>
+      <div class="ret-fin-card-v">${num(s.expected_lost_accounts||expected.length)}</div>
+      <div class="ret-fin-card-l">Expected Lost</div>
+      <div class="ret-fin-card-s">${money(s.expected_lost_value||0)}</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--red)" onclick="window.Modal.open({title:'Lost Accounts',rows:window._fin.lostRows,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
+      <div class="ret-fin-card-icon">✗</div>
+      <div class="ret-fin-card-v">${num(s.lost_accounts||lostRows.length)}</div>
+      <div class="ret-fin-card-l">Lost</div>
+      <div class="ret-fin-card-s">${money(s.lost_value||0)}</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--green)">
+      <div class="ret-fin-card-icon">📊</div>
+      <div class="ret-fin-card-v">${pct(s.cash_collection_pct||0)}</div>
+      <div class="ret-fin-card-l">Cash Collection %</div>
+      <div class="ret-fin-card-s">Cash / renewal</div>
+    </div>
+    <div class="ret-fin-card" style="--fc:var(--cyan)">
+      <div class="ret-fin-card-icon">📈</div>
+      <div class="ret-fin-card-v">${pct(s.booking_coverage_pct||0)}</div>
+      <div class="ret-fin-card-l">Booking Coverage %</div>
+      <div class="ret-fin-card-s">Booked / renewal</div>
+    </div>
+  </div>`;
+
+  // Owner summary
+  let ownerSection='';
+  if(owners){
+    const ownerHead=['Owner','Role','Accounts','Renewal','Booked Total','Cash Collected','Booked Not Cash','Remaining','Delayed'];
+    ownerSection=`<div class="manager-section-label">Owner Financial Summary</div>
+    ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Owner Financial Summary',
+      `<span class="badge bb">${owners.length} owners</span>`,
+      `<div class="tbl-wrap"><table class="tbl">
+        <thead><tr>${ownerHead.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>
+        <tbody>${owners.map(o=>`<tr>
+          <td><strong>${esc(o.owner_name)}</strong></td>
+          <td><span class="ret-tag">${esc(o.role)}</span></td>
+          <td class="c" style="font-family:var(--mono);font-weight:900">${num(o.accounts)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--cyan)">${money(o.renewal_value)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--purple)">${money(o.booked_value)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--green)">${money(o.cash_collected)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--blue)">${money(o.booked_not_cash||0)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900">${money(o.remaining_collection||0)}</td>
+          <td class="c" style="font-family:var(--mono);font-weight:900;color:${o.delayed_accounts>0?'var(--red)':'var(--text2)'}">${num(o.delayed_accounts)}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`)}`;
   }
 
-  async function render() {
-    setTitle('Retention · Financial Details', 'Booked, cash collected, delayed and renewal exposure');
+  // Product summary + monthly
+  const splitSection=`<div class="manager-section-label">Product & Monthly</div>
+  <div class="two-col">
+    ${products?card('<div class="card-title-icon" style="background:var(--purple-bg)">📦</div> Product Summary',`<span class="badge bp">${products.length} products</span>`,table(products,PRODUCT_COLS,10)):''}
+    ${monthly.length?card('<div class="card-title-icon" style="background:var(--amber-bg)">📅</div> Monthly Pipeline',`<span class="badge ba">${monthly.length} months</span>`,table(monthly,[
+      {label:'Month',key:'month'},{label:'Due',key:'due_accounts',center:true,render:r=>num(r.due_accounts)},
+      {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+      {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+      {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
+      {label:'Remaining',key:'remaining_collection',center:true,render:r=>money(r.remaining_collection||0)},
+    ],13)):''}
+  </div>`;
 
-    const results = await Promise.allSettled([
-      get('vw_retention_team_summary', 1),
-      get('vw_retention_owner_financial_summary', 100),
-      get('vw_retention_product_financial_summary', 50),
-      get('vw_retention_renewal_logic', 500),
-      get('vw_retention_monthly_renewal_pipeline', 30),
-      get('vw_retention_not_in_budget', 200)
-    ]);
+  // Status split
+  const statusSection=`<div class="manager-section-label">Renewal Status Split</div>
+  ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📌</div> Renewal Status Split',
+    `<span class="badge bc">${logic.length} accounts</span>`,
+    `<div style="padding:12px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid var(--border)">
+      ${[
+        {label:'📝 Booked',rows:booked,color:'var(--purple)'},
+        {label:'💵 Cashed',rows:cashed,color:'var(--green)'},
+        {label:'⏳ Remaining',rows:remaining,color:'var(--blue)'},
+        {label:'🔴 Delayed',rows:delayed,color:'var(--red)'},
+        {label:'⚠️ Late',rows:late,color:'var(--amber)'},
+        {label:'⚡ Expected Lost',rows:expected,color:'var(--amber)'},
+        {label:'✗ Lost',rows:lostRows,color:'var(--red)'},
+      ].map(g=>`<div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid ${g.color}"
+        onclick="window.Modal.open({title:'${g.label.replace(/['"]/g,'')}',rows:window._fin[Object.keys(window._fin).find(k=>window._fin[k]===window._fin['${Object.keys({booked,cashed,delayed,lostRows,expected,late,remaining}).find(k=>({booked,cashed,delayed,lostRows,expected,late,remaining}[k]===g.rows))}'])],cols:[]})">
+        <div style="font-family:var(--mono);font-size:20px;font-weight:900;color:${g.color}">${num(g.rows.length)}</div>
+        <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">${g.label}</div>
+      </div>`).join('')}
+    </div>
+    ${table(logic,STATUS_COLS,8,r=>r.hubspot_search_url)}`)}`;
 
-    const [sumR, ownersR, productsR, logicR, monthR, notBudgetR] = results;
+  // Fix the status split onclick with proper data refs  
+  const statusSectionFixed=`<div class="manager-section-label">Renewal Status Split</div>
+  ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📌</div> Renewal Status Split',
+    `<button class="badge bc" onclick="window.Modal.open({title:'All Renewals',rows:window._fin.logic,cols:[]})">Open All ${logic.length}</button>`,
+    `<div style="padding:12px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid var(--border)">
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--purple)" onclick="window.Modal.open({title:'Booked Value',rows:window._fin.booked,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--purple)">${num(booked.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">📝 Booked</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--green)" onclick="window.Modal.open({title:'Cash Collected',rows:window._fin.cashed,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--green)">${num(cashed.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">💵 Cashed</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--red)" onclick="window.Modal.open({title:'Delayed',rows:window._fin.delayed,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--red)">${num(delayed.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">🔴 Delayed</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--amber)" onclick="window.Modal.open({title:'Renewed Late',rows:window._fin.late,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--amber)">${num(late.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⚠️ Renewed Late</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--amber)" onclick="window.Modal.open({title:'Expected Lost',rows:window._fin.expected,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--amber)">${num(expected.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⚡ Expected Lost</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--red)" onclick="window.Modal.open({title:'Lost',rows:window._fin.lostRows,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--red)">${num(lostRows.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">✗ Lost</div></div>
+      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--blue)" onclick="window.Modal.open({title:'Remaining Collection',rows:window._fin.remaining,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--blue)">${num(remaining.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⏳ Remaining</div></div>
+    </div>
+    ${table(logic,STATUS_COLS,8,r=>r.hubspot_search_url)}`)}`;
 
-    const s = sumR.status === 'fulfilled' ? sumR.value[0] || {} : {};
-    const owners = ownersR.status === 'fulfilled' ? ownersR.value : null;
-    const products = productsR.status === 'fulfilled' ? productsR.value : null;
-    const logic = logicR.status === 'fulfilled' ? logicR.value : [];
-    const monthly = monthR.status === 'fulfilled' ? monthR.value : [];
-    const notBudget = notBudgetR.status === 'fulfilled' ? notBudgetR.value : null;
+  // Not in Budget
+  const notBudSection=notBud?
+    `<div class="manager-section-label">Not in Budget</div>
+     ${card('<div class="card-title-icon" style="background:var(--amber-bg)">🚩</div> Not in Budget 2026',
+       `<span class="badge ba">${notBud.length} rows</span>`,
+       table(notBud,NOT_BUDGET_COLS,10))}`:
+    '';
 
-    // Status split groups
-    const booked = statusFilter(logic, r => Number(r.booked_value) > 0);
-    const cashed = statusFilter(logic, r => Number(r.collected_value) > 0);
-    const delayed = statusFilter(logic, r => r.is_delayed);
-    const lostRows = statusFilter(logic, r => /lost|churn/i.test(r.renewal_status || r.status || ''));
-    const expected = statusFilter(logic, r => /expected/i.test(r.renewal_status || r.status || ''));
-    const onTime = statusFilter(logic, r => r.renewed_on_time === true || /on.?time/i.test(r.renewal_status || ''));
-    const late = statusFilter(logic, r => r.renewed_late === true || /late/i.test(r.renewal_status || ''));
+  // Patch modal cols for status groups
+  window._fin.STATUS_COLS=STATUS_COLS;
 
-    const kpiCards = [
-      card('Renewal Value', money(s.renewal_value), 'All renewals', 'blue',
-        logic.length ? { title: 'All Renewals', columns: statusCols, rows: logic } : null),
-      card('Booked Value', money(s.booked_value), 'Booked total', 'purple',
-        booked.length ? { title: 'Booked Renewals', columns: statusCols, rows: booked } : null),
-      card('Cash Collected', money(s.cash_collected), 'Collected total', 'green',
-        cashed.length ? { title: 'Cash Collected', columns: statusCols, rows: cashed } : null),
-      card('Remaining', money(s.remaining_collection), 'Collection exposure', 'orange'),
-      card('Delayed', num(s.delayed_accounts), 'Accounts', 'red',
-        delayed.length ? { title: 'Delayed Accounts', columns: statusCols, rows: delayed } : null),
-      card('Renewed Late', num(late.length), 'Accounts', 'orange',
-        late.length ? { title: 'Renewed Late', columns: statusCols, rows: late } : null),
-      card('Expected Lost', num(expected.length), 'At risk', 'red',
-        expected.length ? { title: 'Expected to be Lost', columns: statusCols, rows: expected } : null),
-      card('Lost', num(s.lost_accounts || lostRows.length), 'Accounts', 'red',
-        lostRows.length ? { title: 'Lost Accounts', columns: statusCols, rows: lostRows } : null)
-    ];
+  setContent(finCards+ownerSection+splitSection+statusSectionFixed+notBudSection);
+}
 
-    const app = document.getElementById('app');
-    app.innerHTML = [
-      hero('Retention Financial Details', 'Sheet-driven financial summary from Supabase views.', 'No fallback'),
-      `<div class="kpi-grid">${kpiCards.join('')}</div>`,
-
-      owners
-        ? section('Owner Financial Summary', 'RM and CSM rollup', table(owners, ownerCols), owners.length + ' owners')
-        : section('Owner Financial Summary', 'Unavailable', sectionUnavailable('vw_retention_owner_financial_summary', ownersR.reason?.message)),
-
-      `<div class="two-col">
-        ${products
-          ? section('Product Summary', 'Product-level financials', table(products, productCols))
-          : section('Product Summary', 'Unavailable', sectionUnavailable('vw_retention_product_financial_summary', productsR.reason?.message))
-        }
-        ${monthly.length
-          ? section('Monthly Pipeline', 'Monthly renewal movement', table(monthly, monthCols))
-          : ''
-        }
-      </div>`,
-
-      section('Renewal Status Split', 'Full status breakdown', `
-        <div class="status-tabs">
-          ${booked.length ? `<div class="status-group"><h4 class="status-group-title ok-title">✓ Booked (${booked.length})</h4>${table(booked, statusCols, 20)}</div>` : ''}
-          ${cashed.length ? `<div class="status-group"><h4 class="status-group-title ok-title">💰 Cashed (${cashed.length})</h4>${table(cashed, statusCols, 20)}</div>` : ''}
-          ${onTime.length ? `<div class="status-group"><h4 class="status-group-title ok-title">⏰ On Time (${onTime.length})</h4>${table(onTime, statusCols, 20)}</div>` : ''}
-          ${late.length ? `<div class="status-group"><h4 class="status-group-title warn-title">⚠ Late (${late.length})</h4>${table(late, statusCols, 20)}</div>` : ''}
-          ${delayed.length ? `<div class="status-group"><h4 class="status-group-title bad-title">🔴 Delayed (${delayed.length})</h4>${table(delayed, statusCols, 20)}</div>` : ''}
-          ${expected.length ? `<div class="status-group"><h4 class="status-group-title bad-title">⚡ Expected Lost (${expected.length})</h4>${table(expected, statusCols, 20)}</div>` : ''}
-          ${lostRows.length ? `<div class="status-group"><h4 class="status-group-title bad-title">✗ Lost (${lostRows.length})</h4>${table(lostRows, statusCols, 20)}</div>` : ''}
-        </div>
-      `, logic.length + ' total rows'),
-
-      notBudget
-        ? section('Not in Budget', 'Movements not matched to budget', table(notBudget, notBudgetCols))
-        : section('Not in Budget', 'Unavailable', sectionUnavailable('vw_retention_not_in_budget', notBudgetR.reason?.message))
-    ].join('');
-  }
-
-  window.RetentionFinancialModule = { render };
+window.RetentionFinancialModule={render};
 })();

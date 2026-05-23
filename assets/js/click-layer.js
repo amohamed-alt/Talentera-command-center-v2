@@ -1,0 +1,1 @@
+document.addEventListener('click',function(e){const card=e.target.closest('.card');if(card){card.classList.add('pulse');setTimeout(()=>card.classList.remove('pulse'),350);}const btn=e.target.closest('.mini-open');if(btn){alert(btn.dataset.title||'Details');}});

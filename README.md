@@ -1,33 +1,24 @@
-# Talentera Dashboard Modular Split
+# Talentera Command Center v2
 
-This package is a physical modular split of the last Supabase-only dashboard file.
+Clean modular Supabase-only dashboard.
 
-## What changed
-- `index.html` now keeps the same dashboard shell and layout.
-- Inline CSS was extracted into `assets/css/...`.
-- Inline JavaScript was extracted into `assets/js/...`.
-- Script execution order is preserved by keeping the same `<script>` order in `index.html`.
-- No legacy JSON fallback was intentionally added in this split.
+## Structure
 
-## Folder logic
-- `assets/js/core`: original common/base scripts.
-- `assets/js/router`: tab/router/navigation stability patches.
-- `assets/js/supabase`: Supabase-only loading and mapping patches.
-- `assets/js/acquisition`: acquisition-specific scripts found by name/content.
-- `assets/js/retention`: retention/team/financial scripts.
-- `assets/js/features-plan`: upsell/features plan scripts.
-- `assets/js/pnl`: P&L/revenue analysis scripts.
-
-## Deployment
-Upload the whole folder content to GitHub Pages, keeping the same relative paths:
-
-```
+```txt
 index.html
-assets/css/...
-assets/js/...
+assets/css/style.css
+assets/js/config.js
+assets/js/app.js
 ```
 
-Do not upload only `index.html`; it depends on the `assets` folder.
+## Data source
 
-## Next refactor phase
-This split reduces risk immediately, but the next proper phase is logical cleanup: merge repeated patches into clean modules like `acquisition.js`, `retention-team.js`, `retention-financial.js`, `features-plan.js`, and `pnl.js`.
+No legacy JSON fallback is used. The dashboard reads directly from Supabase views/tables.
+
+## Main routes
+
+- Acquisition
+- Retention Team Overview
+- Retention Financial Details
+- Features Plan
+- P&L

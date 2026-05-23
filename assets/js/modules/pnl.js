@@ -1,139 +1,187 @@
-/**
- * modules/pnl.js
- */
-(function () {
-  'use strict';
-  const { card, table, section, hero } = Components;
-  const { money, num, pct, esc } = Fmt;
-  const { get } = AppState;
-  const { setTitle, sectionUnavailable } = Utils;
+(function(){
+'use strict';
+const {esc,money,num,pct,setTitle,setContent,showLoading,unavailable}=window.U;
+const {card,table}=window.Components;
+const {get}=window.State;
 
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let _charts={};
 
-  const monthCols = [
-    { label: 'Year', key: 'year' },
-    { label: 'Month', key: 'month' },
-    { label: 'Product', key: 'product' },
-    { label: 'Booking', key: 'booking', render: r => money(r.booking) },
-    { label: 'Cashing', key: 'cashing', render: r => money(r.cashing) },
-    { label: 'COGS', key: 'cogs', render: r => money(r.cogs) },
-    { label: 'Overheads', key: 'overheads', render: r => money(r.overheads) },
-    { label: 'Support', key: 'support_allocation', render: r => money(r.support_allocation) },
-    { label: 'Total Cost', key: 'total_cost', render: r => money(r.total_cost) },
-    { label: 'Net Cash', key: 'net_cash_position', render: r => {
-      const v = Number(r.net_cash_position || 0);
-      const clr = v < 0 ? 'var(--red)' : 'var(--green)';
-      return `<span style="color:${clr};font-weight:700">${money(v)}</span>`;
-    }}
-  ];
+function destroyCharts(){Object.values(_charts).forEach(c=>{try{c.destroy();}catch(e){}});_charts={};}
 
-  const costCols = [
-    { label: 'Year', key: 'year' },
-    { label: 'Product', key: 'product' },
-    { label: 'COGS', key: 'cogs', render: r => money(r.cogs) },
-    { label: 'Overheads', key: 'overheads', render: r => money(r.overheads) },
-    { label: 'Support', key: 'support_allocation', render: r => money(r.support_allocation) },
-    { label: 'Total Cost', key: 'total_cost', render: r => money(r.total_cost) }
-  ];
+const MONTHLY_COLS=[
+  {label:'Year',key:'year',center:true},{label:'Month',key:'month',center:true},{label:'Product',key:'product'},
+  {label:'Booking',key:'booking',center:true,render:r=>money(r.booking)},
+  {label:'Cashing',key:'cashing',center:true,render:r=>money(r.cashing)},
+  {label:'COGS',key:'cogs',center:true,render:r=>money(r.cogs)},
+  {label:'Overheads',key:'overheads',center:true,render:r=>money(r.overheads)},
+  {label:'Support',key:'support_allocation',center:true,render:r=>money(r.support_allocation)},
+  {label:'Total Cost',key:'total_cost',center:true,render:r=>money(r.total_cost)},
+  {label:'Net Cash',key:'net_cash_position',center:true,render:r=>{const v=Number(r.net_cash_position||0);return `<span style="color:${v<0?'var(--red)':'var(--green)'};font-family:var(--mono);font-weight:900">${money(v)}</span>`;}},
+];
+const COST_COLS=[
+  {label:'Year',key:'year',center:true},{label:'Product',key:'product'},
+  {label:'COGS',key:'cogs',center:true,render:r=>money(r.cogs)},
+  {label:'Overheads',key:'overheads',center:true,render:r=>money(r.overheads)},
+  {label:'Support',key:'support_allocation',center:true,render:r=>money(r.support_allocation)},
+  {label:'Total Cost',key:'total_cost',center:true,render:r=>money(r.total_cost)},
+];
 
-  function sumBy(rows, year, key) {
-    return MONTHS.map((_, i) =>
-      rows.filter(r =>
-        String(r.year) === String(year) &&
-        (Number(r.month) === i + 1 || String(r.month).slice(0, 3).toLowerCase() === MONTHS[i].toLowerCase())
-      ).reduce((a, b) => a + Number(b[key] || 0), 0)
-    );
-  }
+function sumBy(rows,year,key){
+  return MONTHS.map((_,i)=>rows.filter(r=>String(r.year)===String(year)&&(Number(r.month)===i+1||String(r.month).slice(0,3).toLowerCase()===MONTHS[i].toLowerCase())).reduce((a,b)=>a+Number(b[key]||0),0));
+}
+function total(rows,year,key){return sumBy(rows,year,key).reduce((a,b)=>a+b,0);}
 
-  function drawCharts(rows) {
-    if (!window.Chart) return;
+function drawCharts(rows){
+  if(!window.Chart||!rows.length)return;
+  destroyCharts();
+  const CSS=s=>getComputedStyle(document.documentElement).getPropertyValue(s).trim();
 
-    const y2026booking = sumBy(rows, 2026, 'booking').reduce((a, b) => a + b, 0);
-    const y2026cashing = sumBy(rows, 2026, 'cashing').reduce((a, b) => a + b, 0);
-    const y2026cost    = sumBy(rows, 2026, 'total_cost').reduce((a, b) => a + b, 0);
-    const y2025booking = sumBy(rows, 2025, 'booking').reduce((a, b) => a + b, 0);
-    const y2025cashing = sumBy(rows, 2025, 'cashing').reduce((a, b) => a + b, 0);
-    const y2025cost    = sumBy(rows, 2025, 'total_cost').reduce((a, b) => a + b, 0);
+  // YTD Bar
+  const barEl=document.getElementById('pnlBar');
+  if(barEl) _charts.bar=new Chart(barEl,{
+    type:'bar',
+    data:{
+      labels:['Booking','Cashing','Total Cost'],
+      datasets:[
+        {label:'2025',data:[total(rows,'2025','booking'),total(rows,'2025','cashing'),total(rows,'2025','total_cost')],backgroundColor:'rgba(124,58,237,.35)',borderColor:'#7C3AED',borderWidth:1.5},
+        {label:'2026',data:[total(rows,'2026','booking'),total(rows,'2026','cashing'),total(rows,'2026','total_cost')],backgroundColor:'rgba(22,163,74,.35)',borderColor:'#16A34A',borderWidth:1.5},
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},
+      scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(22,64,42,.08)'}}}}
+  });
 
-    const barCtx = document.getElementById('pnlBar');
-    if (barCtx) new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Booking', 'Cashing', 'Total Cost'],
-        datasets: [
-          { label: '2025', data: [y2025booking, y2025cashing, y2025cost], backgroundColor: ['#93c5fd','#6ee7b7','#fca5a5'] },
-          { label: '2026', data: [y2026booking, y2026cashing, y2026cost], backgroundColor: ['#2563eb','#16a34a','#ef4444'] }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
-    });
+  // Monthly trend line
+  const lineEl=document.getElementById('pnlLine');
+  if(lineEl) _charts.line=new Chart(lineEl,{
+    type:'line',
+    data:{
+      labels:MONTHS,
+      datasets:[
+        {label:'Booking 2026',data:sumBy(rows,'2026','booking'),borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,.08)',tension:.35,fill:true,borderWidth:2},
+        {label:'Cashing 2026',data:sumBy(rows,'2026','cashing'),borderColor:'#16A34A',backgroundColor:'rgba(22,163,74,.08)',tension:.35,fill:true,borderWidth:2},
+        {label:'Cost 2026',data:sumBy(rows,'2026','total_cost'),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.08)',tension:.35,fill:true,borderWidth:2},
+        {label:'Booking 2025',data:sumBy(rows,'2025','booking'),borderColor:'rgba(124,58,237,.4)',tension:.35,fill:false,borderWidth:1.5,borderDash:[4,3]},
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},
+      scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(22,64,42,.08)'}}}}
+  });
 
-    const lineCtx = document.getElementById('pnlLine');
-    if (lineCtx) new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: MONTHS,
-        datasets: [
-          { label: 'Booking 2026', data: sumBy(rows, 2026, 'booking'), borderColor: '#2563eb', tension: 0.3, fill: false },
-          { label: 'Cashing 2026', data: sumBy(rows, 2026, 'cashing'), borderColor: '#16a34a', tension: 0.3, fill: false },
-          { label: 'Total Cost 2026', data: sumBy(rows, 2026, 'total_cost'), borderColor: '#ef4444', tension: 0.3, fill: false }
-        ]
-      },
-      options: { responsive: true, maintainAspectRatio: false }
+  // Cash vs Cost gap
+  const gapEl=document.getElementById('pnlGap');
+  if(gapEl){
+    const cash26=sumBy(rows,'2026','cashing');
+    const cost26=sumBy(rows,'2026','total_cost');
+    const gap=cash26.map((v,i)=>v-cost26[i]);
+    _charts.gap=new Chart(gapEl,{
+      type:'bar',
+      data:{labels:MONTHS,datasets:[{label:'Cash - Cost Gap',data:gap,backgroundColor:gap.map(v=>v>=0?'rgba(22,163,74,.5)':'rgba(220,38,38,.5)'),borderColor:gap.map(v=>v>=0?'#16A34A':'#DC2626'),borderWidth:1.5}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':v},grid:{color:'rgba(22,64,42,.08)'}}}}
     });
   }
+}
 
-  async function render() {
-    setTitle('P&L · Revenue Analysis', 'ForReporting 2025 full year · 2026 actuals to date');
+async function render(){
+  setTitle('P&L · Revenue Analysis','2025 full year · 2026 actuals to date · COGS + Overheads + Support');
+  showLoading('Loading P&L…');
 
-    const results = await Promise.allSettled([
-      get('vw_pnl_monthly_summary_v2', 500),
-      get('vw_pnl_exec_summary_v2', 20),
-      get('vw_pnl_cost_breakdown_v2', 100)
-    ]);
+  const [execR,monthlyR,costR]=await Promise.allSettled([
+    get('vw_pnl_exec_summary_v2',10),
+    get('vw_pnl_monthly_summary_v2',200),
+    get('vw_pnl_cost_breakdown_v2',20),
+  ]);
 
-    const [monthR, execR, costR] = results;
-    const rows = monthR.status === 'fulfilled' ? monthR.value : [];
-    const exec = execR.status === 'fulfilled' ? execR.value : [];
-    const cost = costR.status === 'fulfilled' ? costR.value : null;
+  const exec=execR.status==='fulfilled'?execR.value:[];
+  const monthly=monthlyR.status==='fulfilled'?monthlyR.value:[];
+  const cost=costR.status==='fulfilled'?costR.value:[];
 
-    const y2026 = exec.find(r => String(r.year) === '2026') || exec[0] || {};
+  const y26=exec.find(r=>String(r.year)==='2026')||exec[0]||{};
+  const y25=exec.find(r=>String(r.year)==='2025')||{};
 
-    const kpiCards = [
-      card('Booking 2026', money(y2026.booking), 'Bookings', 'purple',
-        { title: 'Monthly Booking 2026', columns: monthCols, rows: rows.filter(r => String(r.year) === '2026') }),
-      card('Cashing 2026', money(y2026.cashing), 'Cash collected', 'green',
-        { title: 'Monthly Cashing 2026', columns: monthCols, rows: rows.filter(r => String(r.year) === '2026') }),
-      card('Total Cost 2026', money(y2026.total_cost), 'COGS + Overheads + Support', 'orange'),
-      card('Net Cash', money(y2026.net_cash_position), 'Cash minus cost', Number(y2026.net_cash_position) < 0 ? 'red' : 'green'),
-      card('Cash Coverage', pct(y2026.cash_coverage_pct), 'Cash / cost', 'red'),
-      card('Booking → Cash', pct(y2026.booking_cash_pct), 'Cash / booking', 'orange')
-    ];
+  window._pnl={monthly,exec,cost};
 
-    const app = document.getElementById('app');
-    app.innerHTML = [
-      hero('Executive P&L Dashboard', 'Booking, Cashing, Total Cost, COGS, Overheads and Support Allocation.', 'Dynamic · Supabase'),
-      `<div class="kpi-grid six">${kpiCards.join('')}</div>`,
-      `<div class="two-col">
-        <section class="dash-section">
-          <div class="section-head"><div class="section-title-group"><h3>YTD / Period Comparison</h3><p>Booking, Cashing and Total Cost</p></div></div>
-          <div class="chart-wrap"><canvas id="pnlBar"></canvas></div>
-        </section>
-        <section class="dash-section">
-          <div class="section-head"><div class="section-title-group"><h3>Monthly Trend 2026</h3><p>Booking vs Cashing vs Cost</p></div></div>
-          <div class="chart-wrap"><canvas id="pnlLine"></canvas></div>
-        </section>
-      </div>`,
-      rows.length
-        ? section('Monthly P&L Table', 'All rows from Supabase', table(rows, monthCols, 50), rows.length + ' rows')
-        : section('Monthly P&L', 'Unavailable', sectionUnavailable('vw_pnl_monthly_summary_v2', monthR.reason?.message)),
-      cost
-        ? section('Cost Breakdown', 'Product-level cost mix', table(cost, costCols))
-        : section('Cost Breakdown', 'Unavailable', sectionUnavailable('vw_pnl_cost_breakdown_v2', costR.reason?.message))
-    ].join('');
+  // Exec cards
+  const execCards=`<div class="pnl-exec-grid">
+    <div class="pnl-exec-card" style="--fc:var(--purple)" onclick="window.Modal.open({title:'Monthly P&L 2026',rows:window._pnl.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
+      <div class="pnl-exec-v">${money(y26.booking)}</div>
+      <div class="pnl-exec-l">Booking 2026</div>
+      <div class="pnl-exec-s">vs ${money(y25.booking||0)} in 2025</div>
+    </div>
+    <div class="pnl-exec-card" style="--fc:var(--green)" onclick="window.Modal.open({title:'Monthly Cashing 2026',rows:window._pnl.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
+      <div class="pnl-exec-v">${money(y26.cashing)}</div>
+      <div class="pnl-exec-l">Cashing 2026</div>
+      <div class="pnl-exec-s">vs ${money(y25.cashing||0)} in 2025</div>
+    </div>
+    <div class="pnl-exec-card" style="--fc:var(--amber)">
+      <div class="pnl-exec-v">${money(y26.total_cost)}</div>
+      <div class="pnl-exec-l">Total Cost 2026</div>
+      <div class="pnl-exec-s">COGS + Overheads + Support</div>
+    </div>
+    <div class="pnl-exec-card" style="--fc:${Number(y26.net_cash_position||0)<0?'var(--red)':'var(--green)'}">
+      <div class="pnl-exec-v">${money(y26.net_cash_position)}</div>
+      <div class="pnl-exec-l">Net Cash Position</div>
+      <div class="pnl-exec-s">Cash minus total cost</div>
+    </div>
+    <div class="pnl-exec-card" style="--fc:${Number(y26.cash_coverage_pct||0)<70?'var(--red)':'var(--green)'}">
+      <div class="pnl-exec-v">${pct(y26.cash_coverage_pct||0)}</div>
+      <div class="pnl-exec-l">Cash Coverage</div>
+      <div class="pnl-exec-s">Cash / Total Cost</div>
+    </div>
+    <div class="pnl-exec-card" style="--fc:var(--cyan)">
+      <div class="pnl-exec-v">${pct(y26.booking_cash_pct||0)}</div>
+      <div class="pnl-exec-l">Booking → Cash</div>
+      <div class="pnl-exec-s">Cash / Booking ratio</div>
+    </div>
+  </div>`;
 
-    setTimeout(() => drawCharts(rows), 100);
-  }
+  // Filters
+  const products=[...new Set(monthly.map(r=>r.product).filter(Boolean))].sort();
+  const filterBar=`<div class="pnl-filters">
+    <select class="pnl-select" id="pnlYearFilter" onchange="window._pnlFilter()">
+      <option value="all">All Years</option><option value="2026" selected>2026</option><option value="2025">2025</option>
+    </select>
+    <select class="pnl-select" id="pnlProductFilter" onchange="window._pnlFilter()">
+      <option value="All">All Products</option>${products.map(p=>`<option>${esc(p)}</option>`).join('')}
+    </select>
+    <button class="badge bb" onclick="window.Modal.open({title:'Full Monthly P&L',rows:window._pnl.monthly,cols:[]})">Export All Rows</button>
+  </div>`;
 
-  window.PnlModule = { render };
+  window._pnlFilter=function(){
+    const yr=document.getElementById('pnlYearFilter')?.value||'all';
+    const pr=document.getElementById('pnlProductFilter')?.value||'All';
+    const filtered=monthly.filter(r=>(yr==='all'||String(r.year)===yr)&&(pr==='All'||r.product===pr));
+    document.getElementById('pnlTable').innerHTML=table(filtered,MONTHLY_COLS,20);
+  };
+
+  // Charts grid
+  const chartsGrid=`<div class="pnl-chart-grid">
+    <div class="pnl-chart-card">
+      <div class="pnl-chart-hd"><div class="pnl-chart-title">YTD Comparison — Booking / Cashing / Cost</div></div>
+      <div class="pnl-chart-wrap"><canvas id="pnlBar"></canvas></div>
+    </div>
+    <div class="pnl-chart-card">
+      <div class="pnl-chart-hd"><div class="pnl-chart-title">Monthly Trend 2026 vs 2025</div></div>
+      <div class="pnl-chart-wrap"><canvas id="pnlLine"></canvas></div>
+    </div>
+    <div class="pnl-chart-card">
+      <div class="pnl-chart-hd"><div class="pnl-chart-title">Cash vs Cost Gap — 2026</div></div>
+      <div class="pnl-chart-wrap"><canvas id="pnlGap"></canvas></div>
+    </div>
+    ${cost.length?`<div class="pnl-chart-card">
+      <div class="pnl-chart-hd"><div class="pnl-chart-title">Cost Breakdown</div></div>
+      <div style="padding:0">${table(cost,COST_COLS,10)}</div>
+    </div>`:''}
+  </div>`;
+
+  const monthlySection=`<div class="manager-section-label">Monthly P&L Table</div>
+  ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Monthly P&L Detail',
+    `<span class="badge bb">${monthly.length} rows</span>`,
+    filterBar+`<div id="pnlTable">${table(monthly.filter(r=>String(r.year)==='2026'),MONTHLY_COLS,20)}</div>`)}`;
+
+  setContent(execCards+chartsGrid+monthlySection);
+  setTimeout(()=>drawCharts(monthly),100);
+}
+
+window.PnlModule={render};
 })();

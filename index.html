@@ -1,145 +1,120 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Talentera Command Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- CSS -->
-  <link rel="stylesheet" href="./assets/css/base.css" />
-  <link rel="stylesheet" href="./assets/css/layout.css" />
-  <link rel="stylesheet" href="./assets/css/components.css" />
-  <link rel="stylesheet" href="./assets/css/acquisition.css" />
-  <link rel="stylesheet" href="./assets/css/retention.css" />
-  <link rel="stylesheet" href="./assets/css/pnl.css" />
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Talentera · Sales Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/base.css"/>
+<link rel="stylesheet" href="./assets/css/components.css"/>
+<link rel="stylesheet" href="./assets/css/acquisition.css"/>
+<link rel="stylesheet" href="./assets/css/retention.css"/>
+<link rel="stylesheet" href="./assets/css/pnl.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════
-       SIDEBAR
-  ═══════════════════════════════════════════════ -->
+<div class="app">
+  <!-- ═══ SIDEBAR ═══ -->
   <aside class="sidebar">
-    <div class="brand">
-      <div class="logo">T</div>
-      <div>
-        <h1>Talentera</h1>
-        <span>Command Center</span>
-      </div>
+    <div class="sidebar-logo">
+      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" alt="Talentera" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
+      <span id="logo-fallback" style="display:none;font-size:15px;font-weight:800;color:var(--sb-accent)">Talentera</span>
+      <div class="logo-sub">Sales Command Center</div>
     </div>
 
-    <!-- Main navigation -->
-    <div class="side-group">
-      <span class="group-label">Main</span>
-      <button class="nav-btn active" data-route="acquisition">📊 Acquisition</button>
-      <button class="nav-btn" data-route="retention-team">🛡️ Retention</button>
-      <button class="nav-btn sub" data-route="retention-financial">🔥 Financial Details</button>
-      <button class="nav-btn sub" data-route="features-plan">🚀 Features Plan</button>
-      <button class="nav-btn" data-route="pnl">📊 P&amp;L</button>
-    </div>
+    <div class="sidebar-section">Main</div>
+    <button class="nav-item active" id="nav-acquisition" data-route="acquisition">
+      <span class="nav-icon">📊</span> Acquisition
+    </button>
+    <button class="nav-item" id="nav-retention-team" data-route="retention-team">
+      <span class="nav-icon">🛡️</span> Retention
+    </button>
+    <button class="nav-item nav-sub" id="nav-retention-financial" data-route="retention-financial">
+      <span class="nav-icon">💰</span> Financial Details
+    </button>
+    <button class="nav-item nav-sub" id="nav-features-plan" data-route="features-plan">
+      <span class="nav-icon">🚀</span> Features Plan
+    </button>
+    <button class="nav-item" id="nav-pnl" data-route="pnl">
+      <span class="nav-icon">📈</span> P&amp;L
+    </button>
 
-    <!-- Live team reps -->
-    <div class="side-group">
-      <span class="group-label">Team Activity</span>
-      <div id="sidebarReps" class="rep-list">
-        <div class="rep-item" style="opacity:.5"><b>Loading…</b></div>
-      </div>
-    </div>
+    <div class="sidebar-section" id="sideRepTitle">Team</div>
+    <div id="sideRepLinks"></div>
 
-    <!-- Profile -->
-    <div class="sidebar-profile">
-      <div class="avatar">SM</div>
-      <div class="profile-info">
-        <b>Sales Manager</b>
-        <span>Admin · Riyadh</span>
+    <div class="sidebar-bottom">
+      <div class="user-row">
+        <div class="user-av">SM</div>
+        <div>
+          <div class="user-name">Sales Manager</div>
+          <div class="user-role">Admin · Riyadh</div>
+        </div>
       </div>
     </div>
   </aside>
 
-  <!-- ═══════════════════════════════════════════════
-       MAIN CONTENT
-  ═══════════════════════════════════════════════ -->
-  <main class="main">
-
-    <!-- Topbar -->
-    <header class="topbar">
+  <!-- ═══ MAIN ═══ -->
+  <div class="main-area">
+    <div class="topbar">
       <div>
-        <h2 id="pageTitle">Acquisition · Team Overview</h2>
-        <p id="pageSub">Supabase-only modular dashboard</p>
+        <div class="topbar-title" id="topbarTitle">Acquisition · Team Overview</div>
+        <div class="topbar-sub" id="topbarSub">Loading…</div>
       </div>
-      <div class="top-actions">
-        <span class="live-badge"><span class="live-dot">●</span> LIVE · SUPABASE</span>
-        <button id="refreshBtn">↻ Refresh</button>
+      <div class="topbar-right">
+        <div class="live-badge"><span class="live-dot"></span>LIVE · SUPABASE</div>
+        <button class="refresh-btn" id="refreshBtn"><span id="refreshIcon">↻</span> Refresh</button>
       </div>
-    </header>
+    </div>
 
-    <!-- Tab bar -->
-    <nav class="tabs">
+    <div class="tabs-bar" id="tabsBar">
       <button class="tab-btn active" data-route="acquisition">🏠 Team Overview</button>
       <button class="tab-btn" data-route="retention-team">🛡️ Retention</button>
-      <button class="tab-btn" data-route="retention-financial">🔥 Financial</button>
+      <button class="tab-btn" data-route="retention-financial">💰 Financial</button>
       <button class="tab-btn" data-route="features-plan">🚀 Features</button>
-      <button class="tab-btn" data-route="pnl">📊 P&amp;L</button>
-    </nav>
+      <button class="tab-btn" data-route="pnl">📈 P&amp;L</button>
+    </div>
 
-    <!-- Dynamic page content -->
-    <section id="app" class="app">
-      <div class="loading-state"><div class="spinner"></div><span>Loading dashboard…</span></div>
-    </section>
+    <div class="content">
+      <div id="appContent">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <div>Loading dashboard…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  </main>
+<!-- ═══ MODAL ═══ -->
+<div id="detailModal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-sub" id="modalSub"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="modalSearch" class="modal-search" placeholder="Search…"/>
+        <button class="modal-export-btn" id="modalExportBtn">⬇ CSV</button>
+        <button class="modal-close-btn" id="modalCloseBtn">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
-  <!-- Modal (empty shell — built by modal.js) -->
-
-  <!-- ═══════════════════════════════════════════════
-       SCRIPTS — order matters
-  ═══════════════════════════════════════════════ -->
-  <!-- Config -->
-  <script src="./assets/js/config.js"></script>
-  <!-- Core layer -->
-  <script src="./assets/js/core/supabase.js"></script>
-  <script src="./assets/js/core/state.js"></script>
-  <script src="./assets/js/core/formatters.js"></script>
-  <script src="./assets/js/core/utils.js"></script>
-  <script src="./assets/js/core/components.js"></script>
-  <script src="./assets/js/core/modal.js"></script>
-  <!-- Modules -->
-  <script src="./assets/js/modules/acquisition.js"></script>
-  <script src="./assets/js/modules/retention-team.js"></script>
-  <script src="./assets/js/modules/retention-financial.js"></script>
-  <script src="./assets/js/modules/features-plan.js"></script>
-  <script src="./assets/js/modules/pnl.js"></script>
-  <!-- Router (init last — wires everything together) -->
-  <script src="./assets/js/core/router.js"></script>
-
-  <script>
-    // Boot sequence
-    (function () {
-      // Sidebar rep list
-      async function loadSidebar() {
-        const el = document.getElementById('sidebarReps');
-        try {
-          const reps = await AppState.get('vw_dash_acq_sidebar_fast', 50);
-          if (!reps.length) { el.innerHTML = '<div class="rep-item">No reps</div>'; return; }
-          el.innerHTML = reps.map(r =>
-            `<div class="rep-item">
-              <b>${Fmt.esc(r.owner_name)}</b>
-              <span class="rep-pill">${Fmt.num(r.meetings_completed || 0)}</span>
-            </div>`
-          ).join('');
-        } catch (_) {
-          el.innerHTML = '<div class="rep-item" style="opacity:.5">Unavailable</div>';
-        }
-      }
-
-      // Init router (renders active route)
-      Router.init();
-      // Load sidebar (non-blocking)
-      loadSidebar();
-    })();
-  </script>
-
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/supabase-client.js"></script>
+<script src="./assets/js/state.js"></script>
+<script src="./assets/js/utils.js"></script>
+<script src="./assets/js/components.js"></script>
+<script src="./assets/js/modal.js"></script>
+<script src="./assets/js/modules/acquisition.js"></script>
+<script src="./assets/js/modules/retention-team.js"></script>
+<script src="./assets/js/modules/retention-financial.js"></script>
+<script src="./assets/js/modules/features-plan.js"></script>
+<script src="./assets/js/modules/pnl.js"></script>
+<script src="./assets/js/router.js"></script>
 </body>
 </html>

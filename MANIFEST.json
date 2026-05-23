@@ -1,0 +1,290 @@
+[
+  {
+    "type": "css",
+    "order": 1,
+    "name": "style-01",
+    "category": "core",
+    "path": "assets/css/core/style-01.css",
+    "lines": 1550
+  },
+  {
+    "type": "css",
+    "order": 2,
+    "name": "retention-final-layout-and-status-fix",
+    "category": "retention",
+    "path": "assets/css/retention/retention-final-layout-and-status-fix.css",
+    "lines": 27
+  },
+  {
+    "type": "css",
+    "order": 3,
+    "name": "retention-revenue-dynamic-v60-css",
+    "category": "pnl",
+    "path": "assets/css/pnl/retention-revenue-dynamic-v60-css.css",
+    "lines": 3
+  },
+  {
+    "type": "css",
+    "order": 4,
+    "name": "retention-revenue-executive-v61-css",
+    "category": "pnl",
+    "path": "assets/css/pnl/retention-revenue-executive-v61-css.css",
+    "lines": 3
+  },
+  {
+    "type": "css",
+    "order": 5,
+    "name": "retrevenuefiltersv70style",
+    "category": "pnl",
+    "path": "assets/css/pnl/retrevenuefiltersv70style.css",
+    "lines": 3
+  },
+  {
+    "type": "css",
+    "order": 6,
+    "name": "pnl-executive-v80-style",
+    "category": "pnl",
+    "path": "assets/css/pnl/pnl-executive-v80-style.css",
+    "lines": 9
+  },
+  {
+    "type": "css",
+    "order": 7,
+    "name": "final-stable-tab-state-patch-css",
+    "category": "pnl",
+    "path": "assets/css/pnl/final-stable-tab-state-patch-css.css",
+    "lines": 5
+  },
+  {
+    "type": "css",
+    "order": 8,
+    "name": "smooth-navigation-patch-css",
+    "category": "core",
+    "path": "assets/css/core/smooth-navigation-patch-css.css",
+    "lines": 5
+  },
+  {
+    "type": "js",
+    "order": 9,
+    "name": "script-01",
+    "category": "retention",
+    "path": "assets/js/retention/script-01.js",
+    "lines": 4215
+  },
+  {
+    "type": "js",
+    "order": 10,
+    "name": "script-02",
+    "category": "retention",
+    "path": "assets/js/retention/script-02.js",
+    "lines": 123
+  },
+  {
+    "type": "js",
+    "order": 11,
+    "name": "script-03",
+    "category": "supabase",
+    "path": "assets/js/supabase/script-03.js",
+    "lines": 360
+  },
+  {
+    "type": "js",
+    "order": 12,
+    "name": "script-04",
+    "category": "supabase",
+    "path": "assets/js/supabase/script-04.js",
+    "lines": 3
+  },
+  {
+    "type": "js",
+    "order": 13,
+    "name": "script-05",
+    "category": "retention",
+    "path": "assets/js/retention/script-05.js",
+    "lines": 138
+  },
+  {
+    "type": "js",
+    "order": 14,
+    "name": "script-06",
+    "category": "retention",
+    "path": "assets/js/retention/script-06.js",
+    "lines": 251
+  },
+  {
+    "type": "js",
+    "order": 15,
+    "name": "script-07",
+    "category": "retention",
+    "path": "assets/js/retention/script-07.js",
+    "lines": 154
+  },
+  {
+    "type": "js",
+    "order": 16,
+    "name": "script-08",
+    "category": "pnl",
+    "path": "assets/js/pnl/script-08.js",
+    "lines": 124
+  },
+  {
+    "type": "js",
+    "order": 17,
+    "name": "script-09",
+    "category": "retention",
+    "path": "assets/js/retention/script-09.js",
+    "lines": 95
+  },
+  {
+    "type": "js",
+    "order": 18,
+    "name": "retention-financial-clean-v57",
+    "category": "retention",
+    "path": "assets/js/retention/retention-financial-clean-v57.js",
+    "lines": 887
+  },
+  {
+    "type": "js",
+    "order": 19,
+    "name": "safe-acquisition-render-guard",
+    "category": "router",
+    "path": "assets/js/router/safe-acquisition-render-guard.js",
+    "lines": 28
+  },
+  {
+    "type": "js",
+    "order": 20,
+    "name": "retention-financial-wide-state-v58",
+    "category": "retention",
+    "path": "assets/js/retention/retention-financial-wide-state-v58.js",
+    "lines": 48
+  },
+  {
+    "type": "js",
+    "order": 21,
+    "name": "retention-revenue-dynamic-v60",
+    "category": "pnl",
+    "path": "assets/js/pnl/retention-revenue-dynamic-v60.js",
+    "lines": 420
+  },
+  {
+    "type": "js",
+    "order": 22,
+    "name": "retention-revenue-executive-v61",
+    "category": "pnl",
+    "path": "assets/js/pnl/retention-revenue-executive-v61.js",
+    "lines": 82
+  },
+  {
+    "type": "js",
+    "order": 23,
+    "name": "retrevenuefiltersv70script",
+    "category": "pnl",
+    "path": "assets/js/pnl/retrevenuefiltersv70script.js",
+    "lines": 285
+  },
+  {
+    "type": "js",
+    "order": 24,
+    "name": "retention-financial-source-of-truth-v62",
+    "category": "retention",
+    "path": "assets/js/retention/retention-financial-source-of-truth-v62.js",
+    "lines": 621
+  },
+  {
+    "type": "js",
+    "order": 25,
+    "name": "retention-financial-dynamic-filters-v65",
+    "category": "retention",
+    "path": "assets/js/retention/retention-financial-dynamic-filters-v65.js",
+    "lines": 632
+  },
+  {
+    "type": "js",
+    "order": 26,
+    "name": "pnl-main-nav-final-patch",
+    "category": "router",
+    "path": "assets/js/router/pnl-main-nav-final-patch.js",
+    "lines": 146
+  },
+  {
+    "type": "js",
+    "order": 27,
+    "name": "retention-financial-final-guard-no-audit-patch",
+    "category": "retention",
+    "path": "assets/js/retention/retention-financial-final-guard-no-audit-patch.js",
+    "lines": 130
+  },
+  {
+    "type": "js",
+    "order": 28,
+    "name": "pnl-executive-v80-script",
+    "category": "pnl",
+    "path": "assets/js/pnl/pnl-executive-v80-script.js",
+    "lines": 224
+  },
+  {
+    "type": "js",
+    "order": 29,
+    "name": "final-stable-tab-state-patch",
+    "category": "router",
+    "path": "assets/js/router/final-stable-tab-state-patch.js",
+    "lines": 254
+  },
+  {
+    "type": "js",
+    "order": 30,
+    "name": "final-router-lock-patch-v3",
+    "category": "router",
+    "path": "assets/js/router/final-router-lock-patch-v3.js",
+    "lines": 233
+  },
+  {
+    "type": "js",
+    "order": 31,
+    "name": "script-23",
+    "category": "supabase",
+    "path": "assets/js/supabase/script-23.js",
+    "lines": 445
+  },
+  {
+    "type": "js",
+    "order": 32,
+    "name": "retention-financial-supabase-bridge-v1",
+    "category": "supabase",
+    "path": "assets/js/supabase/retention-financial-supabase-bridge-v1.js",
+    "lines": 337
+  },
+  {
+    "type": "js",
+    "order": 33,
+    "name": "pnl-supabase-lazy-load-v1",
+    "category": "supabase",
+    "path": "assets/js/supabase/pnl-supabase-lazy-load-v1.js",
+    "lines": 185
+  },
+  {
+    "type": "js",
+    "order": 34,
+    "name": "smooth-navigation-patch-v5",
+    "category": "router",
+    "path": "assets/js/router/smooth-navigation-patch-v5.js",
+    "lines": 248
+  },
+  {
+    "type": "js",
+    "order": 35,
+    "name": "supabase-only-hard-lock-v1",
+    "category": "supabase",
+    "path": "assets/js/supabase/supabase-only-hard-lock-v1.js",
+    "lines": 195
+  },
+  {
+    "type": "js",
+    "order": 36,
+    "name": "supabase-contract-map-repair-v3",
+    "category": "supabase",
+    "path": "assets/js/supabase/supabase-contract-map-repair-v3.js",
+    "lines": 580
+  }
+]

@@ -590,9 +590,7 @@ body{font-family:var(--font);background:var(--page-bg);color:var(--text);-webkit
    SIMPLE CLIENT-SIDE PASSWORD GATE
    Password: Acqret2026
    ═══════════════════════════════════════════ */
-body.auth-locked {
-  overflow:hidden;
-}
+
 body.auth-was-locked .app {
   filter: blur(8px);
   pointer-events:none;
@@ -1557,35 +1555,9 @@ body::after{
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="auth-locked">
+<body>
 
-<div id="authGate" class="auth-gate" aria-label="Dashboard password login">
-  <div class="auth-card">
-    <div class="auth-card-top">
-      <div class="auth-logo-row">
-        <div class="auth-logo-mark">T</div>
-        <div>
-          <div class="auth-brand">Talentera</div>
-          <div class="auth-subbrand">Sales Command Center</div>
-        </div>
-      </div>
-      <div class="auth-title">Dashboard Login</div>
-      <div class="auth-copy">Enter the dashboard password to continue.</div>
-    </div>
-    <div class="auth-card-body">
-      <form id="authForm" autocomplete="off">
-        <label class="auth-label" for="authPassword">Password</label>
-        <div class="auth-input-wrap">
-          <input id="authPassword" class="auth-input" type="password" placeholder="Enter password" autocomplete="current-password">
-          <button type="button" class="auth-eye" id="authToggle" aria-label="Show password">👁️</button>
-        </div>
-        <button type="submit" class="auth-btn">Login</button>
-        <div id="authError" class="auth-error">Incorrect password. Please try again.</div>
-        <div class="auth-note">Access is required before opening the dashboard. Refresh and auto-refresh will not ask again after login.</div>
-      </form>
-    </div>
-  </div>
-</div>
+
 
 <div class="app">
   <aside class="sidebar">

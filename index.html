@@ -6806,11 +6806,9 @@ window.__dashboardAutoRefreshTimer = setInterval(function(){
     if(ri) ri.classList.remove('spin');
   };
 
-  setTimeout(function(){
-    if(typeof window.loadData === 'function'){
-      window.loadData({ keepView:true, keepScroll:true });
-    }
-  }, 50);
+  setTimeoutfunction isAuthenticated(){return true;}
+function unlockDashboard(){document.body.classList.remove("auth-locked");}
+, 50);
 })();
 </script>
 

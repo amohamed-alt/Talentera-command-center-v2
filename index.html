@@ -398,21 +398,25 @@ a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
-
 <div class="app">
+
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" onerror="this.style.display='none'"><div>
-      <div><div class="sb-logo-text">Talentera</div><div class="sb-logo-sub">Sales Command Center</div></div>
+      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" onerror="this.style.display='none'">
+      <div class="logo-sub">Sales Command Center</div>
     </div>
 
     <div class="sidebar-section">Main</div>
-    <button class="nav-item active" data-route="acquisition"><span class="nav-icon">&#128202;</span> Acquisition</button>
-    <button class="nav-item" data-route="retention-team"><span class="nav-icon">&#128737;&#65039;</span> Retention</button>
-    <button class="nav-item nav-sub" data-route="retention-financial"><span class="nav-icon">&#128176;</span> Financial Details</button>
-    <button class="nav-item nav-sub" data-route="features-plan"><span class="nav-icon">&#128640;</span> Features Plan</button>
-    <button class="nav-item" data-route="pnl"><span class="nav-icon">&#128200;</span> P&amp;L</button>
+    <button class="nav-item active" id="nav-acquisition" data-route="acquisition">
+      <span class="nav-icon">&#128202;</span>Acquisition
+    </button>
+    <button class="nav-item" id="nav-retention" data-route="retention-team">
+      <span class="nav-icon">&#128737;&#65039;</span>Retention
+    </button>
+    <button class="nav-item" id="nav-pnl" data-route="pnl">
+      <span class="nav-icon">&#128200;</span>P&amp;L
+    </button>
 
     <div class="sidebar-section" id="repsSectionTitle" style="display:none">Team</div>
     <div id="sideRepLinks"></div>
@@ -420,7 +424,10 @@ a:hover{text-decoration:underline}
     <div class="sidebar-bottom">
       <div class="user-row">
         <div class="user-av">SM</div>
-        <div><div class="user-name">Sales Manager</div><div class="user-role">Admin &middot; Riyadh</div></div>
+        <div>
+          <div class="user-name">Sales Manager</div>
+          <div class="user-role">Admin &middot; Riyadh</div>
+        </div>
       </div>
     </div>
   </aside>
@@ -430,45 +437,48 @@ a:hover{text-decoration:underline}
     <div class="topbar">
       <div>
         <div class="topbar-title" id="topbarTitle">Acquisition &middot; Team Overview</div>
-        <div class="topbar-sub" id="topbarSub">Loading&hellip;</div>
+        <div class="topbar-sub" id="topbarSub">Coverage, activity quality and pipeline health</div>
       </div>
       <div class="topbar-right">
         <div class="live-badge"><span class="live-dot"></span>LIVE &middot; SUPABASE</div>
-        <button class="refresh-btn" id="refreshBtn"><span id="refresh-icon">&#8635;</span> Refresh</button>
+        <button class="refresh-btn" id="refreshBtn"><span id="refreshIcon">&#8635;</span> Refresh</button>
       </div>
     </div>
 
-    <div class="tabs-bar">
-      <button class="tab-btn active" data-route="acquisition">&#127962; Team Overview</button>
-      <button class="tab-btn" data-route="retention-team">&#128737;&#65039; Retention</button>
-      <button class="tab-btn" data-route="retention-financial">&#128176; Financial</button>
-      <button class="tab-btn" data-route="features-plan">&#128640; Features</button>
-      <button class="tab-btn" data-route="pnl">&#128200; P&amp;L</button>
+    <div class="tabs-bar" id="tabsBar">
+      <button class="tab-btn active" id="tab-acquisition" data-route="acquisition">&#127962; Team Overview</button>
+      <button class="tab-btn" id="tab-retention-team" data-route="retention-team">&#128737;&#65039; Retention</button>
+      <button class="tab-btn" id="tab-retention-financial" data-route="retention-financial">&#128176; Financial</button>
+      <button class="tab-btn" id="tab-features-plan" data-route="features-plan">&#128640; Features</button>
+      <button class="tab-btn" id="tab-pnl" data-route="pnl">&#128200; P&amp;L</button>
     </div>
 
     <div class="content">
-      <div id="appContent">
-        <div class="loading-state"><div class="spinner"></div><div>Loading dashboard&hellip;</div></div>
+      <div id="dashMain">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <div class="load-txt">Loading dashboard&hellip;</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- MODAL -->
-<div id="detail-modal" style="display:none" class="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-hd">
+<div id="detailBackdrop" class="acq-detail-backdrop" style="display:none" onclick="Modal.close()">
+  <div class="acq-detail-card" onclick="event.stopPropagation()">
+    <div class="acq-detail-hd">
       <div>
-        <div class="modal-title" id="modal-title"></div>
-        <div class="modal-sub" id="modal-sub"></div>
+        <div class="acq-detail-title" id="modalTitle">Details</div>
+        <div class="acq-detail-sub" id="modalSub"></div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-        <input type="text" id="modal-search" class="modal-search" placeholder="Search&hellip;"/>
-        <button class="modal-export" id="modal-export">&#11015; CSV</button>
-        <button class="modal-close" id="modal-close">&#10005;</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="modalSearchInput" class="modal-search-input" placeholder="Search&hellip;" oninput="Modal.search(this.value)">
+        <button class="ret-export-btn" onclick="Modal.exportCsv()">&#11015; CSV</button>
+        <button class="acq-detail-close" onclick="Modal.close()">&#10005;</button>
       </div>
     </div>
-    <div class="modal-body" id="modal-body"></div>
+    <div class="acq-detail-body" id="modalBody"></div>
   </div>
 </div>
 

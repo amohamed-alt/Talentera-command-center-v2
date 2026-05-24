@@ -402,22 +402,22 @@ a:hover{text-decoration:underline}
 <div class="app">
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-mark">T</div>
+    <div class="sidebar-logo">
+      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" onerror="this.style.display='none'"><div>
       <div><div class="sb-logo-text">Talentera</div><div class="sb-logo-sub">Sales Command Center</div></div>
     </div>
 
-    <div class="sb-section">Main</div>
-    <button class="nav-btn active" data-route="acquisition"><span class="nav-icon">&#128202;</span> Acquisition</button>
-    <button class="nav-btn" data-route="retention-team"><span class="nav-icon">&#128737;&#65039;</span> Retention</button>
-    <button class="nav-btn sub" data-route="retention-financial"><span class="nav-icon">&#128176;</span> Financial Details</button>
-    <button class="nav-btn sub" data-route="features-plan"><span class="nav-icon">&#128640;</span> Features Plan</button>
-    <button class="nav-btn" data-route="pnl"><span class="nav-icon">&#128200;</span> P&amp;L</button>
+    <div class="sidebar-section">Main</div>
+    <button class="nav-item active" data-route="acquisition"><span class="nav-icon">&#128202;</span> Acquisition</button>
+    <button class="nav-item" data-route="retention-team"><span class="nav-icon">&#128737;&#65039;</span> Retention</button>
+    <button class="nav-item nav-sub" data-route="retention-financial"><span class="nav-icon">&#128176;</span> Financial Details</button>
+    <button class="nav-item nav-sub" data-route="features-plan"><span class="nav-icon">&#128640;</span> Features Plan</button>
+    <button class="nav-item" data-route="pnl"><span class="nav-icon">&#128200;</span> P&amp;L</button>
 
-    <div class="sb-section" id="sideRepTitle">Team</div>
+    <div class="sidebar-section" id="repsSectionTitle" style="display:none">Team</div>
     <div id="sideRepLinks"></div>
 
-    <div class="sb-bottom">
+    <div class="sidebar-bottom">
       <div class="user-row">
         <div class="user-av">SM</div>
         <div><div class="user-name">Sales Manager</div><div class="user-role">Admin &middot; Riyadh</div></div>
@@ -726,7 +726,7 @@ function buildSidebar(reps){
   el.innerHTML=ACQ_REPS.map(n=>mkBtn(n,false)).join('')+VIEW_ONLY.map(n=>mkBtn(n,true)).join('');
   el.querySelectorAll('[data-rep]').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       renderRep(btn.dataset.rep);
     });
@@ -1060,7 +1060,7 @@ function buildRetSidebar(coverage){
   }).join('');
   el.querySelectorAll('[data-owner]').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       renderOwner(btn.dataset.owner,btn.dataset.role);
     });
@@ -1683,7 +1683,7 @@ function navigate(route){
   window.State.setRoute(route);
 
   /* Sidebar nav active */
-  document.querySelectorAll('.nav-btn[data-route]').forEach(el=>{
+  document.querySelectorAll('.nav-item[data-route]').forEach(el=>{
     el.classList.toggle('active', el.dataset.route===route);
   });
   /* Tabs active */
@@ -1709,7 +1709,7 @@ function navigate(route){
 }
 
 /* Wire sidebar nav buttons */
-document.querySelectorAll('.nav-btn[data-route]').forEach(btn=>{
+document.querySelectorAll('.nav-item[data-route]').forEach(btn=>{
   btn.addEventListener('click',()=>navigate(btn.dataset.route));
 });
 

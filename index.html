@@ -6,24 +6,23 @@
 <title>Talentera · Sales Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-
-/* === assets/css/base.css === */
-/* base.css */
 :root{
   --primary:#16A34A;--primary-dk:#15803D;
-  --sb-bg:rgba(255,255,255,.72);--sb-text:#60786B;--sb-accent:#0F7A3C;--sb-border:rgba(22,64,42,.10);--sb-w:230px;
-  --page-bg:#EEF6F1;--surface:rgba(255,255,255,.82);--surface2:rgba(255,255,255,.52);
-  --border:rgba(22,64,42,.11);--text:#0B1F16;--text2:#263C31;--muted:#6E8378;
-  --green:#16A34A;--green-bg:rgba(22,163,74,.09);--green-bd:rgba(22,163,74,.18);
-  --red:#DC2626;--red-bg:rgba(220,38,38,.08);--red-bd:rgba(220,38,38,.16);
-  --amber:#D97706;--amber-bg:rgba(217,119,6,.08);--amber-bd:rgba(217,119,6,.16);
-  --blue:#2563EB;--blue-bg:rgba(37,99,235,.08);--blue-bd:rgba(37,99,235,.16);
-  --purple:#7C3AED;--purple-bg:rgba(124,58,237,.08);--purple-bd:rgba(124,58,237,.16);
-  --cyan:#0891B2;--cyan-bg:rgba(8,145,178,.08);--cyan-bd:rgba(8,145,178,.16);
-  --r-sm:12px;--r:18px;--r-lg:24px;
-  --sh-xs:0 8px 24px rgba(17,47,31,.06);
-  --sh:0 16px 45px rgba(17,47,31,.09),0 2px 8px rgba(17,47,31,.05);
-  --sh-md:0 22px 70px rgba(17,47,31,.13),0 4px 14px rgba(17,47,31,.06);
+  --sb-w:240px;
+  --page-bg:#EEF6F1;
+  --surface:rgba(255,255,255,.85);--surface2:rgba(255,255,255,.55);
+  --border:rgba(22,64,42,.11);--border2:rgba(22,64,42,.06);
+  --text:#0B1F16;--text2:#263C31;--muted:#6E8378;
+  --green:#16A34A;--green-bg:rgba(22,163,74,.09);--green-bd:rgba(22,163,74,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.08);--red-bd:rgba(220,38,38,.18);
+  --amber:#D97706;--amber-bg:rgba(217,119,6,.08);--amber-bd:rgba(217,119,6,.18);
+  --blue:#2563EB;--blue-bg:rgba(37,99,235,.08);--blue-bd:rgba(37,99,235,.18);
+  --purple:#7C3AED;--purple-bg:rgba(124,58,237,.08);--purple-bd:rgba(124,58,237,.18);
+  --cyan:#0891B2;--cyan-bg:rgba(8,145,178,.08);--cyan-bd:rgba(8,145,178,.18);
+  --r-sm:10px;--r:16px;--r-lg:22px;
+  --sh-xs:0 4px 14px rgba(17,47,31,.06);
+  --sh:0 14px 40px rgba(17,47,31,.09),0 2px 6px rgba(17,47,31,.05);
+  --sh-lg:0 24px 64px rgba(17,47,31,.14);
   --font:"Plus Jakarta Sans",system-ui,sans-serif;
   --mono:"DM Mono",monospace;
 }
@@ -32,393 +31,357 @@ html{font-size:14px;-webkit-font-smoothing:antialiased}
 body{
   font-family:var(--font);color:var(--text);min-height:100vh;
   background:
-    radial-gradient(circle at 10% 8%,rgba(22,163,74,.18),transparent 30%),
-    radial-gradient(circle at 86% 14%,rgba(8,145,178,.13),transparent 28%),
-    radial-gradient(circle at 72% 86%,rgba(217,119,6,.08),transparent 26%),
-    linear-gradient(135deg,#F8FCFA 0%,#EEF6F1 46%,#E7F1EC 100%);
-}
-body::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;
-  background:linear-gradient(115deg,rgba(255,255,255,.55),transparent 32%,transparent 70%,rgba(255,255,255,.38)),
-    radial-gradient(circle at 24% 82%,rgba(255,255,255,.58),transparent 34%);
-  mix-blend-mode:soft-light;
+    radial-gradient(circle at 10% 8%,rgba(22,163,74,.15),transparent 30%),
+    radial-gradient(circle at 86% 14%,rgba(8,145,178,.11),transparent 28%),
+    linear-gradient(135deg,#F8FCFA 0%,#EEF6F1 50%,#E7F1EC 100%);
 }
 body::after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.18;
-  background-image:linear-gradient(rgba(15,122,60,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(15,122,60,.16) 1px,transparent 1px);
-  background-size:34px 34px;
-  mask-image:radial-gradient(circle at center,black 12%,transparent 78%);
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.14;
+  background-image:linear-gradient(rgba(15,122,60,.18) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(15,122,60,.18) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%);
 }
 button{font:inherit;cursor:pointer;border:none;background:none}
 a{color:var(--blue);text-decoration:none}
-a:hover{text-decoration:underline}
 ::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb{background:rgba(22,64,42,.15);border-radius:4px}
 .app{display:flex;min-height:100vh}
-/* === assets/css/components.css === */
-/* components.css */
 
 /* ── SIDEBAR ── */
 .sidebar{
   width:var(--sb-w);position:fixed;top:0;left:0;bottom:0;z-index:200;
   display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
-  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.48)),
-    radial-gradient(circle at 20% 0%,rgba(22,163,74,.11),transparent 34%),
-    radial-gradient(circle at 80% 78%,rgba(8,145,178,.08),transparent 35%);
+  background:linear-gradient(170deg,rgba(255,255,255,.78) 0%,rgba(240,252,246,.65) 100%);
   border-right:1px solid rgba(22,64,42,.10);
-  box-shadow:inset -1px 0 0 rgba(255,255,255,.54),0 18px 55px rgba(17,47,31,.08);
-  backdrop-filter:blur(26px) saturate(165%);-webkit-backdrop-filter:blur(26px) saturate(165%);
+  backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+  box-shadow:1px 0 0 rgba(255,255,255,.55),0 0 40px rgba(17,47,31,.07);
 }
-.sidebar-logo{padding:16px 16px 14px;border-bottom:1px solid rgba(22,64,42,.09);display:flex;flex-direction:column;gap:4px}
-.logo-img{height:26px;width:auto;object-fit:contain}
-.logo-sub{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-.sidebar-section{padding:14px 14px 5px;font-size:9px;font-weight:700;color:rgba(107,131,120,.6);text-transform:uppercase;letter-spacing:.12em}
-.nav-item{
-  display:flex;align-items:center;gap:9px;padding:8px 10px;margin:1px 6px;
-  border-radius:var(--r-sm);cursor:pointer;transition:all .15s;
-  color:var(--text2);font-size:12px;font-weight:600;
-  border:1px solid transparent;width:calc(100% - 12px);text-align:left;
+.sb-logo{padding:14px 14px 12px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px}
+.sb-logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#16A34A,#0891B2);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;flex-shrink:0}
+.sb-logo-text{font-size:13px;font-weight:800;color:var(--text);line-height:1.1}
+.sb-logo-sub{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.sb-section{padding:12px 12px 4px;font-size:9px;font-weight:800;color:rgba(107,131,120,.55);
+  text-transform:uppercase;letter-spacing:.14em;display:flex;align-items:center;gap:6px}
+.sb-section::after{content:"";flex:1;height:1px;background:var(--border2)}
+.nav-btn{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;margin:1px 6px;
+  border-radius:var(--r-sm);cursor:pointer;transition:all .14s;
+  color:var(--text2);font-size:12px;font-weight:600;border:1px solid transparent;
+  width:calc(100% - 12px);text-align:left;
 }
-.nav-item:hover{background:rgba(255,255,255,.55);color:var(--primary-dk);border-color:rgba(22,64,42,.08)}
-.nav-item.active{
+.nav-btn:hover{background:rgba(255,255,255,.6);color:var(--primary-dk);border-color:rgba(22,64,42,.08)}
+.nav-btn.active{
   color:var(--primary-dk);font-weight:700;
-  background:linear-gradient(135deg,rgba(255,255,255,.90),rgba(255,255,255,.55));
-  border-color:rgba(22,163,74,.18);
-  box-shadow:0 10px 24px rgba(17,47,31,.08),inset 0 1px 0 rgba(255,255,255,.78);
+  background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.58));
+  border-color:rgba(22,163,74,.20);
+  box-shadow:0 8px 20px rgba(17,47,31,.08),inset 0 1px 0 rgba(255,255,255,.8);
 }
-.nav-sub{margin-left:12px;font-size:11.5px}
-.nav-icon{width:16px;text-align:center;font-size:14px;flex-shrink:0}
-.nav-badge{margin-left:auto;background:rgba(220,38,38,.22);color:#FCA5A5;font-size:9px;font-weight:700;padding:2px 5px;border-radius:8px}
-.ret-tag{font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(8,145,178,.15);color:#22D3EE;border:1px solid rgba(8,145,178,.25)}
-.sidebar-bottom{margin-top:auto;border-top:1px solid rgba(22,64,42,.09);padding:10px 6px}
-.user-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;
-  background:linear-gradient(180deg,rgba(255,255,255,.64),rgba(255,255,255,.36));border:1px solid rgba(22,64,42,.09);transition:background .15s}
-.user-row:hover{background:rgba(255,255,255,.72)}
-.user-av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--cyan));
+.nav-btn.sub{margin-left:14px;font-size:11.5px;opacity:.92}
+.nav-btn.view-only{opacity:.6}
+.nav-icon{width:16px;text-align:center;font-size:13px;flex-shrink:0}
+.nav-chip{margin-left:auto;font-size:8px;font-weight:800;padding:1px 5px;border-radius:4px;flex-shrink:0}
+.chip-view{background:rgba(107,131,120,.15);color:var(--muted)}
+.chip-rm{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd)}
+.chip-csm{background:var(--cyan-bg);color:var(--cyan);border:1px solid var(--cyan-bd)}
+.chip-acq{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.sb-bottom{margin-top:auto;border-top:1px solid var(--border2);padding:8px 6px}
+.user-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r-sm);
+  background:rgba(255,255,255,.55);border:1px solid var(--border2)}
+.user-av{width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,var(--green),var(--cyan));
   display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;flex-shrink:0}
-.user-name{font-size:12px;font-weight:600;color:var(--text)}.user-role{font-size:9px;color:var(--muted);margin-top:1px}
+.user-name{font-size:12px;font-weight:700;color:var(--text)}
+.user-role{font-size:9px;color:var(--muted)}
+
+/* ── MAIN ── */
+.main-area{margin-left:var(--sb-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
 
 /* ── TOPBAR ── */
-.main-area{margin-left:var(--sb-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .topbar{
-  min-height:60px;margin:14px 18px 0;padding:0 22px;
+  position:sticky;top:12px;z-index:100;margin:12px 16px 0;
+  min-height:58px;padding:0 20px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
   border:1px solid rgba(22,64,42,.10);border-radius:var(--r-lg);
-  background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.52));
-  box-shadow:0 10px 30px rgba(17,47,31,.08);
-  backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
-  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--sh);display:flex;align-items:center;gap:14px;
 }
-.topbar-title{font-size:16px;font-weight:900;color:var(--text);letter-spacing:-.02em}
+.topbar-title{font-size:15px;font-weight:900;color:var(--text);letter-spacing:-.02em}
 .topbar-sub{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.live-badge{display:flex;align-items:center;gap:6px;background:var(--green-bg);color:var(--green);
-  font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px solid var(--green-bd);letter-spacing:.04em}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.live-badge{display:flex;align-items:center;gap:5px;background:var(--green-bg);color:var(--green);
+  font-size:10px;font-weight:700;padding:5px 11px;border-radius:20px;border:1px solid var(--green-bd)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:livepulse 2s ease infinite}
+@keyframes livepulse{0%,100%{opacity:1}50%{opacity:.3}}
 .refresh-btn{
-  display:flex;align-items:center;gap:6px;padding:7px 14px;
+  display:flex;align-items:center;gap:5px;padding:6px 13px;
   background:linear-gradient(135deg,var(--green),var(--primary-dk));color:#fff;
-  border-radius:var(--r-sm);font-size:11px;font-weight:700;transition:all .15s;
-  box-shadow:0 6px 18px rgba(22,163,74,.22);
+  border-radius:10px;font-size:11px;font-weight:700;
+  box-shadow:0 4px 14px rgba(22,163,74,.25);transition:all .14s;
 }
-.refresh-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(22,163,74,.3)}
-.refresh-btn.spinning #refreshIcon{display:inline-block;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.refresh-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(22,163,74,.3)}
+.refresh-btn.spin #refresh-icon{display:inline-block;animation:spn .7s linear infinite}
+@keyframes spn{to{transform:rotate(360deg)}}
 
-/* ── TABS BAR ── */
+/* ── TABS ── */
 .tabs-bar{
-  margin:10px 18px 0;padding:8px;
-  border:1px solid rgba(22,64,42,.10);border-radius:22px;
-  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.44));
-  box-shadow:0 8px 24px rgba(17,47,31,.06);
-  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
-  display:flex;overflow-x:auto;scrollbar-width:none;gap:4px;
+  margin:10px 16px 0;padding:7px 8px;
+  background:rgba(255,255,255,.70);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(22,64,42,.09);border-radius:20px;
+  box-shadow:var(--sh-xs);display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;
 }
 .tabs-bar::-webkit-scrollbar{display:none}
 .tab-btn{
-  height:34px;padding:0 14px;border-radius:999px;border:1px solid transparent;
+  height:32px;padding:0 13px;border-radius:999px;border:1px solid transparent;
   font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;
-  white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px;
+  white-space:nowrap;transition:all .14s;display:flex;align-items:center;gap:5px;
 }
-.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.58);border-color:rgba(22,64,42,.08)}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.65);border-color:var(--border2)}
 .tab-btn.active{color:#fff;background:linear-gradient(135deg,var(--green),var(--primary-dk));
-  border-color:transparent;box-shadow:0 8px 22px rgba(22,163,74,.2)}
+  box-shadow:0 6px 18px rgba(22,163,74,.22)}
 
 /* ── CONTENT ── */
-.content{padding:16px 18px 80px;flex:1}
+.content{padding:14px 16px 80px;flex:1}
+#appContent{display:flex;flex-direction:column;gap:14px}
 
-/* ── LOADING / ERROR ── */
-.loading-state{display:flex;align-items:center;gap:14px;padding:48px 24px;color:var(--muted);font-weight:700}
-.spinner{width:22px;height:22px;border:2.5px solid rgba(22,64,42,.12);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-.error-state{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r);padding:16px 18px;color:var(--red);font-weight:700}
-.section-unavail{background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);padding:14px 16px;color:#92400e;font-size:12px;margin:8px 0}
+/* ── STATES ── */
+.loading-state{display:flex;align-items:center;gap:12px;padding:48px 20px;color:var(--muted);font-weight:700}
+.spinner{width:20px;height:20px;border:2.5px solid rgba(22,64,42,.1);border-top-color:var(--green);
+  border-radius:50%;animation:spn .7s linear infinite;flex-shrink:0}
+.err-state{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--r);
+  padding:14px 16px;color:var(--red);font-weight:700;font-size:12px}
+.unavail{background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);
+  padding:12px 14px;color:#92400e;font-size:11px;margin:4px 0}
 
-/* ── PERIOD LABEL ── */
-.period-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;
-  margin:18px 0 10px;display:flex;align-items:center;gap:8px}
-.period-label::before{content:"";width:3px;height:14px;background:var(--green);border-radius:2px;display:block}
-.period-label::after{content:"";flex:1;height:1px;background:var(--border)}
-
-/* ── KPI SUMMARY GRID ── */
-.summary-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-bottom:14px}
+/* ── SUMMARY GRID ── */
+.sum-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.sum-grid.g4{grid-template-columns:repeat(4,1fr)}
+.sum-grid.g6{grid-template-columns:repeat(6,1fr)}
 .sum-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px 12px;position:relative;overflow:hidden;box-shadow:var(--sh-xs);
-  transition:all .2s;cursor:pointer;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:14px 12px 12px;position:relative;overflow:hidden;box-shadow:var(--sh-xs);
+  transition:all .18s;
 }
-.sum-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
-.sum-card::after{content:"↗";position:absolute;top:8px;right:9px;font-size:9px;color:var(--muted);opacity:0;transition:opacity .15s}
-.sum-card:hover::after{opacity:1}
-.sum-card-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
-.sum-val{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1;margin-top:4px}
-.sum-lbl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
+.sum-card.clickable{cursor:pointer}
+.sum-card.clickable:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.sum-card.clickable::after{content:"↗";position:absolute;top:8px;right:9px;
+  font-size:9px;color:var(--muted);opacity:0;transition:.14s}
+.sum-card.clickable:hover::after{opacity:1}
+.sum-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.sum-val{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1;margin-top:6px}
+.sum-lbl{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.1em;margin-top:9px}
 .sum-sub{font-size:9px;color:var(--muted);margin-top:3px;font-weight:500}
 
+/* ── FOCUS STRIP ── */
+.focus-strip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh)}
+.focus-top{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 18px 10px}
+.focus-title{font-size:17px;font-weight:900;color:var(--text);letter-spacing:-.02em}
+.focus-sub{font-size:11px;color:var(--muted);font-weight:600;margin-top:3px}
+.focus-ts{font-size:9px;color:var(--muted);font-weight:700;text-align:right}
+.focus-ts-val{display:block;font-size:11px;color:var(--text2);font-weight:800;margin-top:2px}
+.focus-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 14px 14px}
+.focus-pill{background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:var(--r);
+  padding:12px;border-left:3px solid var(--fp-c,var(--green));cursor:pointer;transition:all .18s}
+.focus-pill:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.focus-pill-v{font-family:var(--mono);font-size:26px;font-weight:900;color:var(--fp-c,var(--green));line-height:1}
+.focus-pill-l{font-size:9px;font-weight:800;color:var(--text2);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+.focus-pill-s{font-size:9px;color:var(--muted);margin-top:3px;font-weight:600}
+.focus-health{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px 14px}
+.fh-card{background:rgba(255,255,255,.55);border:1px solid var(--border);border-radius:var(--r);padding:14px;overflow:hidden;position:relative}
+.fh-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.fh-title{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.fh-val{font-family:var(--mono);font-size:26px;font-weight:900;line-height:1}
+.fh-lbl{font-size:9px;color:var(--muted);font-weight:700;margin-top:4px}
+.fh-bar{height:3px;background:rgba(22,64,42,.08);border-radius:2px;overflow:hidden;margin:8px 0 4px}
+.fh-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.fh-sub{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.fh-mini-v{font-family:var(--mono);font-size:14px;font-weight:900}
+.fh-mini-l{font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.focus-insight{font-size:11px;color:var(--text2);padding:8px 18px;border-top:1px solid var(--border);
+  background:var(--surface2);font-weight:600}
+.focus-insight strong{color:var(--primary-dk)}
+
 /* ── CARD ── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh);transition:box-shadow .2s}
-.card:hover{box-shadow:var(--sh-md)}
-.card-hd{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface2)}
-.card-title{font-size:11px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:8px}
-.card-title-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh)}
+.card-hd{padding:11px 16px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;background:var(--surface2)}
+.card-title{font-size:11px;font-weight:800;color:var(--text2);display:flex;align-items:center;gap:7px}
+.card-icon{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+
+/* ── SECTION LABEL ── */
+.section-lbl{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.14em;display:flex;align-items:center;gap:8px;margin:2px 0 8px}
+.section-lbl::before{content:"";width:3px;height:12px;background:var(--green);border-radius:2px}
+.section-lbl::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* ── TWO / THREE COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
 /* ── TABLE ── */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{padding:9px 14px;text-align:left;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:700;border-bottom:1px solid var(--border);background:var(--surface2);white-space:nowrap;position:sticky;top:0;z-index:2}
-.tbl th.c,.tbl td.c{text-align:center}
-.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);white-space:nowrap}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:rgba(22,163,74,.04)}
-.tbl tbody tr{cursor:pointer}
 .tbl-wrap{overflow-x:auto}
-.show-more-btn{width:100%;padding:9px;text-align:center;font-size:10px;font-weight:900;color:var(--green);
-  border:none;border-top:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:var(--font)}
-.show-more-btn:hover{background:var(--green-bg)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{padding:8px 13px;text-align:left;font-size:9px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.1em;font-weight:700;border-bottom:1px solid var(--border);background:var(--surface2);
+  white-space:nowrap;position:sticky;top:0;z-index:2}
+.tbl th.c,.tbl td.c{text-align:center}
+.tbl td{padding:9px 13px;border-bottom:1px solid var(--border2);color:var(--text2);white-space:nowrap}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:rgba(22,163,74,.03)}
+.tbl-empty{padding:24px;text-align:center;color:var(--muted);font-size:12px;font-style:italic}
+.show-more{width:100%;padding:9px;text-align:center;font-size:10px;font-weight:800;color:var(--green);
+  border-top:1px solid var(--border);background:var(--surface);cursor:pointer}
+.show-more:hover{background:var(--green-bg)}
 
-/* ── BADGES ── */
-.badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:999px}
+/* ── BADGES / CHIPS ── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;
+  padding:3px 8px;border-radius:999px}
 .bg{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
 .br{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
 .bb{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd)}
 .bp{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-bd)}
 .ba{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
 .bc{background:var(--cyan-bg);color:var(--cyan);border:1px solid var(--cyan-bd)}
-
-/* ── STATUS PILLS ── */
-.status-ok{color:var(--green);font-weight:900}
-.status-bad{color:var(--red);font-weight:900}
-.status-warn{color:var(--amber);font-weight:900}
-
-/* ── HS LINK ── */
-.hs-link{display:inline-flex;align-items:center;gap:4px;background:var(--blue-bg);color:var(--blue);
-  border:1px solid var(--blue-bd);border-radius:6px;padding:3px 8px;font-size:10px;font-weight:800;transition:background .12s}
+.rank-a{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block}
+.rank-b{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block}
+.status-ok{color:var(--green);font-weight:900;font-size:11px}
+.status-bad{color:var(--red);font-weight:900;font-size:11px}
+.status-warn{color:var(--amber);font-weight:900;font-size:11px}
+.fin-pill{display:inline-flex;align-items:center;font-size:9px;font-weight:800;padding:2px 7px;border-radius:999px}
+.fp-ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.fp-bad{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.fp-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.fp-info{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd)}
+.fp-muted{background:rgba(107,131,120,.1);color:var(--muted)}
+.hs-link{display:inline-flex;align-items:center;gap:3px;background:var(--blue-bg);color:var(--blue);
+  border:1px solid var(--blue-bd);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800}
 .hs-link:hover{background:#bfdbfe;text-decoration:none}
-
-/* ── RECORD LINK ── */
-.record-link{color:var(--blue);font-weight:700;text-decoration:none}
+.record-link{color:var(--blue);font-weight:700}
 .record-link:hover{text-decoration:underline}
 
-/* ── SECTION LABEL ── */
-.manager-section-label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;
-  padding:16px 0 8px;display:flex;align-items:center;gap:8px}
-.manager-section-label::after{content:"";flex:1;height:1px;background:var(--border)}
+/* ── RETENTION SPECIFIC ── */
+.ret-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ret-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:14px 12px;box-shadow:var(--sh-xs);cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.ret-kpi:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.ret-kpi::after{content:"↗ Details";position:absolute;top:8px;right:9px;font-size:8px;color:var(--muted);opacity:0;transition:.14s}
+.ret-kpi:hover::after{opacity:1}
+.ret-kpi-accent{position:absolute;top:0;left:0;right:0;height:3px}
+.ret-kpi-v{font-family:var(--mono);font-size:24px;font-weight:900;line-height:1;margin-top:6px}
+.ret-kpi-l{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:9px}
+.ret-kpi-s{font-size:9px;color:var(--muted);font-weight:600;margin-top:3px}
+.ret-period-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.ret-period-col{background:var(--surface2);padding:14px 16px}
+.ret-period-hd{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.ret-period-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(22,64,42,.05)}
+.ret-period-row:last-child{border-bottom:0}
+.ret-period-k{font-size:10px;color:var(--muted);font-weight:600}
+.ret-period-v{font-family:var(--mono);font-size:13px;font-weight:900;color:var(--text)}
+.cov-line{display:grid;grid-template-columns:140px 1fr 56px;gap:10px;align-items:center;margin-bottom:10px}
+.cov-lbl{font-size:10px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:5px}
+.cov-bar{height:7px;background:rgba(22,64,42,.07);border-radius:999px;overflow:hidden}
+.cov-fill{height:100%;border-radius:999px;transition:width .6s ease}
+.cov-pct{font-family:var(--mono);font-size:11px;font-weight:900;color:var(--text2);text-align:right}
 
-/* ── TWO COL GRID ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+/* ── FIN CARDS ── */
+.fin-card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.fin-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:14px 12px;border-left:4px solid var(--fc,var(--green));box-shadow:var(--sh-xs);
+  cursor:pointer;transition:all .18s;position:relative}
+.fin-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.fin-card::after{content:"↗";position:absolute;top:9px;right:10px;font-size:9px;color:var(--muted);opacity:0;transition:.14s}
+.fin-card:hover::after{opacity:1}
+.fin-card-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;background:rgba(255,255,255,.7);border:1px solid var(--border);margin-bottom:8px}
+.fin-card-v{font-family:var(--mono);font-size:20px;font-weight:900;line-height:1}
+.fin-card-l{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
+.fin-card-s{font-size:9px;color:var(--text2);font-weight:600;margin-top:4px;line-height:1.4}
+.status-split-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;border-bottom:1px solid var(--border2)}
+.ss-box{background:rgba(255,255,255,.55);border:1px solid var(--border);border-radius:var(--r);
+  padding:10px;text-align:center;cursor:pointer;transition:all .18s}
+.ss-box:hover{background:rgba(255,255,255,.82);transform:translateY(-1px)}
+.ss-v{font-family:var(--mono);font-size:20px;font-weight:900;line-height:1}
+.ss-l{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px}
 
-/* ── COMMAND PREVIEW (Acquisition focus strip) ── */
-.focus-strip{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
-  overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
-.focus-top{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 18px 10px}
-.focus-title{font-size:16px;font-weight:900;color:var(--text);letter-spacing:-.02em}
-.focus-sub{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600}
-.focus-date{text-align:right;font-size:10px;color:var(--muted);font-weight:700}
-.focus-date-val{font-size:12px;color:var(--text2);font-weight:800;margin-top:3px;display:block}
-.focus-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 14px 14px}
-.focus-pill{background:rgba(255,255,255,.58);border:1px solid var(--border);border-radius:var(--r);
-  padding:12px;border-left:3px solid var(--fp-c,var(--green));cursor:pointer;transition:all .2s}
-.focus-pill:hover{transform:translateY(-2px);box-shadow:var(--sh)}
-.focus-pill-value{font-family:var(--mono);font-size:26px;font-weight:900;color:var(--fp-c,var(--green));line-height:1}
-.focus-pill-label{font-size:10px;font-weight:700;color:var(--text2);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
-.focus-pill-sub{font-size:9px;color:var(--muted);margin-top:3px;font-weight:600}
-.focus-row{font-size:11px;color:var(--text2);padding:9px 18px;border-top:1px solid var(--border);background:var(--surface2);font-weight:700}
-.focus-row span{color:var(--green);margin-right:6px}
+/* ── P&L ── */
+.pnl-exec-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.pnl-exec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:14px 12px;border-left:4px solid var(--fc,var(--green));box-shadow:var(--sh-xs);cursor:pointer;transition:all .18s}
+.pnl-exec-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.pnl-exec-v{font-family:var(--mono);font-size:20px;font-weight:900;line-height:1;color:var(--fc,var(--green))}
+.pnl-exec-l{font-size:8px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
+.pnl-exec-s{font-size:9px;color:var(--text2);font-weight:600;margin-top:4px}
+.pnl-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pnl-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-xs)}
+.pnl-chart-hd{padding:10px 14px;border-bottom:1px solid var(--border2);background:var(--surface2);
+  font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+.pnl-chart-wrap{padding:14px;height:260px;position:relative}
+.pnl-filter-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border2)}
+.pnl-select{height:28px;padding:0 10px;border:1px solid var(--border);border-radius:999px;
+  background:rgba(255,255,255,.88);color:var(--text2);font-family:var(--font);font-size:10px;font-weight:700;outline:none}
+.pnl-select:focus{border-color:var(--green-bd);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
+
+/* ── RANK MINI GRID ── */
+.rank-mini{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;padding:10px 14px;border-bottom:1px solid var(--border2)}
+.rank-box{background:rgba(255,255,255,.55);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:10px;text-align:center;cursor:pointer;transition:all .16s}
+.rank-box:hover{background:rgba(255,255,255,.85);transform:translateY(-1px)}
+.rank-box-v{font-family:var(--mono);font-size:18px;font-weight:900;line-height:1}
+.rank-box-l{font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
 
 /* ── MODAL ── */
 .modal-overlay{
   position:fixed;inset:0;z-index:9999;
-  background:rgba(17,47,31,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;padding:24px;
+  background:rgba(10,20,14,.32);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
 }
 .modal-box{
-  background:rgba(255,255,255,.94);border:1px solid rgba(22,64,42,.12);
-  border-radius:var(--r-lg);box-shadow:0 28px 90px rgba(17,47,31,.22);
-  backdrop-filter:blur(18px);width:100%;max-width:1100px;max-height:85vh;
+  background:rgba(255,255,255,.96);border:1px solid rgba(22,64,42,.12);
+  border-radius:var(--r-lg);box-shadow:var(--sh-lg);
+  width:100%;max-width:1120px;max-height:88vh;
   display:flex;flex-direction:column;overflow:hidden;
 }
 .modal-hd{
-  padding:16px 20px 14px;border-bottom:1px solid var(--border);
-  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-shrink:0;
-  background:var(--surface2);
+  padding:14px 18px 12px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  background:var(--surface2);flex-shrink:0;
 }
-.modal-title{font-size:15px;font-weight:900;color:var(--text)}
-.modal-sub{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600}
-.modal-search{height:32px;border:1px solid var(--border);border-radius:var(--r-sm);padding:0 10px;
-  font-size:11px;font-family:var(--font);background:rgba(255,255,255,.8);color:var(--text);outline:none;width:180px}
-.modal-search:focus{border-color:rgba(22,163,74,.4);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
-.modal-export-btn{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);
-  border-radius:999px;padding:5px 11px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap}
-.modal-close-btn{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);
-  border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer}
+.modal-title{font-size:14px;font-weight:900;color:var(--text)}
+.modal-sub{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.modal-search{height:30px;border:1px solid var(--border);border-radius:999px;padding:0 10px;
+  font-size:11px;font-family:var(--font);background:rgba(255,255,255,.9);color:var(--text);
+  outline:none;width:160px}
+.modal-search:focus{border-color:var(--green-bd)}
+.modal-export{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);
+  border-radius:999px;padding:4px 10px;font-size:10px;font-weight:800;cursor:pointer}
+.modal-close{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);
+  border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;cursor:pointer}
 .modal-body{overflow-y:auto;flex:1}
-.modal-empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;font-style:italic}
-
-/* ── RATE BAR ── */
-.rate-bar{width:48px;height:3px;background:rgba(22,64,42,.1);border-radius:2px;overflow:hidden;margin:4px auto 0}
-.rate-fill{height:100%;border-radius:2px}
-
-/* ── PIPELINE STAGE BARS ── */
-.pipe-stages{display:flex;gap:6px;padding:14px;overflow-x:auto}
-.pipe-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:10px 8px;gap:3px;border-radius:var(--r-sm);min-width:90px;flex:1}
-.ps-name{font-size:9px;font-weight:700;color:rgba(255,255,255,.85);text-align:center;line-height:1.2}
-.ps-count{font-family:var(--mono);font-size:22px;font-weight:600;color:#fff}
-.ps-amt{font-size:9px;color:rgba(255,255,255,.7);font-family:var(--mono)}
+.modal-empty{padding:36px;text-align:center;color:var(--muted);font-size:12px}
 
 /* ── RESPONSIVE ── */
-@media(max-width:1200px){.summary-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:1200px){
+  .sum-grid{grid-template-columns:repeat(4,1fr)}
+  .pnl-exec-grid{grid-template-columns:repeat(3,1fr)}
+  .fin-card-grid{grid-template-columns:repeat(3,1fr)}
+}
 @media(max-width:900px){
   .sidebar{position:static;width:100%;border-right:none;border-bottom:1px solid var(--border)}
   .main-area{margin-left:0}
   .two-col,.three-col{grid-template-columns:1fr}
-  .summary-grid{grid-template-columns:repeat(2,1fr)}
+  .sum-grid,.sum-grid.g4,.sum-grid.g6{grid-template-columns:1fr 1fr}
+  .focus-pills,.focus-health{grid-template-columns:1fr 1fr}
+  .ret-kpi-grid,.fin-card-grid{grid-template-columns:1fr 1fr}
+  .pnl-exec-grid{grid-template-columns:1fr 1fr}
+  .pnl-chart-grid{grid-template-columns:1fr}
 }
-@media(max-width:700px){
-  .topbar,.tabs-bar{margin-left:12px;margin-right:12px}
-  .focus-grid{grid-template-columns:1fr 1fr}
-  .content{padding:12px 12px 60px}
+@media(max-width:640px){
+  .main-area{padding:0}
+  .topbar,.tabs-bar{margin-left:10px;margin-right:10px}
+  .content{padding:10px 10px 60px}
+  .sum-grid{grid-template-columns:1fr 1fr}
 }
-/* === assets/css/acquisition.css === */
-/* acquisition.css */
-.rank-a{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block}
-.rank-b{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd);font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block}
-.acq-country-chip{background:rgba(255,255,255,.58);border:1px solid var(--border);border-radius:999px;
-  padding:4px 11px;font-size:10px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .15s}
-.acq-country-chip:hover{background:rgba(255,255,255,.8);border-color:var(--green-bd)}
-.acq-country-chip.active{background:var(--green-bg);color:var(--green);border-color:var(--green-bd)}
-.acq-chips-row{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--border)}
-.acq-rank-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:12px 14px;border-bottom:1px solid var(--border)}
-.acq-rank-box{background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px;text-align:center;cursor:pointer;transition:all .15s}
-.acq-rank-box:hover{background:rgba(255,255,255,.8);transform:translateY(-1px)}
-.acq-rank-v{font-family:var(--mono);font-size:20px;font-weight:900;line-height:1}
-.acq-rank-l{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
-.command-health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px 14px}
-.command-card{background:rgba(255,255,255,.58);border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
-.command-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.command-card-title{font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
-.command-card-accent{position:absolute;top:0;left:0;right:0;height:3px}
-.command-main-value{font-family:var(--mono);font-size:28px;font-weight:900;line-height:1}
-.command-main-label{font-size:10px;color:var(--muted);font-weight:700;margin-top:4px}
-.command-sub-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.command-mini-v{font-family:var(--mono);font-size:15px;font-weight:900}
-.command-mini-l{font-size:8px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-.command-bar{height:3px;background:rgba(22,64,42,.1);border-radius:2px;overflow:hidden;margin:8px 0 4px}
-.command-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
-/* === assets/css/retention.css === */
-/* retention.css */
-.ret-kpi-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
-.ret-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 12px;
-  box-shadow:var(--sh-xs);cursor:pointer;transition:all .2s;position:relative}
-.ret-kpi:hover{transform:translateY(-2px);box-shadow:var(--sh)}
-.ret-kpi::after{content:"↗";position:absolute;top:8px;right:9px;font-size:9px;color:var(--muted);opacity:0;transition:.15s}
-.ret-kpi:hover::after{opacity:1}
-.ret-kpi-v{font-family:var(--mono);font-size:24px;font-weight:900;line-height:1;margin-top:4px}
-.ret-kpi-l{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
-.ret-kpi-s{font-size:9px;color:var(--muted);font-weight:600;margin-top:3px}
-.ret-coverage{padding:14px 18px}
-.ret-coverage-line{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin-bottom:12px}
-.ret-coverage-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
-.ret-bar{height:8px;background:rgba(22,64,42,.08);border-radius:999px;overflow:hidden}
-.ret-fill{height:100%;border-radius:999px;background:var(--rc,var(--green));transition:width .6s ease}
-.ret-pct{font-family:var(--mono);font-size:11px;font-weight:900;text-align:right;color:var(--text2)}
-.ret-alert-row{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border)}
-.ret-alert-row:last-child{border-bottom:0}
-.ret-alert-dot{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
-.ret-alert-title{font-size:12px;font-weight:900;color:var(--text)}
-.ret-alert-desc{font-size:11px;color:var(--muted);line-height:1.55;margin-top:2px}
-.ret-alert-meta{display:flex;gap:8px;margin-top:4px;align-items:center}
-.ret-period-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
-.ret-period-card{background:var(--surface2);padding:14px}
-.ret-period-label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.ret-period-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(22,64,42,.06)}
-.ret-period-row:last-child{border-bottom:0}
-.ret-period-key{font-size:10px;color:var(--muted);font-weight:700}
-.ret-period-val{font-family:var(--mono);font-size:13px;font-weight:900;color:var(--text)}
-.ret-owner-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.ret-owner-card{border:1px solid var(--border);background:var(--surface);border-radius:var(--r-lg);
-  box-shadow:var(--sh);padding:14px;border-top:3px solid var(--oc,var(--green))}
-.ret-mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.ret-mini{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
-.ret-mini-v{font-family:var(--mono);font-size:16px;font-weight:900}
-.ret-mini-l{font-size:7px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
-.ret-show-btn{width:100%;padding:9px;text-align:center;font-size:10px;font-weight:900;color:var(--green);
-  border:none;border-top:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:var(--font)}
-.ret-show-btn:hover{background:var(--green-bg)}
-.fin-status{display:inline-flex;align-items:center;font-size:9px;font-weight:800;padding:3px 8px;border-radius:999px}
-.fin-status.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
-.fin-status.risk{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
-.fin-status.warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
-.fin-status.info{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-bd)}
-.fin-status.lost{background:rgba(100,116,139,.1);color:#64748b;border:1px solid rgba(100,116,139,.2)}
-.ret-fin-top-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
-.ret-fin-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
-  padding:14px 12px;border-left:4px solid var(--fc,var(--green));box-shadow:var(--sh-xs);
-  cursor:pointer;transition:all .2s;position:relative;
-}
-.ret-fin-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
-.ret-fin-card::after{content:"↗ Details";position:absolute;top:9px;right:11px;font-size:8px;color:var(--muted);opacity:0;transition:.15s}
-.ret-fin-card:hover::after{opacity:1}
-.ret-fin-card-icon{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.7);border:1px solid var(--border);margin-bottom:8px}
-.ret-fin-card-v{font-family:var(--mono);font-size:22px;font-weight:900;line-height:1}
-.ret-fin-card-l{font-size:8px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:7px}
-.ret-fin-card-s{font-size:9px;color:var(--text2);font-weight:700;margin-top:4px;line-height:1.4}
-.ret-fin-owner-grid{display:grid;grid-template-columns:minmax(160px,1.2fr) 70px 90px repeat(4,minmax(100px,.85fr));gap:0}
-.ret-fin-owner-cell{padding:11px 14px;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center}
-.ret-fin-owner-cell:nth-child(7n+1){font-weight:700}
-.ret-fin-head{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;background:var(--surface2)}
-@media(max-width:1400px){.ret-fin-top-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:900px){
-  .ret-kpi-bar{grid-template-columns:repeat(3,1fr)}
-  .ret-fin-top-grid{grid-template-columns:repeat(2,1fr)}
-  .ret-owner-grid{grid-template-columns:1fr}
-  .ret-fin-owner-grid{display:block}
-}
-/* === assets/css/pnl.css === */
-/* pnl.css */
-.pnl-exec-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
-.pnl-exec-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
-  padding:14px 12px;border-left:4px solid var(--fc,var(--green));box-shadow:var(--sh-xs);
-  cursor:pointer;transition:all .2s;
-}
-.pnl-exec-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
-.pnl-exec-v{font-family:var(--mono);font-size:22px;font-weight:900;line-height:1;color:var(--fc,var(--green))}
-.pnl-exec-l{font-size:8px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
-.pnl-exec-s{font-size:9px;color:var(--text2);font-weight:750;margin-top:4px}
-.pnl-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.pnl-chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-xs)}
-.pnl-chart-hd{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.pnl-chart-title{font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
-.pnl-chart-wrap{padding:14px;height:280px;position:relative}
-.pnl-chart-wrap canvas{width:100%!important;height:100%!important}
-.pnl-filters{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
-.pnl-select{height:30px;padding:0 10px;border:1px solid var(--border);border-radius:999px;
-  background:rgba(255,255,255,.88);color:var(--text2);font-family:var(--font);font-size:10px;font-weight:800;outline:none}
-.pnl-select:focus{border-color:var(--green-bd);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
-@media(max-width:1100px){.pnl-exec-grid{grid-template-columns:repeat(3,1fr)}.pnl-chart-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.pnl-exec-grid{grid-template-columns:1fr 1fr}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -426,21 +389,24 @@ a:hover{text-decoration:underline}
 <body>
 
 <div class="app">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <img class="logo-img" src="https://www.talentera.com/wp-content/themes/talentera-2018/images/new-design/Talentera-ATS-black-logo.svg" alt="Talentera" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
-      <span id="logo-fallback" style="display:none;font-size:15px;font-weight:800;color:var(--primary)">Talentera</span>
-      <div class="logo-sub">Sales Command Center</div>
+    <div class="sb-logo">
+      <div class="sb-logo-mark">T</div>
+      <div><div class="sb-logo-text">Talentera</div><div class="sb-logo-sub">Sales Command Center</div></div>
     </div>
-    <div class="sidebar-section">Main</div>
-    <button class="nav-item active" data-route="acquisition"><span class="nav-icon">&#128202;</span> Acquisition</button>
-    <button class="nav-item" data-route="retention-team"><span class="nav-icon">&#128737;&#65039;</span> Retention</button>
-    <button class="nav-item nav-sub" data-route="retention-financial"><span class="nav-icon">&#128176;</span> Financial Details</button>
-    <button class="nav-item nav-sub" data-route="features-plan"><span class="nav-icon">&#128640;</span> Features Plan</button>
-    <button class="nav-item" data-route="pnl"><span class="nav-icon">&#128200;</span> P&amp;L</button>
-    <div class="sidebar-section" id="sideRepTitle">Team</div>
+
+    <div class="sb-section">Main</div>
+    <button class="nav-btn active" data-route="acquisition"><span class="nav-icon">&#128202;</span> Acquisition</button>
+    <button class="nav-btn" data-route="retention-team"><span class="nav-icon">&#128737;&#65039;</span> Retention</button>
+    <button class="nav-btn sub" data-route="retention-financial"><span class="nav-icon">&#128176;</span> Financial Details</button>
+    <button class="nav-btn sub" data-route="features-plan"><span class="nav-icon">&#128640;</span> Features Plan</button>
+    <button class="nav-btn" data-route="pnl"><span class="nav-icon">&#128200;</span> P&amp;L</button>
+
+    <div class="sb-section" id="sideRepTitle">Team</div>
     <div id="sideRepLinks"></div>
-    <div class="sidebar-bottom">
+
+    <div class="sb-bottom">
       <div class="user-row">
         <div class="user-av">SM</div>
         <div><div class="user-name">Sales Manager</div><div class="user-role">Admin &middot; Riyadh</div></div>
@@ -448,6 +414,7 @@ a:hover{text-decoration:underline}
     </div>
   </aside>
 
+  <!-- MAIN -->
   <div class="main-area">
     <div class="topbar">
       <div>
@@ -456,11 +423,11 @@ a:hover{text-decoration:underline}
       </div>
       <div class="topbar-right">
         <div class="live-badge"><span class="live-dot"></span>LIVE &middot; SUPABASE</div>
-        <button class="refresh-btn" id="refreshBtn"><span id="refreshIcon">&#8635;</span> Refresh</button>
+        <button class="refresh-btn" id="refreshBtn"><span id="refresh-icon">&#8635;</span> Refresh</button>
       </div>
     </div>
 
-    <div class="tabs-bar" id="tabsBar">
+    <div class="tabs-bar">
       <button class="tab-btn active" data-route="acquisition">&#127962; Team Overview</button>
       <button class="tab-btn" data-route="retention-team">&#128737;&#65039; Retention</button>
       <button class="tab-btn" data-route="retention-financial">&#128176; Financial</button>
@@ -476,289 +443,241 @@ a:hover{text-decoration:underline}
   </div>
 </div>
 
-<!-- Modal -->
-<div id="detailModal" class="modal-overlay" style="display:none">
+<!-- MODAL -->
+<div id="detail-modal" style="display:none" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-hd">
       <div>
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-sub" id="modalSub"></div>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-sub" id="modal-sub"></div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" id="modalSearch" class="modal-search" placeholder="Search&hellip;"/>
-        <button class="modal-export-btn" id="modalExportBtn">&#11015; CSV</button>
-        <button class="modal-close-btn" id="modalCloseBtn">&#10005;</button>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+        <input type="text" id="modal-search" class="modal-search" placeholder="Search&hellip;"/>
+        <button class="modal-export" id="modal-export">&#11015; CSV</button>
+        <button class="modal-close" id="modal-close">&#10005;</button>
       </div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
 
 <script>
-
-// === assets/js/config.js ===
-window.TCC = {
-  supabaseUrl: 'https://czaxtwbmborxwzaboqxl.supabase.co',
-  supabaseKey: 'sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX',
-  hsPortal: '145742477',
-  hsBase: 'https://app-eu1.hubspot.com/contacts/145742477'
+/* ── CONFIG ── */
+window.TCC={
+  supabaseUrl:'https://czaxtwbmborxwzaboqxl.supabase.co',
+  supabaseKey:'sb_publishable_uVUdpVWggu1WvkSKCAi51w_9qsb-AjX',
+  hsBase:'https://app-eu1.hubspot.com/contacts/145742477'
 };
-// === assets/js/supabase-client.js ===
-(function(){
-'use strict';
-const C = window.TCC;
-async function fetchView(name, limit=2000, extra=''){
-  const url = `${C.supabaseUrl}/rest/v1/${encodeURIComponent(name)}?select=*&limit=${limit}${extra}`;
-  const r = await fetch(url,{cache:'no-store',headers:{apikey:C.supabaseKey,Authorization:`Bearer ${C.supabaseKey}`}});
-  if(!r.ok){const t=await r.text().catch(()=>'');throw new Error(`${name} HTTP ${r.status} ${t}`.trim());}
-  return r.json();
-}
-window.DB = {fetchView};
-})();
-// === assets/js/state.js ===
-(function(){
-'use strict';
-const _cache={};
-window.State={
-  route: sessionStorage.getItem('tcc_route')||'acquisition',
-  setRoute(r){this.route=r;sessionStorage.setItem('tcc_route',r);},
-  async get(name,limit,extra){
-    const k=name+(limit||'')+(extra||'');
-    if(!_cache[k]) _cache[k]=window.DB.fetchView(name,limit,extra);
-    return _cache[k];
-  },
-  flush(name){
-    if(name){Object.keys(_cache).filter(k=>k.startsWith(name)).forEach(k=>delete _cache[k]);}
-    else{Object.keys(_cache).forEach(k=>delete _cache[k]);}
+
+/* ── SUPABASE CLIENT ── */
+window.DB={
+  async fetch(name,limit=2000,extra=''){
+    const url=`${TCC.supabaseUrl}/rest/v1/${encodeURIComponent(name)}?select=*&limit=${limit}${extra}`;
+    const r=await fetch(url,{cache:'no-store',headers:{apikey:TCC.supabaseKey,Authorization:'Bearer '+TCC.supabaseKey}});
+    if(!r.ok){const t=await r.text().catch(()=>'');throw new Error(`${name} HTTP ${r.status} ${t}`.slice(0,120));}
+    return r.json();
   }
 };
-})();
-// === assets/js/utils.js ===
+
+/* ── STATE / CACHE ── */
 (function(){
-'use strict';
-const C=window.TCC;
-function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-function money(v){v=Number(v||0);const a=Math.abs(v);let f;if(a>=1e6)f=(v/1e6).toFixed(1)+'M';else if(a>=1e3)f=Math.round(v/1e3)+'K';else f=Math.round(v).toString();return(v<0?'-$':'$')+f.replace('-','');}
-function num(v){return Number(v||0).toLocaleString();}
-function pct(v){return Number(v||0).toFixed(1)+'%';}
-function date(v){if(!v)return'—';try{return new Date(v).toISOString().slice(0,10);}catch{return String(v).slice(0,10);}}
-function relDate(v){if(!v)return'—';const d=Math.round((Date.now()-new Date(v))/86400000);if(d===0)return'Today';if(d===1)return'Yesterday';if(d<0)return`In ${Math.abs(d)}d`;return`${d}d ago`;}
-function hsCompany(id){return id?`${C.hsBase}/company/${id}`:null;}
-function hsDeal(id){return id?`${C.hsBase}/deal/${id}`:null;}
-function hsLink(url,label='↗ Open'){if(!url)return'—';return `<a class="hs-link" href="${esc(url)}" target="_blank" rel="noopener">${label}</a>`;}
-function setTitle(t,s){const a=document.getElementById('topbarTitle'),b=document.getElementById('topbarSub');if(a)a.textContent=t;if(b)b.textContent=s||'';}
-function setContent(html){const el=document.getElementById('appContent');if(el)el.innerHTML=html;}
-function showLoading(msg='Loading…'){setContent(`<div class="loading-state"><div class="spinner"></div><div>${esc(msg)}</div></div>`);}
-function showError(msg){setContent(`<div class="error-state">⚠ ${esc(msg)}</div>`);}
-function unavailable(view,err){return `<div class="section-unavail">⚠ <strong>${esc(view)}</strong> unavailable — ${esc(err||'')}</div>`;}
-function statusClass(s){
-  if(!s)return'info';const v=String(s).toLowerCase();
-  if(v.includes('lost')||v.includes('churn')||v.includes('delayed'))return'risk';
-  if(v.includes('late')||v.includes('expected')||v.includes('upcoming'))return'warn';
-  if(v.includes('cashed')||v.includes('renewed on time')||v.includes('booked'))return'ok';
-  return'info';
-}
-window.U={esc,money,num,pct,date,relDate,hsCompany,hsDeal,hsLink,setTitle,setContent,showLoading,showError,unavailable,statusClass};
-})();
-// === assets/js/components.js ===
-(function(){
-'use strict';
-const {esc,money,num,pct,hsLink}=window.U;
-
-function sumCard(label,value,sub,color,onclick){
-  const cls=`sum-card${onclick?' clickable':''}`;
-  const attr=onclick?`data-onclick="${esc(onclick)}"`:'';
-  return `<div class="${cls}" ${attr} style="--fp-c:${color||'var(--blue)'}">
-    <div class="sum-card-accent" style="background:${color||'var(--blue)'}"></div>
-    <div class="sum-val" style="color:${color||'var(--blue)'}">${value}</div>
-    <div class="sum-lbl">${esc(label)}</div>
-    ${sub?`<div class="sum-sub">${esc(sub)}</div>`:''}
-  </div>`;
-}
-
-function kpiCard(label,value,sub,leftColor,onclickFn){
-  return `<div class="ret-kpi" style="border-left:4px solid ${leftColor||'var(--green)'}" ${onclickFn?`data-kpi-onclick="${esc(onclickFn)}"`:''}>
-    <div class="ret-kpi-v" style="color:${leftColor||'var(--green)'}">${value}</div>
-    <div class="ret-kpi-l">${esc(label)}</div>
-    ${sub?`<div class="ret-kpi-s">${esc(sub)}</div>`:''}
-  </div>`;
-}
-
-function card(titleHtml,badgeHtml,bodyHtml){
-  return `<div class="card">
-    <div class="card-hd"><div class="card-title">${titleHtml}</div>${badgeHtml?`<span class="badge bb">${badgeHtml}</span>`:''}</div>
-    ${bodyHtml}
-  </div>`;
-}
-
-function table(rows, cols, limit=10, rowUrlFn=null){
-  if(!rows||!rows.length) return `<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px">No rows</div>`;
-  const visible=rows.slice(0,limit), hidden=rows.slice(limit);
-  const id='tbl_'+Math.random().toString(36).slice(2,8);
-  const thead=`<thead><tr>${cols.map(c=>`<th class="${c.center?'c':''}">${esc(c.label)}</th>`).join('')}</tr></thead>`;
-  const makeRow=(r,i)=>{
-    const url=rowUrlFn?rowUrlFn(r):null;
-    const attr=url?`onclick="window.open('${esc(url)}','_blank')" style="cursor:pointer"`:r._url?`onclick="window.open('${esc(r._url)}','_blank')" style="cursor:pointer"`:'';
-    return `<tr ${attr}>${cols.map(c=>`<td class="${c.center?'c':''}">${c.render?c.render(r):esc(r[c.key])}</td>`).join('')}</tr>`;
+  const _c={};
+  window.State={
+    route:sessionStorage.getItem('tcc_route')||'acquisition',
+    setRoute(r){this.route=r;sessionStorage.setItem('tcc_route',r);},
+    async get(name,limit,extra){
+      const k=name+(limit||'')+(extra||'');
+      if(!_c[k])_c[k]=window.DB.fetch(name,limit,extra);
+      return _c[k];
+    },
+    flush(name){
+      if(name)Object.keys(_c).filter(k=>k.startsWith(name)).forEach(k=>delete _c[k]);
+      else Object.keys(_c).forEach(k=>delete _c[k]);
+    }
   };
-  let html=`<div class="tbl-wrap"><table class="tbl">${thead}<tbody id="${id}_body">${visible.map(makeRow).join('')}</tbody></table></div>`;
-  if(hidden.length){
-    const extraJson=JSON.stringify({rows:hidden,cols:cols.map(c=>({...c,render:null})),urlFn:null});
-    html+=`<button class="show-more-btn" id="${id}_btn" onclick="Tables.showMore('${id}',${JSON.stringify(hidden.length)})">▼ Show ${hidden.length} more rows</button>`;
-    window.__tableHidden=window.__tableHidden||{};
-    window.__tableHidden[id]={rows:hidden,cols,rowUrlFn};
-  }
-  return html;
-}
+})();
 
-window.__tableHidden={};
-window.Tables={
-  showMore(id,_count){
-    const h=window.__tableHidden[id];
-    if(!h)return;
-    const tbody=document.getElementById(id+'_body');
-    const btn=document.getElementById(id+'_btn');
-    if(!tbody||!btn)return;
-    const {esc:e}=window.U;
-    const {rows,cols,rowUrlFn}=h;
-    const makeRow=(r)=>{
-      const url=rowUrlFn?rowUrlFn(r):r._url||null;
-      const attr=url?`onclick="window.open('${e(url)}','_blank')" style="cursor:pointer"`:'';
-      return `<tr ${attr}>${cols.map(c=>`<td class="${c.center?'c':''}">${c.render?c.render(r):e(r[c.key])}</td>`).join('')}</tr>`;
+/* ── UTILS / FORMATTERS ── */
+(function(){
+  function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+  function money(v){v=Number(v||0);const a=Math.abs(v);let f;if(a>=1e6)f=(v/1e6).toFixed(1)+'M';else if(a>=1e3)f=Math.round(v/1e3)+'K';else f=Math.round(v).toString();return(v<0?'-$':'$')+Math.abs(Number(f.replace(/[MK]/,'')))+f.replace(/[\d.-]/g,'');}
+  function num(v){return Number(v||0).toLocaleString();}
+  function pct(v){return Number(v||0).toFixed(1)+'%';}
+  function dt(v){if(!v)return'—';try{return new Date(v).toISOString().slice(0,10);}catch{return String(v).slice(0,10);}}
+  function relDt(v){if(!v)return'—';const d=Math.round((Date.now()-new Date(v))/86400000);if(d===0)return'Today';if(d===1)return'Yesterday';if(d<0)return'In '+Math.abs(d)+'d';return d+'d ago';}
+  function hsLink(url,label){if(!url)return'—';return '<a class="hs-link" href="'+esc(url)+'" target="_blank" rel="noopener">'+(label||'↗ Open')+'</a>';}
+  function hsUrl(r){return r.hubspot_url||r.hubspot_search_url||r.hubspot_company_url||r.company_url||r.deal_url||null;}
+  function setTitle(t,s){const a=document.getElementById('topbarTitle'),b=document.getElementById('topbarSub');if(a)a.textContent=t;if(b)b.textContent=s||'';}
+  function setContent(h){const el=document.getElementById('appContent');if(el)el.innerHTML=h;}
+  function loading(m){setContent('<div class="loading-state"><div class="spinner"></div><div>'+esc(m||'Loading…')+'</div></div>');}
+  function err(m){setContent('<div class="err-state">⚠ '+esc(m)+'</div>');}
+  function unavail(v,e){return '<div class="unavail">⚠ <strong>'+esc(v)+'</strong> unavailable'+(e?' — '+esc(e):'')+'</div>';}
+  function statusClass(s){const v=String(s||'').toLowerCase();
+    if(v.includes('lost')||v.includes('churn'))return'fp-muted';
+    if(v.includes('delayed'))return'fp-bad';
+    if(v.includes('late')||v.includes('expected'))return'fp-warn';
+    if(v.includes('cashed')||v.includes('cash')||v.includes('on time'))return'fp-ok';
+    if(v.includes('booked'))return'fp-info';
+    return'fp-muted';
+  }
+  window.U={esc,money,num,pct,dt,relDt,hsLink,hsUrl,setTitle,setContent,loading,err,unavail,statusClass};
+})();
+
+/* ── COMPONENTS ── */
+(function(){
+  const {esc,money,num,pct,hsUrl}=window.U;
+
+  function sumCard(label,value,sub,color,onclick){
+    const cl='sum-card'+(onclick?' clickable':'');
+    const ev=onclick?'onclick="'+esc(onclick)+'"':'';
+    return '<div class="'+cl+'" '+ev+'>'
+      +'<div class="sum-accent" style="background:'+color+'"></div>'
+      +'<div class="sum-val" style="color:'+color+'">'+value+'</div>'
+      +'<div class="sum-lbl">'+esc(label)+'</div>'
+      +(sub?'<div class="sum-sub">'+esc(sub)+'</div>':'')
+      +'</div>';
+  }
+
+  function table(rows,cols,limit,rowUrlFn){
+    limit=limit||40;
+    if(!rows||!rows.length)return '<div class="tbl-empty">No rows returned</div>';
+    const vis=rows.slice(0,limit),hid=rows.slice(limit);
+    const id='t'+Math.random().toString(36).slice(2,7);
+    const hd='<thead><tr>'+cols.map(c=>'<th'+(c.center?' class="c"':'')+'>'+esc(c.label)+'</th>').join('')+'</tr></thead>';
+    const mkRow=(r)=>{
+      const url=rowUrlFn?rowUrlFn(r):hsUrl(r);
+      const ev=url?'onclick="window.open(\''+url.replace(/'/g,"\\'")+'\')" style="cursor:pointer"':'';
+      return '<tr '+ev+'>'+cols.map(c=>'<td'+(c.center?' class="c"':'')+'>'+(c.render?c.render(r):esc(r[c.key]))+'</td>').join('')+'</tr>';
     };
-    tbody.insertAdjacentHTML('beforeend',rows.map(makeRow).join(''));
-    btn.remove();
-    delete window.__tableHidden[id];
+    let h='<div class="tbl-wrap"><table class="tbl">'+hd+'<tbody id="'+id+'b">'+vis.map(mkRow).join('')+'</tbody></table></div>';
+    if(hid.length){window.__tbl=window.__tbl||{};window.__tbl[id]={rows:hid,cols,rowUrlFn};
+      h+='<button class="show-more" onclick="window.TblMore(\''+id+'\')">&#9660; Show '+hid.length+' more rows</button>';}
+    return h;
   }
-};
-
-function openAllBtn(label,rows,cols,title,rowUrlFn){
-  const id='oa_'+Math.random().toString(36).slice(2,8);
-  window.__openAllData=window.__openAllData||{};
-  window.__openAllData[id]={rows,cols,title,rowUrlFn};
-  return `<button class="badge bb" style="cursor:pointer" onclick="window.Modal.openFromData('${id}')">${esc(label)}</button>`;
-}
-
-window.Components={sumCard,kpiCard,card,table,openAllBtn};
-})();
-// === assets/js/modal.js ===
-(function(){
-'use strict';
-const {esc}=window.U;
-let _rows=[],_cols=[],_filtered=[];
-
-function open({title,subtitle,rows,cols,rowUrlFn}){
-  _rows=rows||[];_cols=cols||[];_filtered=[..._rows];
-  document.getElementById('modalTitle').textContent=title||'Details';
-  document.getElementById('modalSub').textContent=subtitle||(rows.length+' rows');
-  document.getElementById('modalSearch').value='';
-  render(rowUrlFn);
-  document.getElementById('detailModal').style.display='flex';
-  document.body.style.overflow='hidden';
-  window.__modalUrlFn=rowUrlFn||null;
-  document.getElementById('modalSearch').oninput=function(){
-    const q=this.value.toLowerCase();
-    _filtered=q?_rows.filter(r=>Object.values(r).some(v=>String(v||'').toLowerCase().includes(q))):_rows;
-    document.getElementById('modalSub').textContent=`${_filtered.length} / ${_rows.length} rows`;
-    render(window.__modalUrlFn);
+  window.TblMore=function(id){
+    const d=window.__tbl&&window.__tbl[id];if(!d)return;
+    const {rows,cols,rowUrlFn}=d;const {esc,hsUrl}=window.U;
+    const tbody=document.getElementById(id+'b');if(!tbody)return;
+    const mkRow=(r)=>{const url=rowUrlFn?rowUrlFn(r):hsUrl(r);const ev=url?'onclick="window.open(\''+url.replace(/'/g,"\\'")+'\')" style="cursor:pointer"':'';return '<tr '+ev+'>'+cols.map(c=>'<td'+(c.center?' class="c"':'')+'>'+(c.render?c.render(r):esc(r[c.key]))+'</td>').join('')+'</tr>';};
+    tbody.insertAdjacentHTML('beforeend',rows.map(mkRow).join(''));
+    const btn=tbody.closest('.card,.tbl-wrap')?.parentElement?.querySelector('.show-more');
+    if(btn)btn.remove();delete window.__tbl[id];
   };
-  document.getElementById('modalExportBtn').onclick=()=>exportCsv(title);
-}
 
-function openFromData(id){
-  const d=(window.__openAllData||{})[id];
-  if(!d)return;
-  open(d);
-}
+  function card(titleHtml,badgeHtml,bodyHtml){
+    return '<div class="card"><div class="card-hd"><div class="card-title">'+titleHtml+'</div>'+(badgeHtml?'<span class="badge bb">'+badgeHtml+'</span>':'')+'</div>'+bodyHtml+'</div>';
+  }
 
-function render(rowUrlFn){
-  const {esc:e}=window.U;
-  if(!_filtered.length){document.getElementById('modalBody').innerHTML='<div class="modal-empty">No rows to display</div>';return;}
-  const thead=`<thead><tr>${_cols.map(c=>`<th class="${c.center?'c':''}">${e(c.label)}</th>`).join('')}</tr></thead>`;
-  const tbody=_filtered.map(r=>{
-    const url=rowUrlFn?rowUrlFn(r):r._url||r.hubspot_url||r.hubspot_company_url||r.company_url||r.hubspot_search_url||null;
-    const attr=url?`onclick="window.open('${e(url)}','_blank')" style="cursor:pointer"`:'' ;
-    return `<tr ${attr}>${_cols.map(c=>`<td class="${c.center?'c':''}">${c.render?c.render(r):e(r[c.key])}</td>`).join('')}</tr>`;
-  }).join('');
-  document.getElementById('modalBody').innerHTML=`<div class="tbl-wrap"><table class="tbl">${thead}<tbody>${tbody}</tbody></table></div>`;
-}
-
-function exportCsv(title){
-  if(!_filtered.length)return;
-  const headers=_cols.map(c=>c.label);
-  const csvRows=[headers,..._filtered.map(r=>_cols.map(c=>{
-    const v=c.csvVal?c.csvVal(r):(r[c.key]??'');
-    const s=String(v).replace(/"/g,'""');
-    return (s.includes(',') || s.includes('\n'))?`"${s}"`:s;
-  }))];
-  const blob=new Blob([csvRows.map(r=>r.join(',')).join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`${(title||'export').replace(/\s+/g,'_')}.csv`;
-  a.click();
-}
-
-function close(){
-  document.getElementById('detailModal').style.display='none';
-  document.body.style.overflow='';
-}
-
-// Wire close button and backdrop
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('modalCloseBtn').onclick=close;
-  document.getElementById('detailModal').onclick=function(e){if(e.target===this)close();};
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-});
-
-// Delegated card clicks
-document.addEventListener('click',function(e){
-  const card=e.target.closest('[data-onclick]');
-  if(card){try{eval(card.dataset.onclick);}catch(err){console.error(err);}return;}
-  const kpi=e.target.closest('[data-kpi-onclick]');
-  if(kpi){try{eval(kpi.dataset.kpiOnclick);}catch(err){console.error(err);}return;}
-});
-
-window.Modal={open,openFromData,close};
-window.__openAllData={};
+  window.C={sumCard,table,card};
+  window.__tbl={};
 })();
-// === assets/js/modules/acquisition.js ===
+
+/* ── MODAL ── */
 (function(){
+  let _rows=[],_cols=[],_filt=[],_urlFn=null;
+
+  function open({title,subtitle,rows,cols,rowUrlFn}){
+    _rows=rows||[];_cols=cols||[];_filt=[..._rows];_urlFn=rowUrlFn||null;
+    // Auto-infer cols if empty
+    if(!_cols.length&&_rows.length){
+      _cols=Object.keys(_rows[0]).filter(k=>!k.startsWith('_')).map(k=>({label:k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),key:k}));
+    }
+    document.getElementById('modal-title').textContent=title||'Details';
+    document.getElementById('modal-sub').textContent=subtitle||(_rows.length+' rows');
+    document.getElementById('modal-search').value='';
+    render();
+    document.getElementById('detail-modal').style.display='flex';
+    document.body.style.overflow='hidden';
+  }
+  function render(){
+    const {esc,hsUrl}=window.U;
+    if(!_filt.length){document.getElementById('modal-body').innerHTML='<div class="modal-empty">No rows to display</div>';return;}
+    const hd='<thead><tr>'+_cols.map(c=>'<th'+(c.center?' class="c"':'')+'>'+esc(c.label)+'</th>').join('')+'</tr></thead>';
+    const rows=_filt.map(r=>{
+      const url=_urlFn?_urlFn(r):hsUrl(r);
+      const ev=url?'onclick="window.open(\''+url.replace(/'/g,"\\'")+'\')" style="cursor:pointer"':'';
+      return '<tr '+ev+'>'+_cols.map(c=>'<td'+(c.center?' class="c"':'')+'>'+(c.render?c.render(r):esc(r[c.key]))+'</td>').join('')+'</tr>';
+    }).join('');
+    document.getElementById('modal-body').innerHTML='<div class="tbl-wrap"><table class="tbl">'+hd+'<tbody>'+rows+'</tbody></table></div>';
+  }
+  function close(){document.getElementById('detail-modal').style.display='none';document.body.style.overflow='';}
+  function exportCsv(title){
+    if(!_filt.length)return;
+    const headers=_cols.map(c=>c.label);
+    const csvRows=[headers,..._filt.map(r=>_cols.map(c=>{
+      const v=c.csvVal?c.csvVal(r):(r[c.key]??'');
+      const s=String(v).replace(/"/g,'""');
+      return (s.includes(',') || s.indexOf('\n')>=0)?'"'+s+'"':s;
+    }))];
+    const blob=new Blob([csvRows.map(r=>r.join(',')).join('\n')],{type:'text/csv'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=((title||'export').replace(/\s+/g,'_'))+'.csv';a.click();
+  }
+
+  // Wire up after DOM is ready
+  function wire(){
+    const m=document.getElementById('detail-modal');
+    if(!m)return;
+    document.getElementById('modal-close').onclick=close;
+    document.getElementById('modal-export').onclick=()=>exportCsv(document.getElementById('modal-title').textContent);
+    m.onclick=function(e){if(e.target===this)close();};
+    document.getElementById('modal-search').oninput=function(){
+      const q=this.value.toLowerCase();
+      _filt=q?_rows.filter(r=>Object.values(r).some(v=>String(v||'').toLowerCase().includes(q))):_rows;
+      document.getElementById('modal-sub').textContent=_filt.length+' / '+_rows.length+' rows';
+      render();
+    };
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+  }
+
+  window.Modal={open,close,exportCsv};
+  // Wire immediately if DOM ready, else wait
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);
+  else wire();
+})();
+
+/* ── ACQUISITION MODULE ── */
+window.AcqModule=(function(){
 'use strict';
-const {esc,money,num,pct,date,relDate,hsLink,setTitle,setContent,showLoading,unavailable}=window.U;
-const {sumCard,card,table,openAllBtn}=window.Components;
+const {esc,money,num,pct,dt,relDt,hsLink,setTitle,loading,unavail,statusClass}=window.U;
+const {sumCard,table,card}=window.C;
 const {get}=window.State;
+
+/* Owner lists */
+const ACQ_REPS=['Marita Chedid','Zein Fares','Ursula Waked','Ahmad Khawajah',
+  'Mohammad Khalid','Mohammad Jehad Al-Barqawi','Jehad Al-Barqawi'];
+const VIEW_ONLY=['Fadi Zanona','Mohammed Faizan'];
 
 const RANK_COLS=[
   {label:'Rank',key:'rank_group'},{label:'Country',key:'country'},{label:'Owner',key:'owner_name'},
   {label:'Companies',key:'companies',center:true,render:r=>num(r.companies)},
   {label:'Touched',key:'touched_companies',center:true,render:r=>num(r.touched_companies)},
-  {label:'No Touch',key:'no_touch_companies',center:true,render:r=>num(r.no_touch_companies||Math.max(0,(r.companies||0)-(r.touched_companies||0)))},
-  {label:'Touch Rate',key:'touch_rate_pct',center:true,render:r=>pct(r.touch_rate_pct||0)},
-  {label:'Calls',key:'connected_calls',center:true,render:r=>num(r.connected_calls)},
+  {label:'No Touch',key:'no_touch_companies',center:true,render:r=>num(r.no_touch_companies||Math.max(0,Number(r.companies||0)-Number(r.touched_companies||0)))},
+  {label:'Touch %',key:'touch_rate_pct',center:true,render:r=>pct(r.touch_rate_pct||0)},
+  {label:'Connected',key:'connected_calls',center:true,render:r=>num(r.connected_calls)},
   {label:'Meetings',key:'completed_meetings',center:true,render:r=>num(r.completed_meetings)},
 ];
 const NEEDS_COLS=[
-  {label:'Company',key:'company_name',render:r=>r.company_url?`<a class="record-link" href="${esc(r.company_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Company',key:'company_name',render:r=>{const u=r.company_url||r.hubspot_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.company_name)+'</a>':esc(r.company_name);}},
   {label:'Owner',key:'owner_name'},{label:'Country',key:'country'},
-  {label:'Rank',key:'rank',center:true,render:r=>`<span class="${r.rank==='A'?'rank-a':'rank-b'}">${esc(r.rank||'—')}</span>`},
+  {label:'Rank',key:'rank',center:true,render:r=>'<span class="'+(r.rank==='A'?'rank-a':'rank-b')+'">'+esc(r.rank||'—')+'</span>'},
   {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
   {label:'Meetings',key:'completed_meetings',center:true,render:r=>num(r.completed_meetings)},
-  {label:'Last Touch',key:'last_touch_at',center:true,render:r=>relDate(r.last_touch_at)},
+  {label:'Last Touch',key:'last_touch_at',center:true,render:r=>relDt(r.last_touch_at)},
   {label:'Days',key:'days_since_created',center:true,render:r=>num(r.days_since_created)},
   {label:'Open',key:'hubspot_url',center:true,render:r=>hsLink(r.hubspot_url||r.company_url)},
 ];
 const PIPE_COLS=[
-  {label:'Deal',key:'dealname',render:r=>r.hubspot_url?`<a class="record-link" href="${esc(r.hubspot_url)}" target="_blank">${esc(r.dealname)}</a>`:esc(r.dealname)},
+  {label:'Deal',key:'dealname',render:r=>{const u=r.hubspot_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.dealname)+'</a>':esc(r.dealname);}},
   {label:'Owner',key:'owner_name'},{label:'Stage',key:'dealstage'},{label:'Product',key:'product'},
   {label:'Amount',key:'amount',center:true,render:r=>money(r.amount)},
-  {label:'Close',key:'closedate',center:true,render:r=>date(r.closedate)},
-  {label:'Next Act.',key:'next_activity_date',center:true,render:r=>relDate(r.next_activity_date)},
+  {label:'Close',key:'closedate',center:true,render:r=>dt(r.closedate)},
   {label:'Open',key:'hubspot_url',center:true,render:r=>hsLink(r.hubspot_url)},
 ];
 const STUCK_COLS=[
-  {label:'Deal',key:'dealname',render:r=>r.hubspot_url?`<a class="record-link" href="${esc(r.hubspot_url)}" target="_blank">${esc(r.dealname)}</a>`:esc(r.dealname)},
+  {label:'Deal',key:'dealname',render:r=>{const u=r.hubspot_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.dealname)+'</a>':esc(r.dealname);}},
   {label:'Owner',key:'owner_name'},{label:'Stage',key:'dealstage'},
-  {label:'Days in Stage',key:'days_in_stage',center:true,render:r=>`<span style="color:${r.days_in_stage>30?'var(--red)':r.days_in_stage>14?'var(--amber)':'var(--text2)'};font-family:var(--mono);font-weight:900">${num(r.days_in_stage)}</span>`},
+  {label:'Days',key:'days_in_stage',center:true,render:r=>'<span style="color:'+(Number(r.days_in_stage)>30?'var(--red)':Number(r.days_in_stage)>14?'var(--amber)':'var(--text2)')+'";font-family:var(--mono);font-weight:900">'+num(r.days_in_stage)+'</span>'},
   {label:'Amount',key:'amount',center:true,render:r=>money(r.amount)},
   {label:'Open',key:'hubspot_url',center:true,render:r=>hsLink(r.hubspot_url)},
 ];
@@ -768,7 +687,7 @@ const KPI_COLS=[
   {label:'Connected',key:'connected_calls',center:true,render:r=>num(r.connected_calls)},
   {label:'Meetings',key:'meetings_logged',center:true,render:r=>num(r.meetings_logged)},
   {label:'Completed',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
-  {label:'Conn Rate',key:'connection_rate',center:true,render:r=>pct(r.connection_rate||0)},
+  {label:'Conn%',key:'connection_rate',center:true,render:r=>pct(r.connection_rate||0)},
 ];
 const REP_COLS=[
   {label:'Owner',key:'owner_name'},
@@ -776,18 +695,42 @@ const REP_COLS=[
   {label:'Connected',key:'connected_calls',center:true,render:r=>num(r.connected_calls)},
   {label:'Meetings',key:'meetings_logged',center:true,render:r=>num(r.meetings_logged)},
   {label:'Completed',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
-  {label:'Last Activity',key:'last_activity_at',center:true,render:r=>relDate(r.last_activity_at)},
+  {label:'Last Activity',key:'last_activity_at',center:true,render:r=>relDt(r.last_activity_at)},
 ];
+
+/* Build sidebar reps */
+function buildSidebar(reps){
+  const el=document.getElementById('sideRepLinks');
+  const titleEl=document.getElementById('sideRepTitle');
+  if(titleEl)titleEl.textContent='Acquisition Reps';
+  if(!el)return;
+  const repMap={};
+  (reps||[]).forEach(r=>repMap[r.owner_name]=r);
+  const mkBtn=(name,isView)=>{
+    const r=repMap[name]||{};
+    const cls='nav-btn sub'+(isView?' view-only':'');
+    const chip=isView?'<span class="nav-chip chip-view">VIEW</span>':'<span class="nav-chip chip-acq">'+num(r.meetings_completed||0)+'</span>';
+    return '<button class="'+cls+'" data-route="acq-rep" data-rep="'+esc(name)+'"><span class="nav-icon">👤</span>'+esc(name.split(' ')[0])+chip+'</button>';
+  };
+  el.innerHTML=ACQ_REPS.map(n=>mkBtn(n,false)).join('')+VIEW_ONLY.map(n=>mkBtn(n,true)).join('');
+  el.querySelectorAll('[data-rep]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderRep(btn.dataset.rep);
+    });
+  });
+}
 
 async function render(){
   setTitle('Acquisition · Team Overview','Coverage, activity quality and pipeline health');
-  showLoading('Loading Acquisition…');
+  loading('Loading Acquisition…');
 
   const [snapR,kpiR,repsR,rankR,needsR,pipeR,stuckR]=await Promise.allSettled([
     get('vw_dash_acq_team_fast',1),
-    get('vw_acquisition_kpi_snapshot_periods',10).catch(()=>get('vw_dash_acq_kpi_fast',10)),
+    get('vw_dash_acq_kpi_fast',10),
     get('vw_dash_acq_sidebar_fast',50),
-    get('vw_dash_acq_rank_fast',200),
+    get('vw_dash_acq_rank_fast',500),
     get('vw_dash_acq_needs_fast',2000),
     get('vw_acquisition_pipeline_details',500),
     get('vw_acquisition_stuck_deals',200),
@@ -801,261 +744,294 @@ async function render(){
   const pipe=pipeR.status==='fulfilled'?pipeR.value:[];
   const stuck=stuckR.status==='fulfilled'?stuckR.value:[];
 
-  // Update sidebar
-  const repEl=document.getElementById('sideRepLinks');
-  if(repEl&&reps.length){
-    repEl.innerHTML=reps.map(r=>`<button class="nav-item nav-sub" style="font-size:11px">
-      <span class="nav-icon">👤</span>${esc(r.owner_name)}<span class="nav-badge">${num(r.meetings_completed||0)}</span>
-    </button>`).join('');
-  }
+  buildSidebar(reps);
 
-  // Derived
   const rankA=rank.filter(r=>String(r.rank_group).toUpperCase()==='A');
   const rankB=rank.filter(r=>String(r.rank_group).toUpperCase()==='B');
   const aTotal=rankA.reduce((s,r)=>s+Number(r.companies||0),0);
   const aTouched=rankA.reduce((s,r)=>s+Number(r.touched_companies||0),0);
-  const aNoTouch=rankA.reduce((s,r)=>s+Number(r.no_touch_companies||0),0);
+  const aNoTouch=rankA.reduce((s,r)=>s+Number(r.no_touch_companies||Math.max(0,r.companies-r.touched_companies)||0),0);
   const bTotal=rankB.reduce((s,r)=>s+Number(r.companies||0),0);
-  const bTouched=rankB.reduce((s,r)=>s+Number(r.touched_companies||0),0);
-  const bNoTouch=rankB.reduce((s,r)=>s+Number(r.no_touch_companies||0),0);
+  const bNoTouch=rankB.reduce((s,r)=>s+Number(r.no_touch_companies||Math.max(0,r.companies-r.touched_companies)||0),0);
   const pipeVal=pipe.reduce((s,r)=>s+Number(r.amount||0),0);
-  const repsModal=()=>window.Modal.open({title:'Rep Performance',rows:reps,cols:REP_COLS});
-  const needsModal=()=>window.Modal.open({title:'Needs Contact',rows:needs,cols:NEEDS_COLS,rowUrlFn:r=>r.hubspot_url||r.company_url});
-  const rankAModal=()=>window.Modal.open({title:'Rank A Coverage',rows:rankA,cols:RANK_COLS});
-  const rankBModal=()=>window.Modal.open({title:'Rank B Coverage',rows:rankB,cols:RANK_COLS});
-  const pipeModal=()=>window.Modal.open({title:'Open Pipeline',rows:pipe,cols:PIPE_COLS,rowUrlFn:r=>r.hubspot_url});
-  const stuckModal=()=>window.Modal.open({title:'Stuck Deals',rows:stuck,cols:STUCK_COLS,rowUrlFn:r=>r.hubspot_url});
-  const kpiModal=()=>kpi&&window.Modal.open({title:'Activity KPIs',rows:kpi,cols:KPI_COLS});
 
-  // Register modal helpers
-  window._acq={repsModal,needsModal,rankAModal,rankBModal,pipeModal,stuckModal,kpiModal};
+  /* Store data globally for modal callbacks */
+  window._acqData={snap,kpi,reps,rank,rankA,rankB,needs,pipe,stuck};
 
-  const summaryCards=`<div class="summary-grid">
-    ${sumCard('Total Companies',num(snap.total_companies),'HubSpot','var(--blue)')}
-    ${sumCard('Contacted',num(snap.contacted_companies),pct(snap.contacted_pct||0)+' coverage','var(--green)','window._acq.rankAModal()')}
-    ${sumCard('Needs Contact',num(snap.needs_contact_companies||needs.length),'No activity','var(--amber)','window._acq.needsModal()')}
-    ${sumCard('Meetings Done',num(snap.completed_meetings),'Completed','var(--purple)','window._acq.repsModal()')}
-    ${sumCard('Rank A',num(aTotal),aTouched+' touched','var(--red)','window._acq.rankAModal()')}
-    ${sumCard('Rank A Untouched',num(aNoTouch),'Need contact','var(--red)','window._acq.rankAModal()')}
-    ${sumCard('Rank B',num(bTotal),bTouched+' touched','var(--amber)','window._acq.rankBModal()')}
-    ${sumCard('Open Pipeline',money(pipeVal),pipe.length+' deals','var(--cyan)','window._acq.pipeModal()')}
-  </div>`;
-
-  const focusStrip=`<div class="focus-strip">
+  const focus=`<div class="focus-strip">
     <div class="focus-top">
       <div><div class="focus-title">Today's Acquisition Focus</div>
         <div class="focus-sub">Team coverage, rank A/B reach, lead contact quality and pipeline health</div></div>
-      <div class="focus-date">Live Snapshot<span class="focus-date-val">${new Date().toLocaleString('en-SA',{timeZone:'Asia/Riyadh'})}</span></div>
+      <div class="focus-ts">Live snapshot<span class="focus-ts-val">${new Date().toLocaleString('en-SA',{timeZone:'Asia/Riyadh'})}</span></div>
     </div>
-    <div class="focus-grid">
-      <div class="focus-pill" style="--fp-c:var(--amber)" onclick="window._acq.needsModal()">
-        <div class="focus-pill-value">${num(snap.needs_contact_companies||needs.length)}</div>
-        <div class="focus-pill-label">Needs Contact</div>
-        <div class="focus-pill-sub">Companies, no activity</div>
+    <div class="focus-pills">
+      <div class="focus-pill" style="--fp-c:var(--amber)" onclick="Modal.open({title:'Needs Contact',rows:window._acqData.needs,cols:[]})">
+        <div class="focus-pill-v">${num(snap.needs_contact_companies||needs.length)}</div>
+        <div class="focus-pill-l">Needs Contact</div><div class="focus-pill-s">No activity logged</div>
       </div>
-      <div class="focus-pill" style="--fp-c:var(--red)" onclick="window._acq.rankAModal()">
-        <div class="focus-pill-value">${num(aNoTouch)}</div>
-        <div class="focus-pill-label">Rank A Untouched</div>
-        <div class="focus-pill-sub">${num(aTotal)} total Rank A</div>
+      <div class="focus-pill" style="--fp-c:var(--red)" onclick="Modal.open({title:'Rank A Untouched',rows:window._acqData.rankA.filter(r=>Number(r.no_touch_companies||0)>0),cols:[]})">
+        <div class="focus-pill-v">${num(aNoTouch)}</div>
+        <div class="focus-pill-l">Rank A Untouched</div><div class="focus-pill-s">${num(aTotal)} total Rank A</div>
       </div>
-      <div class="focus-pill" style="--fp-c:var(--red)" onclick="window._acq.stuckModal()">
-        <div class="focus-pill-value">${num(stuck.length)}</div>
-        <div class="focus-pill-label">Stuck Deals</div>
-        <div class="focus-pill-sub">Need attention</div>
+      <div class="focus-pill" style="--fp-c:var(--red)" onclick="Modal.open({title:'Stuck Deals',rows:window._acqData.stuck,cols:[]})">
+        <div class="focus-pill-v">${num(stuck.length)}</div>
+        <div class="focus-pill-l">Stuck Deals</div><div class="focus-pill-s">Require attention</div>
       </div>
-      <div class="focus-pill" style="--fp-c:var(--green)" onclick="window._acq.repsModal()">
-        <div class="focus-pill-value">${pct(snap.contacted_pct||0)}</div>
-        <div class="focus-pill-label">Contact Rate</div>
-        <div class="focus-pill-sub">${num(snap.contacted_companies)} contacted</div>
+      <div class="focus-pill" style="--fp-c:var(--green)" onclick="Modal.open({title:'Rep Performance',rows:window._acqData.reps,cols:[]})">
+        <div class="focus-pill-v">${pct(snap.contacted_pct||0)}</div>
+        <div class="focus-pill-l">Contact Rate</div><div class="focus-pill-s">${num(snap.contacted_companies)} contacted</div>
       </div>
     </div>
-    <div class="command-health-grid">
-      <div class="command-card">
-        <div class="command-card-top"><div class="command-card-title">Revenue Health</div><span class="command-card-accent" style="background:var(--green)"></span></div>
-        <div class="command-main-value" style="color:var(--green)">${money(pipeVal)}</div>
-        <div class="command-main-label">Open Pipeline</div>
-        <div class="command-sub-row">
-          <div><div class="command-mini-v" style="color:var(--green)">${num(pipe.filter(r=>r.deal_status==='Won'||/won/i.test(r.dealstage)).length)}</div><div class="command-mini-l">Won Deals</div></div>
-          <div><div class="command-mini-v" style="color:var(--red)">${num(stuck.length)}</div><div class="command-mini-l">Stuck</div></div>
-        </div>
+    <div class="focus-health">
+      <div class="fh-card"><div class="fh-accent" style="background:var(--green)"></div>
+        <div class="fh-title">Pipeline Health</div>
+        <div class="fh-val" style="color:var(--green)" onclick="Modal.open({title:'Open Pipeline',rows:window._acqData.pipe,cols:[]})" style="cursor:pointer">${money(pipeVal)}</div>
+        <div class="fh-lbl">Open Pipeline Value</div>
+        <div class="fh-sub"><div><div class="fh-mini-v" style="color:var(--green)">${num(pipe.length)}</div><div class="fh-mini-l">Open Deals</div></div>
+          <div><div class="fh-mini-v" style="color:var(--red)">${num(stuck.length)}</div><div class="fh-mini-l">Stuck</div></div></div>
       </div>
-      <div class="command-card">
-        <div class="command-card-top"><div class="command-card-title">Outreach Health</div><span class="command-card-accent" style="background:var(--cyan)"></span></div>
-        <div class="command-main-value" style="color:var(--cyan)">${pct(snap.contacted_pct||0)}</div>
-        <div class="command-main-label">Contact Rate</div>
-        <div class="command-bar"><div class="command-bar-fill" style="background:var(--cyan);width:${Math.min(100,Number(snap.contacted_pct||0))}%"></div></div>
-        <div class="command-sub-row">
-          <div><div class="command-mini-v" style="color:var(--green)">${num(snap.contacted_companies)}</div><div class="command-mini-l">Contacted</div></div>
-          <div><div class="command-mini-v" style="color:var(--red)">${num(snap.needs_contact_companies||needs.length)}</div><div class="command-mini-l">Not Contacted</div></div>
-        </div>
+      <div class="fh-card"><div class="fh-accent" style="background:var(--cyan)"></div>
+        <div class="fh-title">Contact Coverage</div>
+        <div class="fh-val" style="color:var(--cyan)">${pct(snap.contacted_pct||0)}</div>
+        <div class="fh-lbl">Coverage Rate</div>
+        <div class="fh-bar"><div class="fh-fill" style="background:var(--cyan);width:${Math.min(100,Number(snap.contacted_pct||0))}%"></div></div>
+        <div class="fh-sub"><div><div class="fh-mini-v" style="color:var(--green)">${num(snap.contacted_companies)}</div><div class="fh-mini-l">Contacted</div></div>
+          <div><div class="fh-mini-v" style="color:var(--amber)">${num(snap.needs_contact_companies||needs.length)}</div><div class="fh-mini-l">Not Contacted</div></div></div>
       </div>
-      <div class="command-card">
-        <div class="command-card-top"><div class="command-card-title">Rep Execution</div><span class="command-card-accent" style="background:var(--blue)"></span></div>
-        <div class="command-main-value" style="color:var(--blue)" onclick="window._acq.kpiModal()" style="cursor:pointer">${num(snap.calls_logged)}</div>
-        <div class="command-main-label">Calls Logged</div>
-        <div class="command-sub-row">
-          <div><div class="command-mini-v" style="color:var(--green)">${num(snap.connected_calls)}</div><div class="command-mini-l">Connected</div></div>
-          <div><div class="command-mini-v" style="color:var(--purple)">${num(snap.completed_meetings)}</div><div class="command-mini-l">Meetings Done</div></div>
-        </div>
+      <div class="fh-card"><div class="fh-accent" style="background:var(--blue)"></div>
+        <div class="fh-title">Rep Execution</div>
+        <div class="fh-val" style="color:var(--blue);cursor:pointer" onclick="Modal.open({title:'Activity KPIs',rows:window._acqData.kpi||[],cols:[]})">${num(snap.calls_logged)}</div>
+        <div class="fh-lbl">Calls Logged</div>
+        <div class="fh-sub"><div><div class="fh-mini-v" style="color:var(--green)">${num(snap.connected_calls)}</div><div class="fh-mini-l">Connected</div></div>
+          <div><div class="fh-mini-v" style="color:var(--purple)">${num(snap.completed_meetings)}</div><div class="fh-mini-l">Meetings Done</div></div></div>
       </div>
     </div>
-    <div class="focus-row"><span>▶</span> <span id="focusText">Fetching focus insight…</span></div>
+    <div class="focus-insight" id="acq-insight">Calculating focus…</div>
   </div>`;
 
-  // KPI table
-  let kpiSection='';
-  if(kpi){
-    kpiSection=`<div class="manager-section-label">Activity KPIs — Yesterday · MTD · YTD</div>
-    ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Activity KPI Snapshot',
-      `<button class="badge bb" onclick="window._acq.kpiModal()">Open All</button>`,
-      table(kpi,KPI_COLS,10))}`;
-  } else {
-    kpiSection=unavailable('vw_acquisition_kpi_snapshot_periods',kpiR.reason?.message||'');
-  }
+  const summaryCards=`<div class="sum-grid">
+    ${sumCard('Total Companies',num(snap.total_companies),'HubSpot','var(--blue)','Modal.open({title:"All Companies",rows:window._acqData.rank,cols:[]})')}
+    ${sumCard('Contacted',num(snap.contacted_companies),pct(snap.contacted_pct||0),'var(--green)','Modal.open({title:"Contacted",rows:window._acqData.rankA.filter(r=>r.touched_companies>0),cols:[]})')}
+    ${sumCard('Needs Contact',num(snap.needs_contact_companies||needs.length),'No activity','var(--amber)','Modal.open({title:"Needs Contact",rows:window._acqData.needs,cols:[]})')}
+    ${sumCard('Meetings Done',num(snap.completed_meetings),'Completed','var(--purple)','Modal.open({title:"Rep Performance",rows:window._acqData.reps,cols:[]})')}
+    ${sumCard('Rank A',num(aTotal),aTouched+' touched','var(--red)','Modal.open({title:"Rank A Coverage",rows:window._acqData.rankA,cols:[]})')}
+    ${sumCard('Rank A Untouched',num(aNoTouch),'Priority outreach','var(--red)','Modal.open({title:"Rank A Untouched",rows:window._acqData.rankA.filter(r=>Number(r.no_touch_companies||0)>0),cols:[]})')}
+    ${sumCard('Rank B Untouched',num(bNoTouch),'Need contact','var(--amber)','Modal.open({title:"Rank B Untouched",rows:window._acqData.rankB.filter(r=>Number(r.no_touch_companies||0)>0),cols:[]})')}
+    ${sumCard('Open Pipeline',money(pipeVal),pipe.length+' deals','var(--cyan)','Modal.open({title:"Open Pipeline",rows:window._acqData.pipe,cols:[]})')}
+  </div>`;
 
-  // Rank A/B coverage
-  const rankSection=`<div class="manager-section-label">Rank A/B Coverage</div>
+  /* KPI Section */
+  const kpiSection=kpi
+    ?`<div class="section-lbl">Activity KPIs — Yesterday · MTD · YTD</div>
+      ${card('<div class="card-icon" style="background:var(--blue-bg)">📊</div> Activity KPI Snapshot',
+        '<button class="badge bb" onclick="Modal.open({title:\'Activity KPIs\',rows:window._acqData.kpi,cols:[]})">Open All</button>',
+        table(kpi,KPI_COLS,10))}`
+    :`<div class="section-lbl">Activity KPIs</div>${unavail('vw_dash_acq_kpi_fast',kpiR.reason?.message)}`;
+
+  /* Rank A/B */
+  const mkRankMini=(rows,color)=>`<div class="rank-mini">
+    ${[['Touched',rows.reduce((s,r)=>s+Number(r.touched_companies||0),0),'var(--green)'],
+       ['Untouched',rows.reduce((s,r)=>s+Number(r.no_touch_companies||Math.max(0,r.companies-r.touched_companies)||0),0),color],
+       ['Meetings',rows.reduce((s,r)=>s+Number(r.completed_meetings||0),0),'var(--purple)'],
+       ['Connected',rows.reduce((s,r)=>s+Number(r.connected_calls||0),0),'var(--cyan)'],
+       ['Coverage',rows.reduce((s,r)=>s+Number(r.companies||0),0)>0?pct(rows.reduce((s,r)=>s+Number(r.touched_companies||0),0)/rows.reduce((s,r)=>s+Number(r.companies||0),0)*100):'—','var(--blue)'],
+       ['Countries',[...new Set(rows.map(r=>r.country))].length,'var(--text2)'],
+    ].map(([l,v,c])=>`<div class="rank-box" onclick="Modal.open({title:'${l}',rows:window._acqData.rank,cols:[]})"><div class="rank-box-v" style="color:${c}">${typeof v==='number'?num(v):v}</div><div class="rank-box-l">${l}</div></div>`).join('')}
+  </div>`;
+
+  const rankSection=`<div class="section-lbl">Rank A/B Coverage</div>
   <div class="two-col">
-    ${card(`<div class="card-title-icon" style="background:var(--red-bg)">🎯</div> Rank A Coverage`,
-      `<span class="rank-a">${num(aTotal)} total</span>`,
-      `<div class="acq-rank-grid">
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--green)">${num(aTouched)}</div><div class="acq-rank-l">Touched</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--red)">${num(aNoTouch)}</div><div class="acq-rank-l">Untouched</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--purple)">${num(rankA.reduce((s,r)=>s+Number(r.completed_meetings||0),0))}</div><div class="acq-rank-l">Meetings</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--cyan)">${num(rankA.reduce((s,r)=>s+Number(r.connected_calls||0),0))}</div><div class="acq-rank-l">Connected</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--blue)">${aTotal>0?pct((aTouched/aTotal)*100):'—'}</div><div class="acq-rank-l">Coverage</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankAModal()"><div class="acq-rank-v" style="color:var(--text2)">${[...new Set(rankA.map(r=>r.country))].length}</div><div class="acq-rank-l">Countries</div></div>
-      </div>
-      ${table(rankA,RANK_COLS,5)}`)}
-    ${card(`<div class="card-title-icon" style="background:var(--amber-bg)">🎯</div> Rank B Coverage`,
-      `<span class="rank-b">${num(bTotal)} total</span>`,
-      `<div class="acq-rank-grid">
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--green)">${num(bTouched)}</div><div class="acq-rank-l">Touched</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--amber)">${num(bNoTouch)}</div><div class="acq-rank-l">Untouched</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--purple)">${num(rankB.reduce((s,r)=>s+Number(r.completed_meetings||0),0))}</div><div class="acq-rank-l">Meetings</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--cyan)">${num(rankB.reduce((s,r)=>s+Number(r.connected_calls||0),0))}</div><div class="acq-rank-l">Connected</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--blue)">${bTotal>0?pct((bTouched/bTotal)*100):'—'}</div><div class="acq-rank-l">Coverage</div></div>
-        <div class="acq-rank-box" onclick="window._acq.rankBModal()"><div class="acq-rank-v" style="color:var(--text2)">${[...new Set(rankB.map(r=>r.country))].length}</div><div class="acq-rank-l">Countries</div></div>
-      </div>
-      ${table(rankB,RANK_COLS,5)}`)}
+    ${card('<div class="card-icon" style="background:var(--red-bg)">🎯</div> Rank A Coverage <span class="rank-a">'+num(aTotal)+' total</span>','',
+      mkRankMini(rankA,'var(--red)')+table(rankA,RANK_COLS,5,r=>r.company_url||r.hubspot_url))}
+    ${card('<div class="card-icon" style="background:var(--amber-bg)">🎯</div> Rank B Coverage <span class="rank-b">'+num(bTotal)+' total</span>','',
+      mkRankMini(rankB,'var(--amber)')+table(rankB,RANK_COLS,5,r=>r.company_url||r.hubspot_url))}
   </div>`;
 
-  // Needs Contact
-  const needsSection=`<div class="manager-section-label">Needs Contact</div>
-  ${card(`<div class="card-title-icon" style="background:var(--amber-bg)">📋</div> Companies Needing Contact`,
-    `<button class="badge ba" onclick="window._acq.needsModal()">Open All ${needs.length}</button>`,
+  const needsSection=`<div class="section-lbl">Needs Contact</div>
+  ${card('<div class="card-icon" style="background:var(--amber-bg)">📋</div> Companies Needing Contact',
+    '<button class="badge ba" onclick="Modal.open({title:\'Needs Contact\',rows:window._acqData.needs,cols:[]})">Open All '+needs.length+'</button>',
     table(needs,NEEDS_COLS,8,r=>r.hubspot_url||r.company_url))}`;
 
-  // Pipeline
-  const pipeSection=`<div class="manager-section-label">Pipeline</div>
+  const pipeSection=`<div class="section-lbl">Pipeline</div>
   <div class="two-col">
-    ${card(`<div class="card-title-icon" style="background:var(--green-bg)">💼</div> Open Pipeline`,
-      `<button class="badge bg" onclick="window._acq.pipeModal()">Open All ${pipe.length}</button>`,
+    ${card('<div class="card-icon" style="background:var(--green-bg)">💼</div> Open Pipeline',
+      '<button class="badge bg" onclick="Modal.open({title:\'Open Pipeline\',rows:window._acqData.pipe,cols:[]})">Open All '+pipe.length+'</button>',
       table(pipe,PIPE_COLS,6,r=>r.hubspot_url))}
-    ${card(`<div class="card-title-icon" style="background:var(--red-bg)">⚠️</div> Stuck Deals`,
-      `<button class="badge br" onclick="window._acq.stuckModal()">Open All ${stuck.length}</button>`,
+    ${card('<div class="card-icon" style="background:var(--red-bg)">⚠️</div> Stuck Deals',
+      '<button class="badge br" onclick="Modal.open({title:\'Stuck Deals\',rows:window._acqData.stuck,cols:[]})">Open All '+stuck.length+'</button>',
       table(stuck,STUCK_COLS,6,r=>r.hubspot_url))}
   </div>`;
 
-  // Rep performance
-  const repSection=`<div class="manager-section-label">Rep Performance</div>
-  ${card(`<div class="card-title-icon" style="background:var(--blue-bg)">👥</div> Rep Performance`,
-    `<button class="badge bb" onclick="window._acq.repsModal()">Open All</button>`,
+  const repSection=`<div class="section-lbl">Rep Performance</div>
+  ${card('<div class="card-icon" style="background:var(--blue-bg)">👥</div> Rep Performance',
+    '<button class="badge bb" onclick="Modal.open({title:\'All Reps\',rows:window._acqData.reps,cols:[]})">Open All</button>',
     table(reps,REP_COLS,10))}`;
 
-  setContent(focusStrip+summaryCards+kpiSection+rankSection+needsSection+pipeSection+repSection);
+  window.U.setContent(focus+summaryCards+kpiSection+rankSection+needsSection+pipeSection+repSection);
 
-  // Focus text
-  const fEl=document.getElementById('focusText');
-  if(fEl){
+  /* Set insight */
+  setTimeout(()=>{
+    const el=document.getElementById('acq-insight');if(!el)return;
     const un=Number(snap.needs_contact_companies||needs.length);
-    const st=stuck.length;
-    if(un>100) fEl.innerHTML=`<strong>Lead Outreach</strong> — ${num(un)} companies still need contact.`;
-    else if(aNoTouch>20) fEl.innerHTML=`<strong>Account Coverage</strong> — ${num(aNoTouch)} Rank A accounts untouched.`;
-    else if(st>5) fEl.innerHTML=`<strong>Pipeline Hygiene</strong> — ${st} stuck deals need attention.`;
-    else fEl.innerHTML=`<strong>On Track</strong> — no critical gaps detected.`;
-  }
+    if(aNoTouch>20)el.innerHTML='<strong>Priority:</strong> '+num(aNoTouch)+' Rank A accounts untouched — outreach needed.';
+    else if(un>50)el.innerHTML='<strong>Focus:</strong> '+num(un)+' companies still need first contact.';
+    else if(stuck.length>5)el.innerHTML='<strong>Pipeline hygiene:</strong> '+stuck.length+' stuck deals need action.';
+    else el.innerHTML='<strong>On Track</strong> — no critical gaps detected today.';
+  },100);
 }
 
-window.AcquisitionModule={render};
+async function renderRep(ownerName){
+  const isView=VIEW_ONLY.includes(ownerName);
+  setTitle('Acquisition · '+ownerName,isView?'View Only':'Rep Overview');
+  loading('Loading '+ownerName+'…');
+
+  const [repsR,pipeR,stuckR,rankR]=await Promise.allSettled([
+    get('vw_dash_acq_sidebar_fast',50),
+    get('vw_acquisition_pipeline_details',500),
+    get('vw_acquisition_stuck_deals',200),
+    get('vw_dash_acq_rank_fast',500),
+  ]);
+
+  const reps=repsR.status==='fulfilled'?repsR.value:[];
+  const pipe=pipeR.status==='fulfilled'?pipeR.value.filter(r=>r.owner_name===ownerName):[];
+  const stuck=stuckR.status==='fulfilled'?stuckR.value.filter(r=>r.owner_name===ownerName):[];
+  const rank=rankR.status==='fulfilled'?rankR.value.filter(r=>r.owner_name===ownerName):[];
+  const rep=reps.find(r=>r.owner_name===ownerName)||{};
+
+  window._repData={pipe,stuck,rank,rep};
+
+  const banner=isView?'<div class="unavail">👁 View Only — '+esc(ownerName)+' is in read-only mode.</div>':'';
+
+  const cards=`<div class="sum-grid g4">
+    ${sumCard('Calls Logged',num(rep.calls_logged),'Total calls','var(--blue)','')}
+    ${sumCard('Connected',num(rep.connected_calls),'Connected calls','var(--cyan)','')}
+    ${sumCard('Meetings Done',num(rep.meetings_completed),'Completed','var(--purple)','')}
+    ${sumCard('Open Deals',num(pipe.length),money(pipe.reduce((s,r)=>s+Number(r.amount||0),0)),'var(--green)','Modal.open({title:"Open Deals",rows:window._repData.pipe,cols:[]})')}
+  </div>`;
+
+  const pipeSection=card('<div class="card-icon" style="background:var(--green-bg)">💼</div> Open Pipeline — '+esc(ownerName),
+    '<button class="badge bg" onclick="Modal.open({title:\'Pipeline\',rows:window._repData.pipe,cols:[]})">All '+pipe.length+'</button>',
+    table(pipe,PIPE_COLS,10,r=>r.hubspot_url));
+
+  const stuckSection=stuck.length?card('<div class="card-icon" style="background:var(--red-bg)">⚠️</div> Stuck Deals — '+esc(ownerName),'',table(stuck,STUCK_COLS,10,r=>r.hubspot_url)):'';
+
+  window.U.setContent(banner+cards+pipeSection+(stuckSection?'<div class="section-lbl">Stuck</div>'+stuckSection:''));
+}
+
+return {render,renderRep,buildSidebar};
 })();
-// === assets/js/modules/retention-team.js ===
-(function(){
+
+/* ── RETENTION TEAM MODULE ── */
+window.RetModule=(function(){
 'use strict';
-const {esc,money,num,pct,date,relDate,hsLink,setTitle,setContent,showLoading,unavailable,statusClass}=window.U;
-const {card,table}=window.Components;
+const {esc,money,num,pct,dt,relDt,hsLink,setTitle,loading,unavail,statusClass}=window.U;
+const {sumCard,table,card}=window.C;
 const {get}=window.State;
 
+/* Retention owners (loaded from views, these are fallbacks) */
+const KNOWN_RM=['Fadi','Mohammad','Mohammed','Hatem'];
+const KNOWN_CSM=['Darshna','Haia','Maryam','Sarah'];
+
 const RENEWAL_COLS=[
-  {label:'Account',key:'company_name',render:r=>r.hubspot_search_url?`<a class="record-link" href="${esc(r.hubspot_search_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Account',key:'company_name',render:r=>{const u=r.hubspot_search_url||r.hubspot_company_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.company_name)+'</a>':esc(r.company_name);}},
   {label:'Product',key:'product'},{label:'RM',key:'rm_owner'},{label:'CSM',key:'csm_owner'},
-  {label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
-  {label:'Month',key:'month',center:true},{label:'Renewal Date',key:'renewal_date',center:true,render:r=>date(r.renewal_date)},
+  {label:'Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Month',key:'month',center:true},{label:'Renewal Date',key:'renewal_date',center:true,render:r=>dt(r.renewal_date)},
   {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
   {label:'Collected',key:'collected_value',center:true,render:r=>money(r.collected_value)},
-  {label:'Status',key:'status',center:true,render:r=>{const s=r.renewal_status||r.status||'';const c=statusClass(s);return `<span class="fin-status ${c}">${esc(s)}</span>`;}},
-  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url)},
+  {label:'Status',key:'renewal_status',center:true,render:r=>{const s=r.renewal_status||r.status||'';return '<span class="fin-pill '+statusClass(s)+'">'+esc(s)+'</span>';}},
+  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url||r.hubspot_company_url)},
 ];
-const FOLLOW_COLS=[
-  {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
-  {label:'Account',key:'company_name',render:r=>r.hubspot_company_url?`<a class="record-link" href="${esc(r.hubspot_company_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
-  {label:'Tier',key:'tier_group'},{label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
-  {label:'Last Activity',key:'last_activity_at',center:true,render:r=>relDate(r.last_activity_at)},
-  {label:'Days',key:'days_since_last_activity',center:true,render:r=>num(r.days_since_last_activity)},
-  {label:'Alert',key:'alert'},{label:'Open',key:'hubspot_company_url',center:true,render:r=>hsLink(r.hubspot_company_url)},
+const KPI_COLS=[
+  {label:'Period',key:'period'},
+  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
+  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
+  {label:'Booked #',key:'booked_count',center:true,render:r=>num(r.booked_count)},
+  {label:'Booked $',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Cashed #',key:'cashed_count',center:true,render:r=>num(r.cashed_count)},
+  {label:'Cashed $',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
+  {label:'Delayed',key:'delayed_count',center:true,render:r=>'<span style="color:var(--red);font-weight:900">'+num(r.delayed_count)+'</span>'},
 ];
 const MONTH_COLS=[
   {label:'Month',key:'month'},{label:'Year',key:'year',center:true},
   {label:'Due',key:'due_accounts',center:true,render:r=>num(r.due_accounts)},
   {label:'Renewal Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
   {label:'Booked',key:'booked_accounts',center:true,render:r=>num(r.booked_accounts)},
+  {label:'Booked $',key:'booked_value',center:true,render:r=>money(r.booked_value)},
   {label:'Cashed',key:'cashed_accounts',center:true,render:r=>num(r.cashed_accounts)},
-  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--green)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
+  {label:'Cashed $',key:'cash_collected',center:true,render:r=>money(r.cash_collected||0)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>'<span style="color:'+(Number(r.delayed_accounts)>0?'var(--red)':'var(--text2)')+'";font-weight:900">'+num(r.delayed_accounts)+'</span>'},
   {label:'Renewed Late',key:'renewed_late_accounts',center:true,render:r=>num(r.renewed_late_accounts||0)},
   {label:'Lost',key:'lost_accounts',center:true,render:r=>num(r.lost_accounts||0)},
+];
+const COV_COLS=[
+  {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
+  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>'<span style="color:'+(Number(r.delayed_accounts)>0?'var(--red)':'var(--green)')+'";font-weight:900">'+num(r.delayed_accounts)+'</span>'},
+  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
+  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
+  {label:'Call Coverage',key:'call_coverage_score',center:true,render:r=>'<span style="color:'+(Number(r.call_coverage_score)>=70?'var(--green)':Number(r.call_coverage_score)>=40?'var(--amber)':'var(--red)')+'">'+pct(r.call_coverage_score)+'</span>'},
 ];
 const CHURN_COLS=[
   {label:'Reason',key:'reason'},
   {label:'Deals',key:'deals',center:true,render:r=>num(r.deals)},
   {label:'Value',key:'value',center:true,render:r=>money(r.value)},
-  {label:'Top Account',key:'top_account'},{label:'Status',key:'status'},
+  {label:'Top Account',key:'top_account'},
 ];
-const COV_COLS=[
+const FOLLOW_COLS=[
   {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
-  {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
-  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--green)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
-  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
-  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
-  {label:'Call Coverage',key:'call_coverage_score',center:true,render:r=>`<span style="color:${r.call_coverage_score>=70?'var(--green)':r.call_coverage_score>=40?'var(--amber)':'var(--red)'}">${pct(r.call_coverage_score)}</span>`},
-  {label:'Status',key:'coverage_status'},
-];
-const KPI_COLS=[
-  {label:'Period',key:'period'},
-  {label:'Calls',key:'calls_logged',center:true,render:r=>num(r.calls_logged)},
-  {label:'Meetings',key:'meetings_completed',center:true,render:r=>num(r.meetings_completed)},
-  {label:'Booked',key:'booked_count',center:true,render:r=>`${num(r.booked_count)} / ${money(r.booked_value)}`},
-  {label:'Cashed',key:'cashed_count',center:true,render:r=>`${num(r.cashed_count)} / ${money(r.cash_collected)}`},
-  {label:'Delayed',key:'delayed_count',center:true,render:r=>`<span style="color:var(--red);font-weight:900">${num(r.delayed_count)}</span>`},
+  {label:'Account',key:'company_name',render:r=>{const u=r.hubspot_company_url||r.hubspot_search_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.company_name)+'</a>':esc(r.company_name);}},
+  {label:'Tier',key:'tier_group'},
+  {label:'Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Last Activity',key:'last_activity_at',center:true,render:r=>relDt(r.last_activity_at)},
+  {label:'Days',key:'days_since_last_activity',center:true,render:r=>num(r.days_since_last_activity)},
+  {label:'Alert',key:'alert'},
+  {label:'Open',key:'hubspot_company_url',center:true,render:r=>hsLink(r.hubspot_company_url||r.hubspot_search_url)},
 ];
 const SMART_COLS=[
   {label:'#',key:'sort_order',center:true},
-  {label:'Action',key:'title',render:r=>`<strong>${esc(r.title)}</strong>`},
+  {label:'Action',key:'title',render:r=>'<strong>'+esc(r.title)+'</strong>'},
   {label:'Description',key:'description'},
   {label:'Accounts',key:'accounts',center:true,render:r=>num(r.accounts)},
   {label:'Value',key:'value',center:true,render:r=>money(r.value||0)},
   {label:'Status',key:'status',center:true},
 ];
 
+function buildRetSidebar(coverage){
+  const el=document.getElementById('sideRepLinks');
+  const titleEl=document.getElementById('sideRepTitle');
+  if(titleEl)titleEl.textContent='Retention Team';
+  if(!el)return;
+  if(!coverage||!coverage.length){el.innerHTML='<div style="padding:6px 10px;font-size:11px;color:var(--muted)">Loading team…</div>';return;}
+  el.innerHTML=coverage.map(o=>{
+    const role=String(o.role||'').toUpperCase();
+    const chipCls=role==='RM'?'chip-rm':'chip-csm';
+    return '<button class="nav-btn sub" data-route="ret-owner" data-owner="'+esc(o.owner_name)+'" data-role="'+esc(o.role)+'">'
+      +'<span class="nav-icon">'+(role==='RM'?'◆':'●')+'</span>'
+      +esc((o.owner_name||'').split(' ')[0])
+      +'<span class="nav-chip '+chipCls+'">'+esc(role)+'</span>'
+      +'<span class="nav-chip" style="background:var(--amber-bg);color:var(--amber);margin-left:2px">'+num(o.delayed_accounts||0)+'</span>'
+      +'</button>';
+  }).join('');
+  el.querySelectorAll('[data-owner]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderOwner(btn.dataset.owner,btn.dataset.role);
+    });
+  });
+}
+
 async function render(){
   setTitle('Retention · Team Overview','Renewal movement and follow-up focus');
-  showLoading('Loading Retention…');
+  loading('Loading Retention…');
 
   const [focusR,smartR,kpiR,logicR,monthR,churnR,covR,followR]=await Promise.allSettled([
-    get('vw_retention_team_overview_focus',1).catch(()=>get('vw_dash_ret_focus_fast',1)),
-    get('vw_retention_smart_actions',20).catch(()=>get('vw_dash_ret_smart_fast',20)),
+    get('vw_dash_ret_focus_fast',1),
+    get('vw_dash_ret_smart_fast',20),
     get('vw_retention_kpi_snapshot',10),
-    get('vw_retention_renewal_logic',500),
-    get('vw_retention_monthly_renewal_pipeline',20),
+    get('vw_retention_renewal_logic',1000),
+    get('vw_retention_monthly_renewal_pipeline',24),
     get('vw_retention_churn_reasons',30),
     get('vw_retention_coverage_quality',50),
     get('vw_retention_followup_due_details',300),
@@ -1063,13 +1039,13 @@ async function render(){
 
   const renewals=logicR.status==='fulfilled'?logicR.value:[];
   const delayed=renewals.filter(r=>r.is_delayed===true);
-  const snap=focusR.status==='fulfilled'?focusR.value[0]||{}:{};
+  const focusSnap=focusR.status==='fulfilled'?focusR.value[0]||{}:{};
   const f={
-    delayed_renewals:snap.delayed_renewals||delayed.length,
-    tier_a_overdue:snap.tier_a_overdue||delayed.filter(r=>Number(r.renewal_value)>5000).length,
-    csm_follow_up_due:snap.csm_follow_up_due||delayed.filter(r=>r.csm_owner).length,
-    rm_follow_up_due:snap.rm_follow_up_due||delayed.filter(r=>r.rm_owner).length,
-    delayed_value:snap.delayed_value||delayed.reduce((s,r)=>s+Number(r.renewal_value||0),0),
+    delayed_renewals:focusSnap.delayed_renewals||delayed.length,
+    tier_a_overdue:focusSnap.tier_a_overdue||delayed.filter(r=>Number(r.renewal_value)>5000).length,
+    csm_follow_up_due:focusSnap.csm_follow_up_due||delayed.filter(r=>r.csm_owner).length,
+    rm_follow_up_due:focusSnap.rm_follow_up_due||delayed.filter(r=>r.rm_owner).length,
+    delayed_value:focusSnap.delayed_value||delayed.reduce((s,r)=>s+Number(r.renewal_value||0),0),
   };
   const smart=smartR.status==='fulfilled'?smartR.value:[];
   const kpi=kpiR.status==='fulfilled'?kpiR.value:null;
@@ -1078,135 +1054,157 @@ async function render(){
   const coverage=covR.status==='fulfilled'?covR.value:[];
   const followup=followR.status==='fulfilled'?followR.value:[];
 
-  // Sidebar
-  const repEl=document.getElementById('sideRepLinks');
-  if(repEl&&coverage.length){
-    repEl.innerHTML=coverage.slice(0,12).map(r=>`<button class="nav-item nav-sub" style="font-size:11px">
-      <span class="nav-icon">${r.role==='RM'?'◆':'●'}</span>${esc(r.owner_name)}<span class="ret-tag">${esc(r.role)}</span><span class="nav-badge">${r.accounts||0}</span>
-    </button>`).join('');
-    document.getElementById('sideRepTitle').textContent='Retention Team';
-  }
+  buildRetSidebar(coverage);
 
-  // Retention KPI focus cards
-  const focusCards=`<div class="ret-kpi-bar" style="grid-template-columns:repeat(4,1fr)">
-    <div class="ret-kpi" style="border-left:4px solid var(--red)" onclick="window._ret.delayedModal()">
+  window._retData={renewals,delayed,f,smart,kpi,monthly,churn,coverage,followup};
+
+  const kpiCards=`<div class="ret-kpi-grid">
+    <div class="ret-kpi" onclick="Modal.open({title:'Delayed Renewals',rows:window._retData.delayed,cols:[]})">
+      <div class="ret-kpi-accent" style="background:var(--red)"></div>
       <div class="ret-kpi-v" style="color:var(--red)">${num(f.delayed_renewals)}</div>
       <div class="ret-kpi-l">Delayed Renewals</div>
-      <div class="ret-kpi-s">${money(f.delayed_value)} exposure</div>
+      <div class="ret-kpi-s">${money(f.delayed_value)} at risk</div>
     </div>
-    <div class="ret-kpi" style="border-left:4px solid var(--amber)" onclick="window._ret.tierAModal()">
+    <div class="ret-kpi" onclick="Modal.open({title:'High Value Overdue',rows:window._retData.delayed.filter(r=>Number(r.renewal_value)>5000),cols:[]})">
+      <div class="ret-kpi-accent" style="background:var(--amber)"></div>
       <div class="ret-kpi-v" style="color:var(--amber)">${num(f.tier_a_overdue)}</div>
       <div class="ret-kpi-l">High Value Overdue</div>
       <div class="ret-kpi-s">Over $5K value</div>
     </div>
-    <div class="ret-kpi" style="border-left:4px solid var(--cyan)" onclick="window._ret.csmModal()">
+    <div class="ret-kpi" onclick="Modal.open({title:'CSM Follow-up Due',rows:window._retData.delayed.filter(r=>r.csm_owner),cols:[]})">
+      <div class="ret-kpi-accent" style="background:var(--cyan)"></div>
       <div class="ret-kpi-v" style="color:var(--cyan)">${num(f.csm_follow_up_due)}</div>
       <div class="ret-kpi-l">CSM Follow-up Due</div>
       <div class="ret-kpi-s">Assigned CSM accounts</div>
     </div>
-    <div class="ret-kpi" style="border-left:4px solid var(--blue)" onclick="window._ret.rmModal()">
+    <div class="ret-kpi" onclick="Modal.open({title:'RM Follow-up Due',rows:window._retData.delayed.filter(r=>r.rm_owner),cols:[]})">
+      <div class="ret-kpi-accent" style="background:var(--blue)"></div>
       <div class="ret-kpi-v" style="color:var(--blue)">${num(f.rm_follow_up_due)}</div>
       <div class="ret-kpi-l">RM Follow-up Due</div>
       <div class="ret-kpi-s">Assigned RM accounts</div>
     </div>
   </div>`;
 
-  // Register modal helpers
-  window._ret={
-    delayedModal:()=>window.Modal.open({title:'Delayed Renewals',rows:delayed,cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-    tierAModal:()=>window.Modal.open({title:'High Value Overdue',rows:delayed.filter(r=>Number(r.renewal_value)>5000),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-    csmModal:()=>window.Modal.open({title:'CSM Follow-up Due',rows:delayed.filter(r=>r.csm_owner),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-    rmModal:()=>window.Modal.open({title:'RM Follow-up Due',rows:delayed.filter(r=>r.rm_owner),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-    renewalModal:()=>window.Modal.open({title:'All Renewals',rows:renewals,cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-    monthlyModal:(m)=>window.Modal.open({title:`Renewals — ${m}`,rows:renewals.filter(r=>r.month===m),cols:RENEWAL_COLS,rowUrlFn:r=>r.hubspot_search_url}),
-  };
+  const smartSection=smart.length
+    ?`<div class="section-lbl">Smart Actions</div>${card('<div class="card-icon" style="background:var(--green-bg)">⚡</div> Prioritised Actions','',table(smart,SMART_COLS,10))}`
+    :'';
 
-  // Smart actions
-  const smartSection=smart.length?
-    `<div class="manager-section-label">Smart Actions</div>
-     ${card('<div class="card-title-icon" style="background:var(--green-bg)">⚡</div> Prioritised Actions','',table(smart,SMART_COLS,10))}`:
-    '';
+  const kpiSection=kpi
+    ?`<div class="section-lbl">KPI Snapshot — Yesterday · MTD · YTD</div>
+      ${card('<div class="card-icon" style="background:var(--blue-bg)">📊</div> Retention KPIs','',
+        '<div class="ret-period-grid">'+kpi.map(p=>`
+          <div class="ret-period-col">
+            <div class="ret-period-hd">${esc(p.period||'')}</div>
+            ${[['Calls',num(p.calls_logged)],['Meetings',num(p.meetings_completed)],
+               ['Booked',num(p.booked_count)+' / '+money(p.booked_value)],
+               ['Cashed',num(p.cashed_count)+' / '+money(p.cash_collected)],
+               ['Renewed Late','<span style="color:var(--amber);font-weight:900">'+num(p.renewed_late_count||0)+'</span>'],
+               ['Delayed','<span style="color:var(--red);font-weight:900">'+num(p.delayed_count)+'</span>'],
+            ].map(([k,v])=>'<div class="ret-period-row"><div class="ret-period-k">'+k+'</div><div class="ret-period-v">'+v+'</div></div>').join('')}
+          </div>`).join('')+'</div>')}`
+    :`<div class="section-lbl">KPI Snapshot</div>${unavail('vw_retention_kpi_snapshot',kpiR.reason?.message)}`;
 
-  // KPI snapshot
-  const kpiSection=kpi?
-    `<div class="manager-section-label">KPI Snapshot — Yesterday · MTD · YTD</div>
-     ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Retention KPIs','',
-       `<div class="ret-period-grid">
-         ${kpi.map(p=>`<div class="ret-period-card">
-           <div class="ret-period-label">${esc(p.period)}</div>
-           ${[['Calls',num(p.calls_logged)],['Meetings',num(p.meetings_completed)],['Booked',`${num(p.booked_count)} / ${money(p.booked_value)}`],['Cashed',`${num(p.cashed_count)} / ${money(p.cash_collected)}`],['Delayed',`<span style="color:var(--red);font-weight:900">${num(p.delayed_count)}</span>`]].map(([k,v])=>
-             `<div class="ret-period-row"><div class="ret-period-key">${k}</div><div class="ret-period-val">${v}</div></div>`).join('')}
-         </div>`).join('')}
-       </div>`)}`:
-    (kpiR.status!=='fulfilled'?`<div class="manager-section-label">KPI Snapshot</div>${unavailable('vw_retention_kpi_snapshot',kpiR.reason?.message)}`:'' );
+  const monthSection=monthly.length
+    ?`<div class="section-lbl">Monthly Renewal Pipeline</div>
+      ${card('<div class="card-icon" style="background:var(--amber-bg)">📅</div> Monthly Renewals',
+        '<span class="badge ba">'+monthly.length+' months</span>',
+        table(monthly,MONTH_COLS,14))}`
+    :'';
 
-  // Monthly renewal pipeline
-  const monthSection=monthly.length?
-    `<div class="manager-section-label">Monthly Renewal Pipeline</div>
-     ${card('<div class="card-title-icon" style="background:var(--amber-bg)">📅</div> Monthly Renewal Pipeline',
-       `<span class="badge ba">${monthly.length} months</span>`,
-       table(monthly,MONTH_COLS,13))}`:
-    '';
+  const covSection=coverage.length?`<div class="cov-section" style="padding:14px 16px">
+    ${coverage.map(o=>`<div class="cov-line">
+      <div class="cov-lbl">${esc(o.owner_name)}<span class="nav-chip ${o.role==='RM'?'chip-rm':'chip-csm'}">${esc(o.role||'')}</span></div>
+      <div class="cov-bar"><div class="cov-fill" style="background:${o.role==='RM'?'var(--blue)':'var(--cyan)'};width:${Math.min(100,Number(o.call_coverage_score||0))}%"></div></div>
+      <div class="cov-pct">${pct(o.call_coverage_score||0)}</div>
+    </div>`).join('')}
+  </div>`:null;
 
-  // Coverage quality + churn reasons
-  const covHtml=coverage.length?
-    `<div class="ret-coverage">${coverage.map(o=>`
-      <div class="ret-coverage-line">
-        <div class="ret-coverage-label">${esc(o.owner_name)} <span class="ret-tag">${esc(o.role)}</span></div>
-        <div class="ret-bar"><div class="ret-fill" style="--rc:${o.role==='RM'?'var(--blue)':'var(--cyan)'};width:${Math.min(100,Number(o.call_coverage_score||0))}%"></div></div>
-        <div class="ret-pct">${pct(o.call_coverage_score||0)}</div>
-      </div>`).join('')}</div>`
-    :`<div style="padding:14px;color:var(--muted);font-size:12px">No coverage data</div>`;
-
-  const sideSection=`<div class="manager-section-label">Coverage & Churn</div>
+  const sideSection=`<div class="section-lbl">Coverage & Churn</div>
   <div class="two-col">
-    ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📊</div> Coverage Quality',
-      `<button class="badge bc" onclick="window.Modal.open({title:'Coverage Quality',rows:window._retData.coverage,cols:${JSON.stringify(COV_COLS.map(c=>({...c,render:null})))}})">Details</button>`,
-      covHtml)}
-    ${churn.length?card('<div class="card-title-icon" style="background:var(--blue-bg)">📉</div> Churn Reasons','',table(churn,CHURN_COLS,8)):''}
+    ${card('<div class="card-icon" style="background:var(--cyan-bg)">📊</div> Coverage Quality',
+      '<button class="badge bc" onclick="Modal.open({title:\'Coverage Quality\',rows:window._retData.coverage,cols:[]})">Details</button>',
+      covSection||'<div class="tbl-empty">No coverage data</div>')}
+    ${churn.length?card('<div class="card-icon" style="background:var(--red-bg)">📉</div> Churn Reasons','',table(churn,CHURN_COLS,10)):''}
   </div>`;
 
-  // Unified Renewal Table
-  const renewalSection=renewals.length?
-    `<div class="manager-section-label">Unified Renewal Table</div>
-     ${card('<div class="card-title-icon" style="background:var(--red-bg)">🔁</div> Unified Renewal Table',
-       `<button class="badge br" onclick="window._ret.renewalModal()">Open All ${renewals.length}</button>`,
-       `<div style="font-size:11px;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border)">One row per renewal. Delayed, upcoming, and all renewal statuses in one table.</div>
-       ${table(renewals,RENEWAL_COLS,8,r=>r.hubspot_search_url)}`)}`:
-    unavailable('vw_retention_renewal_logic',logicR.reason?.message);
+  const renewalSection=renewals.length
+    ?`<div class="section-lbl">Unified Renewal Table</div>
+      ${card('<div class="card-icon" style="background:var(--red-bg)">🔁</div> Unified Renewal Table',
+        '<button class="badge br" onclick="Modal.open({title:\'All Renewals\',rows:window._retData.renewals,cols:[]})">All '+renewals.length+'</button>',
+        table(renewals,RENEWAL_COLS,8,r=>r.hubspot_search_url||r.hubspot_company_url))}`
+    :unavail('vw_retention_renewal_logic',logicR.reason?.message);
 
-  // Follow-up metrics
-  const followSection=followup.length?
-    `<div class="manager-section-label">RM / CSM Follow-up Metrics</div>
-     ${card('<div class="card-title-icon" style="background:var(--purple-bg)">👥</div> Follow-up Metrics',
-       `<button class="badge bp" onclick="window.Modal.open({title:'Follow-up Due',rows:window._retData.followup,cols:${JSON.stringify(FOLLOW_COLS.map(c=>({...c,render:null})))}})">Open All ${followup.length}</button>`,
-       table(followup,FOLLOW_COLS,8,r=>r.hubspot_company_url))}`:
-    '';
+  const followSection=followup.length
+    ?`<div class="section-lbl">Follow-up Metrics</div>
+      ${card('<div class="card-icon" style="background:var(--purple-bg)">👥</div> RM / CSM Follow-up',
+        '<button class="badge bp" onclick="Modal.open({title:\'Follow-up Due\',rows:window._retData.followup,cols:[]})">All '+followup.length+'</button>',
+        table(followup,FOLLOW_COLS,8,r=>r.hubspot_company_url||r.hubspot_search_url))}`
+    :'';
 
-  window._retData={coverage,followup};
-
-  setContent(focusCards+smartSection+kpiSection+monthSection+sideSection+renewalSection+followSection);
+  window.U.setContent(kpiCards+smartSection+kpiSection+monthSection+sideSection+renewalSection+followSection);
 }
 
-window.RetentionTeamModule={render};
+async function renderOwner(ownerName,role){
+  setTitle('Retention · '+ownerName,(role||'')+' Overview');
+  loading('Loading '+ownerName+'…');
+
+  const logicR=await get('vw_retention_renewal_logic',1000).catch(e=>({status:'rejected',reason:e}));
+  const renewals=Array.isArray(logicR)?logicR.filter(r=>r.rm_owner===ownerName||r.csm_owner===ownerName):[];
+  const delayed=renewals.filter(r=>r.is_delayed===true);
+  const booked=renewals.filter(r=>Number(r.booked_value)>0);
+  const cashed=renewals.filter(r=>Number(r.collected_value)>0);
+  const totalValue=renewals.reduce((s,r)=>s+Number(r.renewal_value||0),0);
+
+  window._ownerData={renewals,delayed,booked,cashed,ownerName,role};
+
+  const RENEWAL_COLS_SHORT=[
+    {label:'Account',key:'company_name',render:r=>{const u=r.hubspot_search_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.company_name)+'</a>':esc(r.company_name);}},
+    {label:'Product',key:'product'},{label:'Month',key:'month',center:true},
+    {label:'Renewal Date',key:'renewal_date',center:true,render:r=>dt(r.renewal_date)},
+    {label:'Value',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+    {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+    {label:'Collected',key:'collected_value',center:true,render:r=>money(r.collected_value)},
+    {label:'Status',key:'renewal_status',center:true,render:r=>'<span class="fin-pill '+statusClass(r.renewal_status||r.status||'')+'">'+esc(r.renewal_status||r.status||'')+'</span>'},
+    {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url)},
+  ];
+
+  const cards=`<div class="sum-grid g4">
+    ${sumCard('Total Accounts',num(renewals.length),'This owner','var(--blue)','')}
+    ${sumCard('Total Renewal',money(totalValue),'Budget','var(--cyan)','')}
+    ${sumCard('Delayed',num(delayed.length),'Need action','var(--red)','Modal.open({title:"Delayed",rows:window._ownerData.delayed,cols:[]})')}
+    ${sumCard('Booked',num(booked.length),money(booked.reduce((s,r)=>s+Number(r.booked_value||0),0)),'var(--green)','Modal.open({title:"Booked",rows:window._ownerData.booked,cols:[]})')}
+  </div>`;
+
+  const tbl=renewals.length
+    ?card('<div class="card-icon" style="background:var(--cyan-bg)">🔁</div> Renewals — '+esc(ownerName),
+        '<button class="badge bc" onclick="Modal.open({title:\'All Renewals — '+esc(ownerName)+'\',rows:window._ownerData.renewals,cols:[]})">All '+renewals.length+'</button>',
+        table(renewals,RENEWAL_COLS_SHORT,10,r=>r.hubspot_search_url))
+    :'<div class="unavail">No renewals found for '+esc(ownerName)+'</div>';
+
+  window.U.setContent(cards+tbl);
+}
+
+return {render,renderOwner,buildRetSidebar};
 })();
-// === assets/js/modules/retention-financial.js ===
-(function(){
+
+/* ── RETENTION FINANCIAL MODULE ── */
+window.FinModule=(function(){
 'use strict';
-const {esc,money,num,pct,date,hsLink,setTitle,setContent,showLoading,unavailable,statusClass}=window.U;
-const {card,table}=window.Components;
+const {esc,money,num,pct,dt,hsLink,setTitle,loading,unavail,statusClass}=window.U;
+const {sumCard,table,card}=window.C;
 const {get}=window.State;
 
 const STATUS_COLS=[
-  {label:'Account',key:'company_name',render:r=>r.hubspot_search_url?`<a class="record-link" href="${esc(r.hubspot_search_url)}" target="_blank">${esc(r.company_name)}</a>`:esc(r.company_name)},
+  {label:'Account',key:'company_name',render:r=>{const u=r.hubspot_search_url||r.hubspot_company_url;return u?'<a class="record-link" href="'+esc(u)+'" target="_blank">'+esc(r.company_name)+'</a>':esc(r.company_name);}},
   {label:'Product',key:'product'},{label:'RM',key:'rm_owner'},{label:'CSM',key:'csm_owner'},
-  {label:'Month',key:'month',center:true},
+  {label:'Month',key:'month',center:true},{label:'Location',key:'location'},
   {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
   {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
   {label:'Collected',key:'collected_value',center:true,render:r=>money(r.collected_value)},
+  {label:'Bkd Not Cash',key:'booked_not_cash_value',center:true,render:r=>money(r.booked_not_cash_value||0)},
   {label:'Remaining',key:'remaining_collection_value',center:true,render:r=>money(r.remaining_collection_value||0)},
-  {label:'Status',key:'status',center:true,render:r=>{const s=r.renewal_status||r.status||'';return `<span class="fin-status ${statusClass(s)}">${esc(s)}</span>`;}},
-  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url)},
+  {label:'Status',key:'renewal_status',center:true,render:r=>{const s=r.renewal_status||r.status||'';return '<span class="fin-pill '+statusClass(s)+'">'+esc(s)+'</span>';}},
+  {label:'Open',key:'hubspot_search_url',center:true,render:r=>hsLink(r.hubspot_search_url||r.hubspot_company_url)},
 ];
 const OWNER_COLS=[
   {label:'Role',key:'role'},{label:'Owner',key:'owner_name'},
@@ -1214,9 +1212,9 @@ const OWNER_COLS=[
   {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
   {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
   {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
-  {label:'Booked Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
+  {label:'Bkd Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
   {label:'Remaining',key:'remaining_collection',center:true,render:r=>money(r.remaining_collection||0)},
-  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>`<span style="color:${r.delayed_accounts>0?'var(--red)':'var(--text2)'};font-weight:900">${num(r.delayed_accounts)}</span>`},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>'<span style="color:'+(Number(r.delayed_accounts)>0?'var(--red)':'var(--text2)')+'";font-weight:900">'+num(r.delayed_accounts)+'</span>'},
 ];
 const PRODUCT_COLS=[
   {label:'Product',key:'product'},
@@ -1224,29 +1222,40 @@ const PRODUCT_COLS=[
   {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
   {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
   {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
-  {label:'Booked Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
+  {label:'Bkd Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
   {label:'Delayed',key:'delayed_accounts',center:true,render:r=>num(r.delayed_accounts)},
+  {label:'Renewed Late',key:'renewed_late_accounts',center:true,render:r=>num(r.renewed_late_accounts||0)},
+  {label:'Expected Lost',key:'expected_lost_accounts',center:true,render:r=>num(r.expected_lost_accounts||0)},
   {label:'Lost',key:'lost_accounts',center:true,render:r=>num(r.lost_accounts||0)},
 ];
 const NOT_BUDGET_COLS=[
   {label:'Source',key:'source'},{label:'Company',key:'company_name'},
   {label:'Product',key:'product'},{label:'Owner',key:'owner_name'},
-  {label:'Date',key:'event_date',center:true,render:r=>date(r.event_date)},
+  {label:'Date',key:'event_date',center:true,render:r=>dt(r.event_date)},
   {label:'Value',key:'value',center:true,render:r=>money(r.value)},
   {label:'Flag',key:'flag'},
 ];
+const MONTHLY_COLS=[
+  {label:'Month',key:'month'},{label:'Due',key:'due_accounts',center:true,render:r=>num(r.due_accounts)},
+  {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
+  {label:'Booked $',key:'booked_value',center:true,render:r=>money(r.booked_value)},
+  {label:'Cash $',key:'cash_collected',center:true,render:r=>money(r.cash_collected||0)},
+  {label:'Bkd Not Cash',key:'booked_not_cash',center:true,render:r=>money(r.booked_not_cash||0)},
+  {label:'Remaining',key:'remaining_collection',center:true,render:r=>money(r.remaining_collection||0)},
+  {label:'Delayed',key:'delayed_accounts',center:true,render:r=>'<span style="color:'+(Number(r.delayed_accounts)>0?'var(--red)':'var(--text2)')+'";font-weight:900">'+num(r.delayed_accounts)+'</span>'},
+];
 
 async function render(){
-  setTitle('Retention · Financial Details','Booked, cash collected, delayed and renewal exposure');
-  showLoading('Loading Retention Financial…');
+  setTitle('Retention · Financial Details','Sheet-driven financial summary from Supabase');
+  loading('Loading Financial Details…');
 
   const [sumR,ownersR,productsR,logicR,monthR,notBudR]=await Promise.allSettled([
     get('vw_retention_team_summary',1),
     get('vw_retention_owner_financial_summary',50),
     get('vw_retention_product_financial_summary',20),
-    get('vw_retention_renewal_logic',500),
-    get('vw_retention_monthly_renewal_pipeline',20),
-    get('vw_retention_not_in_budget',200),
+    get('vw_retention_renewal_logic',1000),
+    get('vw_retention_monthly_renewal_pipeline',24),
+    get('vw_retention_not_in_budget',500),
   ]);
 
   const s=sumR.status==='fulfilled'?sumR.value[0]||{}:{};
@@ -1256,174 +1265,145 @@ async function render(){
   const monthly=monthR.status==='fulfilled'?monthR.value:[];
   const notBud=notBudR.status==='fulfilled'?notBudR.value:null;
 
-  // Status groups
+  /* Status groups from vw_retention_renewal_logic */
   const booked=logic.filter(r=>Number(r.booked_value)>0);
   const cashed=logic.filter(r=>Number(r.collected_value)>0);
   const delayed=logic.filter(r=>r.is_delayed===true);
-  const lostRows=logic.filter(r=>/lost|churn/i.test(r.renewal_status||r.status||''));
-  const expected=logic.filter(r=>/expected/i.test(r.renewal_status||r.status||''));
   const late=logic.filter(r=>r.renewed_late===true||/renewed late/i.test(r.renewal_status||''));
+  const expected=logic.filter(r=>/expected/i.test(r.renewal_status||r.status||''));
+  const lost=logic.filter(r=>/lost|churn/i.test(r.renewal_status||r.status||''));
+  const bndCash=logic.filter(r=>Number(r.booked_not_cash_value||0)>0);
   const remaining=logic.filter(r=>Number(r.remaining_collection_value||0)>0);
 
-  window._fin={booked,cashed,delayed,lostRows,expected,late,remaining,logic};
+  window._finData={s,logic,booked,cashed,delayed,late,expected,lost,bndCash,remaining};
 
-  // Top financial cards
-  const finCards=`<div class="ret-fin-top-grid">
-    <div class="ret-fin-card" style="--fc:var(--cyan)" onclick="window.Modal.open({title:'All Renewals',rows:window._fin.logic,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">💎</div>
-      <div class="ret-fin-card-v">${money(s.renewal_value)}</div>
-      <div class="ret-fin-card-l">Renewal Value</div>
-      <div class="ret-fin-card-s">${num(s.accounts||logic.length)} accounts</div>
+  const finCards=`<div class="fin-card-grid">
+    <div class="fin-card" style="--fc:var(--cyan)" onclick="Modal.open({title:'All Renewals',rows:window._finData.logic,cols:[]})">
+      <div class="fin-card-ico">💎</div>
+      <div class="fin-card-v" style="color:var(--cyan)">${money(s.renewal_value)}</div>
+      <div class="fin-card-l">Renewal Value</div>
+      <div class="fin-card-s">${num(s.accounts||logic.length)} accounts</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--purple)" onclick="window.Modal.open({title:'Booked Value',rows:window._fin.booked,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">📝</div>
-      <div class="ret-fin-card-v">${money(s.booked_value)}</div>
-      <div class="ret-fin-card-l">Booked Value Total</div>
-      <div class="ret-fin-card-s">${num(s.booked_accounts||booked.length)} booking rows</div>
+    <div class="fin-card" style="--fc:var(--purple)" onclick="Modal.open({title:'Booked Value',rows:window._finData.booked,cols:[]})">
+      <div class="fin-card-ico">📝</div>
+      <div class="fin-card-v" style="color:var(--purple)">${money(s.booked_value)}</div>
+      <div class="fin-card-l">Booked Value Total</div>
+      <div class="fin-card-s">${num(s.booked_accounts||booked.length)} rows</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--green)" onclick="window.Modal.open({title:'Cash Collected',rows:window._fin.cashed,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">💵</div>
-      <div class="ret-fin-card-v">${money(s.cash_collected)}</div>
-      <div class="ret-fin-card-l">Cash Collected</div>
-      <div class="ret-fin-card-s">${num(s.cashed_accounts||cashed.length)} collection rows</div>
+    <div class="fin-card" style="--fc:var(--green)" onclick="Modal.open({title:'Cash Collected',rows:window._finData.cashed,cols:[]})">
+      <div class="fin-card-ico">💵</div>
+      <div class="fin-card-v" style="color:var(--green)">${money(s.cash_collected)}</div>
+      <div class="fin-card-l">Cash Collected</div>
+      <div class="fin-card-s">${num(s.cashed_accounts||cashed.length)} rows</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--blue)" onclick="window.Modal.open({title:'Booked Not Cash',rows:window._fin.remaining,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">⏳</div>
-      <div class="ret-fin-card-v">${money(s.booked_not_cash||s.remaining_collection)}</div>
-      <div class="ret-fin-card-l">Booked Not Cash</div>
-      <div class="ret-fin-card-s">Collection pending</div>
+    <div class="fin-card" style="--fc:var(--blue)" onclick="Modal.open({title:'Booked Not Cash',rows:window._finData.bndCash,cols:[]})">
+      <div class="fin-card-ico">⏳</div>
+      <div class="fin-card-v" style="color:var(--blue)">${money(s.booked_not_cash)}</div>
+      <div class="fin-card-l">Booked Not Cash</div>
+      <div class="fin-card-s">Awaiting collection</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--red)" onclick="window.Modal.open({title:'Delayed Accounts',rows:window._fin.delayed,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">🚨</div>
-      <div class="ret-fin-card-v">${num(s.delayed_accounts||delayed.length)}</div>
-      <div class="ret-fin-card-l">Delayed Accounts</div>
-      <div class="ret-fin-card-s">${money(s.delayed_value||delayed.reduce((a,r)=>a+Number(r.renewal_value||0),0))} value</div>
+    <div class="fin-card" style="--fc:var(--blue)" onclick="Modal.open({title:'Remaining Collection',rows:window._finData.remaining,cols:[]})">
+      <div class="fin-card-ico">🔄</div>
+      <div class="fin-card-v" style="color:var(--blue)">${money(s.remaining_collection)}</div>
+      <div class="fin-card-l">Remaining Collection</div>
+      <div class="fin-card-s">Still to collect</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--amber)" onclick="window.Modal.open({title:'Renewed Late',rows:window._fin.late,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">⚠️</div>
-      <div class="ret-fin-card-v">${num(s.renewed_late_accounts||late.length)}</div>
-      <div class="ret-fin-card-l">Renewed Late</div>
-      <div class="ret-fin-card-s">${money(s.renewed_late_value||0)}</div>
+    <div class="fin-card" style="--fc:var(--red)" onclick="Modal.open({title:'Delayed Accounts',rows:window._finData.delayed,cols:[]})">
+      <div class="fin-card-ico">🚨</div>
+      <div class="fin-card-v" style="color:var(--red)">${num(s.delayed_accounts||delayed.length)}</div>
+      <div class="fin-card-l">Delayed Accounts</div>
+      <div class="fin-card-s">${money(s.delayed_value||delayed.reduce((a,r)=>a+Number(r.renewal_value||0),0))}</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--amber)" onclick="window.Modal.open({title:'Expected to be Lost',rows:window._fin.expected,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">⚡</div>
-      <div class="ret-fin-card-v">${num(s.expected_lost_accounts||expected.length)}</div>
-      <div class="ret-fin-card-l">Expected Lost</div>
-      <div class="ret-fin-card-s">${money(s.expected_lost_value||0)}</div>
+    <div class="fin-card" style="--fc:var(--amber)" onclick="Modal.open({title:'Renewed Late',rows:window._finData.late,cols:[]})">
+      <div class="fin-card-ico">⚠️</div>
+      <div class="fin-card-v" style="color:var(--amber)">${num(s.renewed_late_accounts||late.length)}</div>
+      <div class="fin-card-l">Renewed Late</div>
+      <div class="fin-card-s">${money(s.renewed_late_value||0)}</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--red)" onclick="window.Modal.open({title:'Lost Accounts',rows:window._fin.lostRows,cols:${JSON.stringify(STATUS_COLS.map(c=>({...c,render:null})))}})">
-      <div class="ret-fin-card-icon">✗</div>
-      <div class="ret-fin-card-v">${num(s.lost_accounts||lostRows.length)}</div>
-      <div class="ret-fin-card-l">Lost</div>
-      <div class="ret-fin-card-s">${money(s.lost_value||0)}</div>
+    <div class="fin-card" style="--fc:var(--amber)" onclick="Modal.open({title:'Expected Lost',rows:window._finData.expected,cols:[]})">
+      <div class="fin-card-ico">⚡</div>
+      <div class="fin-card-v" style="color:var(--amber)">${num(s.expected_lost_accounts||expected.length)}</div>
+      <div class="fin-card-l">Expected Lost</div>
+      <div class="fin-card-s">${money(s.expected_lost_value||0)}</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--green)">
-      <div class="ret-fin-card-icon">📊</div>
-      <div class="ret-fin-card-v">${pct(s.cash_collection_pct||0)}</div>
-      <div class="ret-fin-card-l">Cash Collection %</div>
-      <div class="ret-fin-card-s">Cash / renewal</div>
+    <div class="fin-card" style="--fc:var(--red)" onclick="Modal.open({title:'Lost Accounts',rows:window._finData.lost,cols:[]})">
+      <div class="fin-card-ico">✗</div>
+      <div class="fin-card-v" style="color:var(--red)">${num(s.lost_accounts||lost.length)}</div>
+      <div class="fin-card-l">Lost</div>
+      <div class="fin-card-s">${money(s.lost_value||0)}</div>
     </div>
-    <div class="ret-fin-card" style="--fc:var(--cyan)">
-      <div class="ret-fin-card-icon">📈</div>
-      <div class="ret-fin-card-v">${pct(s.booking_coverage_pct||0)}</div>
-      <div class="ret-fin-card-l">Booking Coverage %</div>
-      <div class="ret-fin-card-s">Booked / renewal</div>
+    <div class="fin-card" style="--fc:var(--green)">
+      <div class="fin-card-ico">📊</div>
+      <div class="fin-card-v" style="color:var(--green)">${pct(s.cash_collection_pct||0)}</div>
+      <div class="fin-card-l">Cash Collection %</div>
+      <div class="fin-card-s">Cash / renewal</div>
     </div>
   </div>`;
 
-  // Owner summary
-  let ownerSection='';
-  if(owners){
-    const ownerHead=['Owner','Role','Accounts','Renewal','Booked Total','Cash Collected','Booked Not Cash','Remaining','Delayed'];
-    ownerSection=`<div class="manager-section-label">Owner Financial Summary</div>
-    ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Owner Financial Summary',
-      `<span class="badge bb">${owners.length} owners</span>`,
-      `<div class="tbl-wrap"><table class="tbl">
-        <thead><tr>${ownerHead.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>
-        <tbody>${owners.map(o=>`<tr>
-          <td><strong>${esc(o.owner_name)}</strong></td>
-          <td><span class="ret-tag">${esc(o.role)}</span></td>
-          <td class="c" style="font-family:var(--mono);font-weight:900">${num(o.accounts)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--cyan)">${money(o.renewal_value)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--purple)">${money(o.booked_value)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--green)">${money(o.cash_collected)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900;color:var(--blue)">${money(o.booked_not_cash||0)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900">${money(o.remaining_collection||0)}</td>
-          <td class="c" style="font-family:var(--mono);font-weight:900;color:${o.delayed_accounts>0?'var(--red)':'var(--text2)'}">${num(o.delayed_accounts)}</td>
-        </tr>`).join('')}</tbody>
-      </table></div>`)}`;
-  }
+  const ownerSection=owners
+    ?`<div class="section-lbl">Owner Financial Summary</div>
+      ${card('<div class="card-icon" style="background:var(--blue-bg)">📊</div> Owner Financial Summary',
+        '<span class="badge bb">'+owners.length+' owners</span>',
+        '<div class="tbl-wrap"><table class="tbl"><thead><tr>'
+        +'<th>Owner</th><th>Role</th><th class="c">Accounts</th><th class="c">Renewal</th><th class="c">Booked</th><th class="c">Cash</th><th class="c">Bkd Not Cash</th><th class="c">Remaining</th><th class="c">Delayed</th>'
+        +'</tr></thead><tbody>'
+        +owners.map(o=>'<tr><td><strong>'+esc(o.owner_name)+'</strong></td>'
+          +'<td><span class="nav-chip '+(o.role==='RM'?'chip-rm':'chip-csm')+'">'+esc(o.role)+'</span></td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900">'+num(o.accounts)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900;color:var(--cyan)">'+money(o.renewal_value)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900;color:var(--purple)">'+money(o.booked_value)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900;color:var(--green)">'+money(o.cash_collected)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900;color:var(--blue)">'+money(o.booked_not_cash||0)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900">'+money(o.remaining_collection||0)+'</td>'
+          +'<td class="c" style="font-family:var(--mono);font-weight:900;color:'+(Number(o.delayed_accounts)>0?'var(--red)':'var(--text2)')+'">'+num(o.delayed_accounts)+'</td>'
+          +'</tr>').join('')
+        +'</tbody></table></div>')}`
+    :`<div class="section-lbl">Owner Financial</div>${unavail('vw_retention_owner_financial_summary',ownersR.reason?.message)}`;
 
-  // Product summary + monthly
-  const splitSection=`<div class="manager-section-label">Product & Monthly</div>
+  const splitSection=`<div class="section-lbl">Renewal Status Split</div>
+  ${card('<div class="card-icon" style="background:var(--cyan-bg)">📌</div> Status Split',
+    '<button class="badge bc" onclick="Modal.open({title:\'All Renewals\',rows:window._finData.logic,cols:[]})">All '+logic.length+'</button>',
+    '<div class="status-split-grid">'
+    +[
+      {l:'📝 Booked',r:'booked',v:booked.length,c:'var(--purple)'},
+      {l:'💵 Cashed',r:'cashed',v:cashed.length,c:'var(--green)'},
+      {l:'⏳ Bkd Not Cash',r:'bndCash',v:bndCash.length,c:'var(--blue)'},
+      {l:'🔴 Delayed',r:'delayed',v:delayed.length,c:'var(--red)'},
+      {l:'⚠️ Renewed Late',r:'late',v:late.length,c:'var(--amber)'},
+      {l:'⚡ Expected Lost',r:'expected',v:expected.length,c:'var(--amber)'},
+      {l:'✗ Lost',r:'lost',v:lost.length,c:'var(--red)'},
+      {l:'🔄 Remaining',r:'remaining',v:remaining.length,c:'var(--cyan)'},
+    ].map(g=>'<div class="ss-box" style="border-left:3px solid '+g.c+'" onclick="Modal.open({title:\''+g.l.replace(/[\']/g,"'")+'\',rows:window._finData.'+g.r+',cols:[]})">'
+      +'<div class="ss-v" style="color:'+g.c+'">'+num(g.v)+'</div>'
+      +'<div class="ss-l">'+esc(g.l)+'</div>'
+      +'</div>').join('')
+    +'</div>'
+    +table(logic,STATUS_COLS,8,r=>r.hubspot_search_url||r.hubspot_company_url))}`;
+
+  const prodSection=`<div class="section-lbl">Product & Monthly</div>
   <div class="two-col">
-    ${products?card('<div class="card-title-icon" style="background:var(--purple-bg)">📦</div> Product Summary',`<span class="badge bp">${products.length} products</span>`,table(products,PRODUCT_COLS,10)):''}
-    ${monthly.length?card('<div class="card-title-icon" style="background:var(--amber-bg)">📅</div> Monthly Pipeline',`<span class="badge ba">${monthly.length} months</span>`,table(monthly,[
-      {label:'Month',key:'month'},{label:'Due',key:'due_accounts',center:true,render:r=>num(r.due_accounts)},
-      {label:'Renewal',key:'renewal_value',center:true,render:r=>money(r.renewal_value)},
-      {label:'Booked',key:'booked_value',center:true,render:r=>money(r.booked_value)},
-      {label:'Cash',key:'cash_collected',center:true,render:r=>money(r.cash_collected)},
-      {label:'Remaining',key:'remaining_collection',center:true,render:r=>money(r.remaining_collection||0)},
-    ],13)):''}
+    ${products?card('<div class="card-icon" style="background:var(--purple-bg)">📦</div> Product Summary','',table(products,PRODUCT_COLS,10)):''}
+    ${monthly.length?card('<div class="card-icon" style="background:var(--amber-bg)">📅</div> Monthly Pipeline',monthly.length+' months',table(monthly,MONTHLY_COLS,14)):''}
   </div>`;
 
-  // Status split
-  const statusSection=`<div class="manager-section-label">Renewal Status Split</div>
-  ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📌</div> Renewal Status Split',
-    `<span class="badge bc">${logic.length} accounts</span>`,
-    `<div style="padding:12px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid var(--border)">
-      ${[
-        {label:'📝 Booked',rows:booked,color:'var(--purple)'},
-        {label:'💵 Cashed',rows:cashed,color:'var(--green)'},
-        {label:'⏳ Remaining',rows:remaining,color:'var(--blue)'},
-        {label:'🔴 Delayed',rows:delayed,color:'var(--red)'},
-        {label:'⚠️ Late',rows:late,color:'var(--amber)'},
-        {label:'⚡ Expected Lost',rows:expected,color:'var(--amber)'},
-        {label:'✗ Lost',rows:lostRows,color:'var(--red)'},
-      ].map(g=>`<div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid ${g.color}"
-        onclick="window.Modal.open({title:'${g.label.replace(/['"]/g,'')}',rows:window._fin[Object.keys(window._fin).find(k=>window._fin[k]===window._fin['${Object.keys({booked,cashed,delayed,lostRows,expected,late,remaining}).find(k=>({booked,cashed,delayed,lostRows,expected,late,remaining}[k]===g.rows))}'])],cols:[]})">
-        <div style="font-family:var(--mono);font-size:20px;font-weight:900;color:${g.color}">${num(g.rows.length)}</div>
-        <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">${g.label}</div>
-      </div>`).join('')}
-    </div>
-    ${table(logic,STATUS_COLS,8,r=>r.hubspot_search_url)}`)}`;
+  const notBudSection=notBud
+    ?`<div class="section-lbl">Not in Budget 2026</div>
+      ${card('<div class="card-icon" style="background:var(--amber-bg)">🚩</div> Not in Budget',
+        '<span class="badge ba">'+notBud.length+' rows</span>',
+        table(notBud,NOT_BUDGET_COLS,10))}`
+    :'';
 
-  // Fix the status split onclick with proper data refs  
-  const statusSectionFixed=`<div class="manager-section-label">Renewal Status Split</div>
-  ${card('<div class="card-title-icon" style="background:var(--cyan-bg)">📌</div> Renewal Status Split',
-    `<button class="badge bc" onclick="window.Modal.open({title:'All Renewals',rows:window._fin.logic,cols:[]})">Open All ${logic.length}</button>`,
-    `<div style="padding:12px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-bottom:1px solid var(--border)">
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--purple)" onclick="window.Modal.open({title:'Booked Value',rows:window._fin.booked,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--purple)">${num(booked.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">📝 Booked</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--green)" onclick="window.Modal.open({title:'Cash Collected',rows:window._fin.cashed,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--green)">${num(cashed.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">💵 Cashed</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--red)" onclick="window.Modal.open({title:'Delayed',rows:window._fin.delayed,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--red)">${num(delayed.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">🔴 Delayed</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--amber)" onclick="window.Modal.open({title:'Renewed Late',rows:window._fin.late,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--amber)">${num(late.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⚠️ Renewed Late</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--amber)" onclick="window.Modal.open({title:'Expected Lost',rows:window._fin.expected,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--amber)">${num(expected.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⚡ Expected Lost</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--red)" onclick="window.Modal.open({title:'Lost',rows:window._fin.lostRows,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--red)">${num(lostRows.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">✗ Lost</div></div>
-      <div style="background:rgba(255,255,255,.5);border:1px solid var(--border);border-radius:var(--r);padding:10px;text-align:center;cursor:pointer;border-left:3px solid var(--blue)" onclick="window.Modal.open({title:'Remaining Collection',rows:window._fin.remaining,cols:[]})"><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--blue)">${num(remaining.length)}</div><div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:6px">⏳ Remaining</div></div>
-    </div>
-    ${table(logic,STATUS_COLS,8,r=>r.hubspot_search_url)}`)}`;
-
-  // Not in Budget
-  const notBudSection=notBud?
-    `<div class="manager-section-label">Not in Budget</div>
-     ${card('<div class="card-title-icon" style="background:var(--amber-bg)">🚩</div> Not in Budget 2026',
-       `<span class="badge ba">${notBud.length} rows</span>`,
-       table(notBud,NOT_BUDGET_COLS,10))}`:
-    '';
-
-  // Patch modal cols for status groups
-  window._fin.STATUS_COLS=STATUS_COLS;
-
-  setContent(finCards+ownerSection+splitSection+statusSectionFixed+notBudSection);
+  window.U.setContent(finCards+ownerSection+splitSection+prodSection+notBudSection);
 }
 
-window.RetentionFinancialModule={render};
+return {render};
 })();
-// === assets/js/modules/features-plan.js ===
-(function(){
+
+/* ── FEATURES PLAN MODULE ── */
+window.FeatModule=(function(){
 'use strict';
-const {esc,money,num,date,setTitle,setContent,showLoading}=window.U;
-const {card,table}=window.Components;
+const {esc,money,num,dt,setTitle,loading}=window.U;
+const {sumCard,table,card}=window.C;
 const {get}=window.State;
 
 const CO_COLS=[
@@ -1431,25 +1411,19 @@ const CO_COLS=[
   {label:'Owner',key:'owner_name'},{label:'CSM',key:'csm_owner'},
   {label:'Features',key:'features',center:true,render:r=>num(r.features)},
   {label:'Proposal',key:'proposal',center:true,render:r=>num(r.proposal)},
-  {label:'Interested',key:'interested',center:true,render:r=>`<span style="color:var(--green);font-weight:900">${num(r.interested)}</span>`},
-  {label:'Not Interested',key:'not_interested',center:true,render:r=>`<span style="color:var(--red);font-weight:900">${num(r.not_interested)}</span>`},
+  {label:'Interested',key:'interested',center:true,render:r=>'<span style="color:var(--green);font-weight:900">'+num(r.interested)+'</span>'},
+  {label:'Not Interested',key:'not_interested',center:true,render:r=>'<span style="color:var(--red);font-weight:900">'+num(r.not_interested)+'</span>'},
   {label:'Upsell',key:'upsell',center:true,render:r=>money(r.upsell)},
   {label:'Renewal',key:'renewal',center:true,render:r=>money(r.renewal)},
-];
-const FEAT_COLS=[
-  {label:'Company',key:'company_name'},{label:'Feature',key:'feature_name'},{label:'Status',key:'feature_status'},
-  {label:'Proposal Date',key:'proposal_sent_date',center:true,render:r=>date(r.proposal_sent_date)},
-  {label:'Expected Month',key:'expected_month',center:true},
-  {label:'Upsell Value',key:'upsell_value',center:true,render:r=>money(r.upsell_value)},
-  {label:'Owner',key:'owner_name'},{label:'CSM',key:'csm_owner'},
 ];
 
 function groupByCompany(rows){
   const map={};
   rows.forEach(r=>{
     const k=(r.company_name||'Unknown').toLowerCase().trim();
-    if(!map[k])map[k]={company_name:r.company_name,product_line:r.product_line,owner_name:r.owner_name,csm_owner:r.csm_owner,features:0,proposal:0,interested:0,not_interested:0,upsell:0,renewal:0,_rows:[]};
-    const c=map[k];c.features++;c._rows.push(r);
+    if(!map[k])map[k]={company_name:r.company_name,product_line:r.product_line,
+      owner_name:r.owner_name,csm_owner:r.csm_owner,features:0,proposal:0,interested:0,not_interested:0,upsell:0,renewal:0};
+    const c=map[k];c.features++;
     const st=String(r.feature_status||'').toLowerCase();
     if(st.includes('proposal'))c.proposal++;
     if(st.includes('interested')&&!st.includes('not'))c.interested++;
@@ -1462,91 +1436,60 @@ function groupByCompany(rows){
 
 async function render(){
   setTitle('Features Plan · Upselling','Upsell features grouped by company');
-  showLoading('Loading Features Plan…');
+  loading('Loading Features Plan…');
 
   const rows=await get('features_plan_rows',2000).catch(()=>[]);
   const companies=groupByCompany(rows);
 
-  const totalUpsell=companies.reduce((s,c)=>s+c.upsell,0);
-  const totalProposal=companies.reduce((s,c)=>s+c.proposal,0);
-  const totalInterested=companies.reduce((s,c)=>s+c.interested,0);
-  const totalNot=companies.reduce((s,c)=>s+c.not_interested,0);
-
-  // Unique filters
   const products=[...new Set(rows.map(r=>r.product_line).filter(Boolean))].sort();
   const owners=[...new Set(rows.map(r=>r.owner_name).filter(Boolean))].sort();
   let filterProduct='All',filterOwner='All';
 
-  window._feat={companies,rows,filtered:companies};
-
-  function getFiltered(){
-    return companies.filter(c=>{
-      if(filterProduct!=='All'&&c.product_line!==filterProduct)return false;
-      if(filterOwner!=='All'&&c.owner_name!==filterOwner)return false;
-      return true;
-    });
+  window._featData={companies,rows};
+  function refilter(){
+    const fc=companies.filter(c=>(filterProduct==='All'||c.product_line===filterProduct)&&(filterOwner==='All'||c.owner_name===filterOwner));
+    window._featData.filtered=fc;
+    const el=document.getElementById('feat-table');if(el)el.innerHTML=table(fc,CO_COLS,20);
+    const ct=document.getElementById('feat-count');if(ct)ct.textContent=fc.length+' companies';
   }
-  function rerender(){
-    const fc=getFiltered();
-    window._feat.filtered=fc;
-    document.getElementById('featTable').innerHTML=table(fc,CO_COLS,20);
-    document.getElementById('featCount').textContent=fc.length+' companies';
-  }
+  window._featFilter=function(type,val){if(type==='product')filterProduct=val;else filterOwner=val;refilter();};
 
-  const filterBar=`<div style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
-    <select class="pnl-select" onchange="window._featFilter('product',this.value)">
-      <option value="All">All Products</option>
-      ${products.map(p=>`<option>${esc(p)}</option>`).join('')}
-    </select>
-    <select class="pnl-select" onchange="window._featFilter('owner',this.value)">
-      <option value="All">All Owners</option>
-      ${owners.map(o=>`<option>${esc(o)}</option>`).join('')}
-    </select>
-    <button class="badge bb" onclick="window.Modal.open({title:'All Features',rows:window._feat.rows,cols:[]})">All ${rows.length} feature rows</button>
+  const cards=`<div class="sum-grid g6">
+    ${sumCard('Companies',num(companies.length),'Unique','var(--blue)','Modal.open({title:"All Companies",rows:window._featData.filtered||window._featData.companies,cols:[]})')}
+    ${sumCard('Proposal Sent',num(companies.reduce((s,c)=>s+c.proposal,0)),'Feature rows','var(--purple)','Modal.open({title:"Proposal Sent",rows:(window._featData.filtered||window._featData.companies).filter(c=>c.proposal>0),cols:[]})')}
+    ${sumCard('Interested',num(companies.reduce((s,c)=>s+c.interested,0)),'Feature rows','var(--green)','Modal.open({title:"Interested",rows:(window._featData.filtered||window._featData.companies).filter(c=>c.interested>0),cols:[]})')}
+    ${sumCard('Not Interested',num(companies.reduce((s,c)=>s+c.not_interested,0)),'Feature rows','var(--red)','Modal.open({title:"Not Interested",rows:(window._featData.filtered||window._featData.companies).filter(c=>c.not_interested>0),cols:[]})')}
+    ${sumCard('Total Upsell',money(companies.reduce((s,c)=>s+c.upsell,0)),'Company max','var(--amber)','')}
+    ${sumCard('Total Renewal',money(companies.reduce((s,c)=>s+c.renewal,0)),'Company max','var(--cyan)','')}
   </div>`;
 
-  window._featFilter=function(type,val){
-    if(type==='product')filterProduct=val;
-    else filterOwner=val;
-    rerender();
-  };
+  const filterBar='<div class="pnl-filter-bar">'
+    +'<select class="pnl-select" onchange="window._featFilter(\'product\',this.value)">'
+    +'<option value="All">All Products</option>'+products.map(p=>'<option>'+esc(p)+'</option>').join('')+'</select>'
+    +'<select class="pnl-select" onchange="window._featFilter(\'owner\',this.value)">'
+    +'<option value="All">All Owners</option>'+owners.map(o=>'<option>'+esc(o)+'</option>').join('')+'</select>'
+    +'<button class="badge bb" onclick="Modal.open({title:\'All Feature Rows\',rows:window._featData.rows,cols:[]})">All '+rows.length+' feature rows</button>'
+    +'</div>';
 
-  const summaryCards=`<div class="summary-grid">
-    <div class="sum-card" style="cursor:pointer" onclick="window.Modal.open({title:'All Companies',rows:window._feat.filtered,cols:[]})" ><div class="sum-card-accent" style="background:var(--blue)"></div><div class="sum-val" style="color:var(--blue)">${num(companies.length)}</div><div class="sum-lbl">Companies</div></div>
-    <div class="sum-card" style="cursor:pointer" onclick="window.Modal.open({title:'Proposal Sent',rows:window._feat.filtered.filter(c=>c.proposal>0),cols:[]})"><div class="sum-card-accent" style="background:var(--purple)"></div><div class="sum-val" style="color:var(--purple)">${num(totalProposal)}</div><div class="sum-lbl">Proposal Sent</div></div>
-    <div class="sum-card" style="cursor:pointer" onclick="window.Modal.open({title:'Interested',rows:window._feat.filtered.filter(c=>c.interested>0),cols:[]})"><div class="sum-card-accent" style="background:var(--green)"></div><div class="sum-val" style="color:var(--green)">${num(totalInterested)}</div><div class="sum-lbl">Interested</div></div>
-    <div class="sum-card" style="cursor:pointer" onclick="window.Modal.open({title:'Not Interested',rows:window._feat.filtered.filter(c=>c.not_interested>0),cols:[]})"><div class="sum-card-accent" style="background:var(--red)"></div><div class="sum-val" style="color:var(--red)">${num(totalNot)}</div><div class="sum-lbl">Not Interested</div></div>
-    <div class="sum-card"><div class="sum-card-accent" style="background:var(--amber)"></div><div class="sum-val" style="color:var(--amber)">${money(totalUpsell)}</div><div class="sum-lbl">Total Upsell Value</div><div class="sum-sub">Company-unique max</div></div>
-    <div class="sum-card"><div class="sum-card-accent" style="background:var(--cyan)"></div><div class="sum-val" style="color:var(--cyan)">${money(companies.reduce((s,c)=>s+c.renewal,0))}</div><div class="sum-lbl">Total Renewal Value</div><div class="sum-sub">Company-unique max</div></div>
-  </div>`;
+  const mainCard=card('<div class="card-icon" style="background:var(--blue-bg)">🚀</div> Company Features Plan',
+    '<span class="badge bb" id="feat-count">'+companies.length+' companies</span>',
+    filterBar+'<div id="feat-table">'+table(companies,CO_COLS,20)+'</div>');
 
-  const mainCard=`<div class="manager-section-label">Company Features Plan</div>
-  ${card('<div class="card-title-icon" style="background:var(--blue-bg)">🚀</div> Company Features Plan',
-    `<span class="badge bb" id="featCount">${companies.length} companies</span>`,
-    filterBar+`<div id="featTable">${table(companies,CO_COLS,20)}</div>`)}`;
-
-  setContent(summaryCards+mainCard);
-
-  // Patch modal cols
-  window.Modal._origOpen=window.Modal.open;
-  CO_COLS.forEach(c=>{if(!c.render)c.render=null;});
-  FEAT_COLS.forEach(c=>{if(!c.render)c.render=null;});
-  window._feat.CO_COLS=CO_COLS;
-  window._feat.FEAT_COLS=FEAT_COLS;
+  window.U.setContent(cards+mainCard);
+  window._featData.filtered=companies;
 }
-
-window.FeaturesPlanModule={render};
+return {render};
 })();
-// === assets/js/modules/pnl.js ===
-(function(){
+
+/* ── P&L MODULE ── */
+window.PnlModule=(function(){
 'use strict';
-const {esc,money,num,pct,setTitle,setContent,showLoading,unavailable}=window.U;
-const {card,table}=window.Components;
+const {esc,money,num,pct,setTitle,loading,unavail}=window.U;
+const {sumCard,table,card}=window.C;
 const {get}=window.State;
 
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let _charts={};
-
 function destroyCharts(){Object.values(_charts).forEach(c=>{try{c.destroy();}catch(e){}});_charts={};}
 
 const MONTHLY_COLS=[
@@ -1557,7 +1500,7 @@ const MONTHLY_COLS=[
   {label:'Overheads',key:'overheads',center:true,render:r=>money(r.overheads)},
   {label:'Support',key:'support_allocation',center:true,render:r=>money(r.support_allocation)},
   {label:'Total Cost',key:'total_cost',center:true,render:r=>money(r.total_cost)},
-  {label:'Net Cash',key:'net_cash_position',center:true,render:r=>{const v=Number(r.net_cash_position||0);return `<span style="color:${v<0?'var(--red)':'var(--green)'};font-family:var(--mono);font-weight:900">${money(v)}</span>`;}},
+  {label:'Net Cash',key:'net_cash_position',center:true,render:r=>{const v=Number(r.net_cash_position||0);return '<span style="color:'+(v<0?'var(--red)':'var(--green)')+'";font-family:var(--mono);font-weight:900">'+money(v)+'</span>';}},
 ];
 const COST_COLS=[
   {label:'Year',key:'year',center:true},{label:'Product',key:'product'},
@@ -1567,236 +1510,173 @@ const COST_COLS=[
   {label:'Total Cost',key:'total_cost',center:true,render:r=>money(r.total_cost)},
 ];
 
-function sumBy(rows,year,key){
-  return MONTHS.map((_,i)=>rows.filter(r=>String(r.year)===String(year)&&(Number(r.month)===i+1||String(r.month).slice(0,3).toLowerCase()===MONTHS[i].toLowerCase())).reduce((a,b)=>a+Number(b[key]||0),0));
-}
+function sumBy(rows,year,key){return MONTHS.map((_,i)=>rows.filter(r=>String(r.year)===String(year)&&(Number(r.month)===i+1||String(r.month).slice(0,3).toLowerCase()===MONTHS[i].toLowerCase())).reduce((a,b)=>a+Number(b[key]||0),0));}
 function total(rows,year,key){return sumBy(rows,year,key).reduce((a,b)=>a+b,0);}
 
 function drawCharts(rows){
   if(!window.Chart||!rows.length)return;
   destroyCharts();
-  const CSS=s=>getComputedStyle(document.documentElement).getPropertyValue(s).trim();
-
-  // YTD Bar
-  const barEl=document.getElementById('pnlBar');
-  if(barEl) _charts.bar=new Chart(barEl,{
+  const barEl=document.getElementById('pnl-bar');
+  if(barEl)_charts.bar=new Chart(barEl,{
     type:'bar',
-    data:{
-      labels:['Booking','Cashing','Total Cost'],
+    data:{labels:['Booking','Cashing','Total Cost'],
       datasets:[
         {label:'2025',data:[total(rows,'2025','booking'),total(rows,'2025','cashing'),total(rows,'2025','total_cost')],backgroundColor:'rgba(124,58,237,.35)',borderColor:'#7C3AED',borderWidth:1.5},
         {label:'2026',data:[total(rows,'2026','booking'),total(rows,'2026','cashing'),total(rows,'2026','total_cost')],backgroundColor:'rgba(22,163,74,.35)',borderColor:'#16A34A',borderWidth:1.5},
       ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},
-      scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(22,64,42,.08)'}}}}
+      scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'K':v}}}}
   });
-
-  // Monthly trend line
-  const lineEl=document.getElementById('pnlLine');
-  if(lineEl) _charts.line=new Chart(lineEl,{
+  const lineEl=document.getElementById('pnl-line');
+  if(lineEl)_charts.line=new Chart(lineEl,{
     type:'line',
-    data:{
-      labels:MONTHS,
-      datasets:[
-        {label:'Booking 2026',data:sumBy(rows,'2026','booking'),borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,.08)',tension:.35,fill:true,borderWidth:2},
-        {label:'Cashing 2026',data:sumBy(rows,'2026','cashing'),borderColor:'#16A34A',backgroundColor:'rgba(22,163,74,.08)',tension:.35,fill:true,borderWidth:2},
-        {label:'Cost 2026',data:sumBy(rows,'2026','total_cost'),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.08)',tension:.35,fill:true,borderWidth:2},
-        {label:'Booking 2025',data:sumBy(rows,'2025','booking'),borderColor:'rgba(124,58,237,.4)',tension:.35,fill:false,borderWidth:1.5,borderDash:[4,3]},
-      ]},
+    data:{labels:MONTHS,datasets:[
+      {label:'Booking 26',data:sumBy(rows,'2026','booking'),borderColor:'#7C3AED',backgroundColor:'rgba(124,58,237,.06)',tension:.35,fill:true,borderWidth:2},
+      {label:'Cashing 26',data:sumBy(rows,'2026','cashing'),borderColor:'#16A34A',backgroundColor:'rgba(22,163,74,.06)',tension:.35,fill:true,borderWidth:2},
+      {label:'Cost 26',data:sumBy(rows,'2026','total_cost'),borderColor:'#D97706',backgroundColor:'rgba(217,119,6,.06)',tension:.35,fill:true,borderWidth:2},
+      {label:'Booking 25',data:sumBy(rows,'2025','booking'),borderColor:'rgba(124,58,237,.4)',tension:.35,fill:false,borderWidth:1.5,borderDash:[4,3]},
+    ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:12}}},
-      scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':Math.abs(v)>=1e3?(v/1e3).toFixed(0)+'K':v},grid:{color:'rgba(22,64,42,.08)'}}}}
+      scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':v}}}}
   });
-
-  // Cash vs Cost gap
-  const gapEl=document.getElementById('pnlGap');
-  if(gapEl){
-    const cash26=sumBy(rows,'2026','cashing');
-    const cost26=sumBy(rows,'2026','total_cost');
-    const gap=cash26.map((v,i)=>v-cost26[i]);
-    _charts.gap=new Chart(gapEl,{
-      type:'bar',
-      data:{labels:MONTHS,datasets:[{label:'Cash - Cost Gap',data:gap,backgroundColor:gap.map(v=>v>=0?'rgba(22,163,74,.5)':'rgba(220,38,38,.5)'),borderColor:gap.map(v=>v>=0?'#16A34A':'#DC2626'),borderWidth:1.5}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{x:{ticks:{font:{size:9}},grid:{color:'rgba(22,64,42,.08)'}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':v},grid:{color:'rgba(22,64,42,.08)'}}}}
-    });
-  }
+  const gapEl=document.getElementById('pnl-gap');
+  if(gapEl){const c26=sumBy(rows,'2026','cashing'),co26=sumBy(rows,'2026','total_cost'),gap=c26.map((v,i)=>v-co26[i]);
+    _charts.gap=new Chart(gapEl,{type:'bar',data:{labels:MONTHS,datasets:[{label:'Cash - Cost',data:gap,
+      backgroundColor:gap.map(v=>v>=0?'rgba(22,163,74,.45)':'rgba(220,38,38,.45)'),
+      borderColor:gap.map(v=>v>=0?'#16A34A':'#DC2626'),borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9},callback:v=>Math.abs(v)>=1e6?(v/1e6).toFixed(1)+'M':v}}}}});}
 }
 
 async function render(){
-  setTitle('P&L · Revenue Analysis','2025 full year · 2026 actuals to date · COGS + Overheads + Support');
-  showLoading('Loading P&L…');
-
+  setTitle('P&L · Revenue Analysis','2025 full year · 2026 actuals to date');
+  loading('Loading P&L…');
   const [execR,monthlyR,costR]=await Promise.allSettled([
     get('vw_pnl_exec_summary_v2',10),
     get('vw_pnl_monthly_summary_v2',200),
     get('vw_pnl_cost_breakdown_v2',20),
   ]);
-
   const exec=execR.status==='fulfilled'?execR.value:[];
   const monthly=monthlyR.status==='fulfilled'?monthlyR.value:[];
   const cost=costR.status==='fulfilled'?costR.value:[];
-
   const y26=exec.find(r=>String(r.year)==='2026')||exec[0]||{};
   const y25=exec.find(r=>String(r.year)==='2025')||{};
+  window._pnlData={monthly,exec,cost};
 
-  window._pnl={monthly,exec,cost};
-
-  // Exec cards
   const execCards=`<div class="pnl-exec-grid">
-    <div class="pnl-exec-card" style="--fc:var(--purple)" onclick="window.Modal.open({title:'Monthly P&L 2026',rows:window._pnl.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
-      <div class="pnl-exec-v">${money(y26.booking)}</div>
-      <div class="pnl-exec-l">Booking 2026</div>
-      <div class="pnl-exec-s">vs ${money(y25.booking||0)} in 2025</div>
-    </div>
-    <div class="pnl-exec-card" style="--fc:var(--green)" onclick="window.Modal.open({title:'Monthly Cashing 2026',rows:window._pnl.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
-      <div class="pnl-exec-v">${money(y26.cashing)}</div>
-      <div class="pnl-exec-l">Cashing 2026</div>
-      <div class="pnl-exec-s">vs ${money(y25.cashing||0)} in 2025</div>
-    </div>
+    <div class="pnl-exec-card" style="--fc:var(--purple)" onclick="Modal.open({title:'Booking 2026',rows:window._pnlData.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
+      <div class="pnl-exec-v">${money(y26.booking)}</div><div class="pnl-exec-l">Booking 2026</div>
+      <div class="pnl-exec-s">vs ${money(y25.booking||0)} in 2025</div></div>
+    <div class="pnl-exec-card" style="--fc:var(--green)" onclick="Modal.open({title:'Cashing 2026',rows:window._pnlData.monthly.filter(r=>String(r.year)==='2026'),cols:[]})">
+      <div class="pnl-exec-v">${money(y26.cashing)}</div><div class="pnl-exec-l">Cashing 2026</div>
+      <div class="pnl-exec-s">vs ${money(y25.cashing||0)} in 2025</div></div>
     <div class="pnl-exec-card" style="--fc:var(--amber)">
-      <div class="pnl-exec-v">${money(y26.total_cost)}</div>
-      <div class="pnl-exec-l">Total Cost 2026</div>
-      <div class="pnl-exec-s">COGS + Overheads + Support</div>
-    </div>
+      <div class="pnl-exec-v">${money(y26.total_cost)}</div><div class="pnl-exec-l">Total Cost 2026</div>
+      <div class="pnl-exec-s">COGS + Overheads + Support</div></div>
     <div class="pnl-exec-card" style="--fc:${Number(y26.net_cash_position||0)<0?'var(--red)':'var(--green)'}">
-      <div class="pnl-exec-v">${money(y26.net_cash_position)}</div>
-      <div class="pnl-exec-l">Net Cash Position</div>
-      <div class="pnl-exec-s">Cash minus total cost</div>
-    </div>
+      <div class="pnl-exec-v">${money(y26.net_cash_position)}</div><div class="pnl-exec-l">Net Cash Position</div>
+      <div class="pnl-exec-s">Cash minus total cost</div></div>
     <div class="pnl-exec-card" style="--fc:${Number(y26.cash_coverage_pct||0)<70?'var(--red)':'var(--green)'}">
-      <div class="pnl-exec-v">${pct(y26.cash_coverage_pct||0)}</div>
-      <div class="pnl-exec-l">Cash Coverage</div>
-      <div class="pnl-exec-s">Cash / Total Cost</div>
-    </div>
+      <div class="pnl-exec-v">${pct(y26.cash_coverage_pct||0)}</div><div class="pnl-exec-l">Cash Coverage</div>
+      <div class="pnl-exec-s">Cash / Total Cost</div></div>
     <div class="pnl-exec-card" style="--fc:var(--cyan)">
-      <div class="pnl-exec-v">${pct(y26.booking_cash_pct||0)}</div>
-      <div class="pnl-exec-l">Booking → Cash</div>
-      <div class="pnl-exec-s">Cash / Booking ratio</div>
-    </div>
+      <div class="pnl-exec-v">${pct(y26.booking_cash_pct||0)}</div><div class="pnl-exec-l">Booking → Cash</div>
+      <div class="pnl-exec-s">Cash / Booking</div></div>
   </div>`;
 
-  // Filters
   const products=[...new Set(monthly.map(r=>r.product).filter(Boolean))].sort();
-  const filterBar=`<div class="pnl-filters">
-    <select class="pnl-select" id="pnlYearFilter" onchange="window._pnlFilter()">
-      <option value="all">All Years</option><option value="2026" selected>2026</option><option value="2025">2025</option>
-    </select>
-    <select class="pnl-select" id="pnlProductFilter" onchange="window._pnlFilter()">
-      <option value="All">All Products</option>${products.map(p=>`<option>${esc(p)}</option>`).join('')}
-    </select>
-    <button class="badge bb" onclick="window.Modal.open({title:'Full Monthly P&L',rows:window._pnl.monthly,cols:[]})">Export All Rows</button>
-  </div>`;
-
   window._pnlFilter=function(){
-    const yr=document.getElementById('pnlYearFilter')?.value||'all';
-    const pr=document.getElementById('pnlProductFilter')?.value||'All';
-    const filtered=monthly.filter(r=>(yr==='all'||String(r.year)===yr)&&(pr==='All'||r.product===pr));
-    document.getElementById('pnlTable').innerHTML=table(filtered,MONTHLY_COLS,20);
+    const yr=document.getElementById('pnl-yr')?.value||'all';
+    const pr=document.getElementById('pnl-pr')?.value||'All';
+    const f=monthly.filter(r=>(yr==='all'||String(r.year)===yr)&&(pr==='All'||r.product===pr));
+    const el=document.getElementById('pnl-tbl');if(el)el.innerHTML=table(f,MONTHLY_COLS,20);
   };
 
-  // Charts grid
-  const chartsGrid=`<div class="pnl-chart-grid">
-    <div class="pnl-chart-card">
-      <div class="pnl-chart-hd"><div class="pnl-chart-title">YTD Comparison — Booking / Cashing / Cost</div></div>
-      <div class="pnl-chart-wrap"><canvas id="pnlBar"></canvas></div>
-    </div>
-    <div class="pnl-chart-card">
-      <div class="pnl-chart-hd"><div class="pnl-chart-title">Monthly Trend 2026 vs 2025</div></div>
-      <div class="pnl-chart-wrap"><canvas id="pnlLine"></canvas></div>
-    </div>
-    <div class="pnl-chart-card">
-      <div class="pnl-chart-hd"><div class="pnl-chart-title">Cash vs Cost Gap — 2026</div></div>
-      <div class="pnl-chart-wrap"><canvas id="pnlGap"></canvas></div>
-    </div>
-    ${cost.length?`<div class="pnl-chart-card">
-      <div class="pnl-chart-hd"><div class="pnl-chart-title">Cost Breakdown</div></div>
-      <div style="padding:0">${table(cost,COST_COLS,10)}</div>
-    </div>`:''}
+  const filterBar='<div class="pnl-filter-bar">'
+    +'<select class="pnl-select" id="pnl-yr" onchange="window._pnlFilter()">'
+    +'<option value="all">All Years</option><option value="2026" selected>2026</option><option value="2025">2025</option></select>'
+    +'<select class="pnl-select" id="pnl-pr" onchange="window._pnlFilter()">'
+    +'<option value="All">All Products</option>'+products.map(p=>'<option>'+esc(p)+'</option>').join('')+'</select>'
+    +'<button class="badge bb" onclick="Modal.open({title:\'Full Monthly P&L\',rows:window._pnlData.monthly,cols:[]})">Export All</button>'
+    +'</div>';
+
+  const charts=`<div class="pnl-chart-grid">
+    <div class="pnl-chart-card"><div class="pnl-chart-hd">YTD Comparison — Booking / Cashing / Cost</div>
+      <div class="pnl-chart-wrap"><canvas id="pnl-bar"></canvas></div></div>
+    <div class="pnl-chart-card"><div class="pnl-chart-hd">Monthly Trend 2026 vs 2025</div>
+      <div class="pnl-chart-wrap"><canvas id="pnl-line"></canvas></div></div>
+    <div class="pnl-chart-card"><div class="pnl-chart-hd">Cash vs Cost Gap — 2026</div>
+      <div class="pnl-chart-wrap"><canvas id="pnl-gap"></canvas></div></div>
+    ${cost.length?'<div class="pnl-chart-card"><div class="pnl-chart-hd">Cost Breakdown</div>'+table(cost,COST_COLS,10)+'</div>':''}
   </div>`;
 
-  const monthlySection=`<div class="manager-section-label">Monthly P&L Table</div>
-  ${card('<div class="card-title-icon" style="background:var(--blue-bg)">📊</div> Monthly P&L Detail',
-    `<span class="badge bb">${monthly.length} rows</span>`,
-    filterBar+`<div id="pnlTable">${table(monthly.filter(r=>String(r.year)==='2026'),MONTHLY_COLS,20)}</div>`)}`;
+  const monthSection=card('<div class="card-icon" style="background:var(--blue-bg)">📊</div> Monthly P&L Detail',
+    '<span class="badge bb">'+monthly.length+' rows</span>',
+    filterBar+'<div id="pnl-tbl">'+table(monthly.filter(r=>String(r.year)==='2026'),MONTHLY_COLS,20)+'</div>');
 
-  setContent(execCards+chartsGrid+monthlySection);
-  setTimeout(()=>drawCharts(monthly),100);
+  window.U.setContent(execCards+charts+monthSection);
+  setTimeout(()=>drawCharts(monthly),120);
 }
-
-window.PnlModule={render};
+return {render};
 })();
-// === assets/js/router.js ===
+
+/* ── ROUTER ── */
 (function(){
 'use strict';
-const ROUTES={
-  'acquisition':()=>window.AcquisitionModule.render(),
-  'retention-team':()=>window.RetentionTeamModule.render(),
-  'retention-financial':()=>window.RetentionFinancialModule.render(),
-  'features-plan':()=>window.FeaturesPlanModule.render(),
-  'pnl':()=>window.PnlModule.render(),
-};
 
-const PAGE_TITLES={
-  'acquisition':'Acquisition · Team Overview',
-  'retention-team':'Retention · Team Overview',
-  'retention-financial':'Retention · Financial Details',
-  'features-plan':'Retention · Features Plan',
-  'pnl':'P&L · Revenue Analysis',
+const ROUTES={
+  'acquisition':    ()=>window.AcqModule.render(),
+  'retention-team': ()=>window.RetModule.render(),
+  'retention-financial': ()=>window.FinModule.render(),
+  'features-plan':  ()=>window.FeatModule.render(),
+  'pnl':            ()=>window.PnlModule.render(),
 };
 
 function navigate(route){
   if(!ROUTES[route]) route='acquisition';
   window.State.setRoute(route);
 
-  // Update active states — sidebar nav
-  document.querySelectorAll('.nav-item[data-route]').forEach(el=>{
-    el.classList.toggle('active',el.dataset.route===route);
+  /* Sidebar nav active */
+  document.querySelectorAll('.nav-btn[data-route]').forEach(el=>{
+    el.classList.toggle('active', el.dataset.route===route);
   });
-  // Update active states — tab bar
+  /* Tabs active */
   document.querySelectorAll('.tab-btn[data-route]').forEach(el=>{
-    el.classList.toggle('active',el.dataset.route===route);
+    el.classList.toggle('active', el.dataset.route===route);
   });
 
-  // Show/hide tabs bar
-  const tabsBar=document.getElementById('tabsBar');
-  if(tabsBar) tabsBar.style.display='flex';
-
-  window.scrollTo({top:0,behavior:'smooth'});
-
+  window.scrollTo({top:0,behavior:'instant'});
   ROUTES[route]().catch(err=>{
-    window.U.showError('Route error: '+err.message);
+    window.U.err('Route error: '+err.message);
     console.error(err);
   });
 }
 
-// Wire all nav buttons
-document.querySelectorAll('[data-route]').forEach(btn=>{
+/* Wire sidebar nav buttons */
+document.querySelectorAll('.nav-btn[data-route]').forEach(btn=>{
   btn.addEventListener('click',()=>navigate(btn.dataset.route));
 });
 
-// Refresh button
-document.getElementById('refreshBtn').addEventListener('click',function(){
-  this.classList.add('spinning');
-  window.State.flush();
-  navigate(window.State.route);
-  setTimeout(()=>this.classList.remove('spinning'),1500);
+/* Wire tabs */
+document.querySelectorAll('.tab-btn[data-route]').forEach(btn=>{
+  btn.addEventListener('click',()=>navigate(btn.dataset.route));
 });
 
-// Fix modal open for empty cols (pass STATUS_COLS from context)
-const _origModalOpen=window.Modal.open.bind(window.Modal);
-window.Modal.open=function(opts){
-  if(!opts.cols||!opts.cols.length){
-    // Try to infer cols from first row
-    if(opts.rows&&opts.rows.length){
-      opts.cols=Object.keys(opts.rows[0]).filter(k=>!k.startsWith('_')).map(k=>({label:k.replace(/_/g,' ').replace(/\w/g,c=>c.toUpperCase()),key:k}));
-    }
-  }
-  _origModalOpen(opts);
-};
+/* Refresh */
+const rfBtn=document.getElementById('refreshBtn');
+if(rfBtn){
+  rfBtn.addEventListener('click',function(){
+    this.classList.add('spin');
+    window.State.flush();
+    navigate(window.State.route);
+    setTimeout(()=>this.classList.remove('spin'),1800);
+  });
+}
 
-// Boot
+/* Boot */
 navigate(window.State.route);
 })();
+
 
 </script>
 </body>

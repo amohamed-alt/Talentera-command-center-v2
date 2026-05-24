@@ -882,32 +882,67 @@ async function render(){
 
 async function renderRep(ownerName){
   const isView=VIEW_ONLY.includes(ownerName);
-  setTitle('Acquisition · '+ownerName,isView?'View Only':'Rep Overview');
-  loading('Loading '+ownerName+'…');
+  setTitle('Acquisition \u00b7 '+ownerName,isView?'View Only':'Rep Overview');
+  loading('Loading '+ownerName+'...');
 
-  const [repsR,pipeR,stuckR,rankR]=await Promise.allSettled([
-    get('vw_dash_acq_sidebar_fast',50),
+  const [repKpiR,pipeR,stuckR]=await Promise.allSettled([
+    get('vw_acquisition_rep_kpi_periods',50),
     get('vw_acquisition_pipeline_details',500),
     get('vw_acquisition_stuck_deals',200),
-    get('vw_dash_acq_rank_fast',500),
   ]);
 
-  const reps=repsR.status==='fulfilled'?repsR.value:[];
+  const repKpiAll=repKpiR.status==='fulfilled'?repKpiR.value:[];
+  const repKpiOwner=repKpiAll.filter(r=>r.owner_name===ownerName);
+  const flatRow=repKpiAll.find(r=>r.owner_name===ownerName)||{};
   const pipe=pipeR.status==='fulfilled'?pipeR.value.filter(r=>r.owner_name===ownerName):[];
   const stuck=stuckR.status==='fulfilled'?stuckR.value.filter(r=>r.owner_name===ownerName):[];
-  const rank=rankR.status==='fulfilled'?rankR.value.filter(r=>r.owner_name===ownerName):[];
-  const rep=reps.find(r=>r.owner_name===ownerName)||{};
+  window._repData={pipe,stuck,repKpiOwner,flatRow};
 
-  window._repData={pipe,stuck,rank,rep};
+  const banner=isView?'<div class="unavail">View Only - '+esc(ownerName)+'</div>':'';
 
-  const banner=isView?'<div class="unavail">👁 View Only — '+esc(ownerName)+' is in read-only mode.</div>':'';
+  const ytdRow=repKpiOwner.find(r=>/ytd/i.test(r.period||''))||repKpiOwner[repKpiOwner.length-1]||{};
+  const totalCalls=Number(ytdRow.calls_logged||flatRow.calls_ytd||0);
+  const totalConn=Number(ytdRow.connected_calls||flatRow.connected_ytd||0);
+  const totalMtg=Number(ytdRow.meetings_completed||flatRow.completed_ytd||0);
+  const pipeVal=pipe.reduce((s,r)=>s+Number(r.amount||0),0);
 
-  const cards=`<div class="sum-grid g4">
-    ${sumCard('Calls Logged',num(rep.calls_logged),'Total calls','var(--blue)','')}
-    ${sumCard('Connected',num(rep.connected_calls),'Connected calls','var(--cyan)','')}
-    ${sumCard('Meetings Done',num(rep.meetings_completed),'Completed','var(--purple)','')}
-    ${sumCard('Open Deals',num(pipe.length),money(pipe.reduce((s,r)=>s+Number(r.amount||0),0)),'var(--green)','Modal.open({title:"Open Deals",rows:window._repData.pipe,cols:[]})')}
-  </div>`;
+  const sumCards='<div class="sum-grid g4">'
+    +sumCard('Calls Logged',num(totalCalls),'YTD calls','var(--blue)','')
+    +sumCard('Connected',num(totalConn),'YTD connected','var(--cyan)','')
+    +sumCard('Meetings Done',num(totalMtg),'YTD completed','var(--purple)','')
+    +sumCard('Open Deals',num(pipe.length),money(pipeVal),'var(--green)','Modal.open({title:"Open Deals",rows:window._repData.pipe,cols:[]})')
+    +'</div>';
+
+  function mkPeriodBox(label,calls,conn,mtg,rate){
+    return '<div style="background:var(--surface2);padding:14px 16px">'
+      +'<div style="font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:6px">'
+      +'<span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:block"></span>'+esc(label)+'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+      +'<div><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--blue)">'+num(calls)+'</div><div style="font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-top:5px">CALLS</div></div>'
+      +'<div><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--cyan)">'+num(conn)+'</div><div style="font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-top:5px">CONNECTED</div></div>'
+      +'<div><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--purple)">'+num(mtg)+'</div><div style="font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-top:5px">MEETINGS</div></div>'
+      +'<div><div style="font-family:var(--mono);font-size:20px;font-weight:900;color:var(--green)">'+pct(rate)+'</div><div style="font-size:7px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-top:5px">CONN%</div></div>'
+      +'</div></div>';
+  }
+
+  let kpiSection='';
+  // period-column style (rows have period='Yesterday','MTD','YTD')
+  if(repKpiOwner.length&&repKpiOwner[0].period){
+    const boxes=repKpiOwner.map(p=>mkPeriodBox(p.period||'',p.calls_logged||0,p.connected_calls||0,p.meetings_completed||0,p.connection_rate||0)).join('');
+    kpiSection='<div class="section-lbl">YESTERDAY - MTD - YTD SUMMARY</div>'
+      +'<div class="card" style="overflow:hidden">'
+      +'<div class="card-hd"><div class="card-title"><div class="card-icon" style="background:var(--blue-bg)">📊</div>Activity KPIs</div><span class="badge bb">'+esc(ownerName)+'</span></div>'
+      +'<div style="display:grid;grid-template-columns:repeat('+repKpiOwner.length+',1fr);gap:1px;background:var(--border)">'+boxes+'</div></div>';
+  } else if(flatRow.calls_ytd!==undefined||flatRow.calls_yesterday!==undefined){
+    // flat-column style
+    const boxes=mkPeriodBox('Yesterday',flatRow.calls_yesterday||0,flatRow.connected_yesterday||0,flatRow.completed_yesterday||0,flatRow.conn_rate_yesterday||0)
+      +mkPeriodBox('MTD',flatRow.calls_mtd||0,flatRow.connected_mtd||0,flatRow.completed_mtd||0,flatRow.conn_rate_mtd||0)
+      +mkPeriodBox('YTD',flatRow.calls_ytd||0,flatRow.connected_ytd||0,flatRow.completed_ytd||0,flatRow.conn_rate_ytd||0);
+    kpiSection='<div class="section-lbl">YESTERDAY - MTD - YTD SUMMARY</div>'
+      +'<div class="card" style="overflow:hidden">'
+      +'<div class="card-hd"><div class="card-title"><div class="card-icon" style="background:var(--blue-bg)">📊</div>Activity KPIs</div><span class="badge bb">'+esc(ownerName)+'</span></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">'+boxes+'</div></div>';
+  }
 
   const pipeSection=card('<div class="card-icon" style="background:var(--green-bg)">💼</div> Open Pipeline — '+esc(ownerName),
     '<button class="badge bg" onclick="Modal.open({title:\'Pipeline\',rows:window._repData.pipe,cols:[]})">All '+pipe.length+'</button>',
@@ -915,9 +950,8 @@ async function renderRep(ownerName){
 
   const stuckSection=stuck.length?card('<div class="card-icon" style="background:var(--red-bg)">⚠️</div> Stuck Deals — '+esc(ownerName),'',table(stuck,STUCK_COLS,10,r=>r.hubspot_url)):'';
 
-  window.U.setContent(banner+cards+pipeSection+(stuckSection?'<div class="section-lbl">Stuck</div>'+stuckSection:''));
+  window.U.setContent(banner+sumCards+kpiSection+pipeSection+(stuckSection?'<div class="section-lbl">Stuck</div>'+stuckSection:''));
 }
-
 return {render,renderRep,buildSidebar};
 })();
 
@@ -1114,8 +1148,8 @@ async function render(){
   const covSection=coverage.length?`<div class="cov-section" style="padding:14px 16px">
     ${coverage.map(o=>`<div class="cov-line">
       <div class="cov-lbl">${esc(o.owner_name)}<span class="nav-chip ${o.role==='RM'?'chip-rm':'chip-csm'}">${esc(o.role||'')}</span></div>
-      <div class="cov-bar"><div class="cov-fill" style="background:${o.role==='RM'?'var(--blue)':'var(--cyan)'};width:${Math.min(100,Number(o.call_coverage_score||0))}%"></div></div>
-      <div class="cov-pct">${pct(o.call_coverage_score||0)}</div>
+      <div class="cov-bar"><div class="cov-fill" style="background:${o.role==='RM'?'var(--blue)':'var(--cyan)'};width:${Math.min(100,Number(o.call_coverage_score||o.meeting_coverage_score||0))}%"></div></div>
+      <div class="cov-pct">${pct(o.call_coverage_score||o.meeting_coverage_score||0)}</div>
     </div>`).join('')}
   </div>`:null;
 
@@ -1438,7 +1472,7 @@ async function render(){
   setTitle('Features Plan · Upselling','Upsell features grouped by company');
   loading('Loading Features Plan…');
 
-  const rows=await get('features_plan_rows',2000).catch(()=>[]);
+  const rows=await get('features_plan_rows',2000).catch(e=>{console.error('features_plan_rows:',e.message);return[];});
   const companies=groupByCompany(rows);
 
   const products=[...new Set(rows.map(r=>r.product_line).filter(Boolean))].sort();
@@ -1626,6 +1660,7 @@ return {render};
 
 const ROUTES={
   'acquisition':    ()=>window.AcqModule.render(),
+  'acq-financial':  ()=>window.AcqModule.render(),
   'retention-team': ()=>window.RetModule.render(),
   'retention-financial': ()=>window.FinModule.render(),
   'features-plan':  ()=>window.FeatModule.render(),
@@ -1646,10 +1681,20 @@ function navigate(route){
   });
 
   window.scrollTo({top:0,behavior:'instant'});
-  ROUTES[route]().catch(err=>{
-    window.U.err('Route error: '+err.message);
-    console.error(err);
-  });
+  // Tab visibility
+  const tabsBar=document.getElementById('tabsBar');
+  if(tabsBar){
+    tabsBar.style.display='flex';
+    const acqSection=['acquisition','acq-financial'].includes(route);
+    const retSection=['retention-team','retention-financial','features-plan'].includes(route);
+    ['tab-acquisition','tab-fin-details'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=acqSection?'':'none';});
+    ['tab-retention-team','tab-retention-financial','tab-features-plan'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=retSection?'':'none';});
+    document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+    const at=document.getElementById('tab-'+route);if(at)at.classList.add('active');
+  }
+  if(ROUTES[route]){
+    ROUTES[route]().catch(err=>{window.U.err('Route error: '+err.message);console.error(err);});
+  }
 }
 
 /* Wire sidebar nav buttons */

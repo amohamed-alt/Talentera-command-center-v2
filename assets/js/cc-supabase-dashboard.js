@@ -1,5 +1,6 @@
 (function(){
 'use strict';
+
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const fmt=new Intl.NumberFormat('en-US');
@@ -9,106 +10,548 @@ const n=v=>Number(v||0);
 const num=v=>fmt.format(n(v));
 const money=v=>usd.format(n(v));
 const pct=v=>`${Math.round(n(v)*10)/10}%`;
-const sum=(arr,key)=>(arr||[]).reduce((a,b)=>a+n(b[key]),0);
-const ownerOf=r=>String(r.owner_name||'Unassigned').trim()||'Unassigned';
-const stageOf=r=>String(r.dealstage||'Unknown').trim()||'Unknown';
-const sourceOf=r=>String(r.source_bucket||'Unknown').trim()||'Unknown';
-const isRiskDeal=r=>!r.next_activity_date||n(r.days_in_stage)>=21;
-const first=v=>String(v||'').split(/\s+/)[0]||'';
+const sum=(rows,key)=>(rows||[]).reduce((a,r)=>a+n(r[key]),0);
+const uniq=rows=>[...new Set(rows.filter(v=>v!==undefined&&v!==null&&String(v).trim()!==''))].sort((a,b)=>String(a).localeCompare(String(b)));
+const safeRows=v=>Array.isArray(v)?v:[];
+const date=v=>v?String(v).slice(0,10):'—';
+
+const SOURCES={
+  acqPersonSummary:'vw_acq_person_summary_v3',
+  acqPersonDeals:'vw_acq_person_deals_v3',
+  acqRankCoverage:'vw_acq_rank_coverage_v1',
+  acqOverviewSummary:'vw_acq_overview_summary_v1',
+  acqActivityDetails:'vw_acq_activity_details_v1',
+  retentionPersonSummary:'vw_retention_person_summary_v3',
+  retentionPersonAccounts:'vw_retention_person_accounts_v3',
+  retentionPersonDeals:'vw_retention_person_deals_v3',
+  retentionActivityDetails:'vw_retention_activity_details_v1',
+  retentionOverviewSummary:'vw_retention_overview_summary_v1',
+  pnlSummary:'vw_pnl_exec_summary_v2',
+  pnlMonthly:'vw_pnl_monthly_summary_v2',
+  pnlCosts:'vw_pnl_cost_breakdown_v2'
+};
+
 let charts=[];
-let state={view:'overview',owner:'All',search:'',data:null};
-function cleanCharts(){charts.forEach(c=>{try{c.destroy()}catch(e){}});charts=[];}
-function safeRows(v){return Array.isArray(v)?v:[]}
-async function view(name,limit=1000){
+let state={
+  area:'acquisition',
+  page:'overview',
+  search:'',
+  filters:{country:'All',rank:'All',tier:'All',year:'All',month:'All',product:'All',status:'All'},
+  data:null
+};
+
+function destroyCharts(){charts.forEach(c=>{try{c.destroy()}catch(e){}});charts=[]}
+async function view(name,limit=5000){
   if(!window.DB||!DB.fetchView) throw new Error('Supabase DB client is not loaded');
-  try{return safeRows(await DB.fetchView(name,limit));}
+  try{return safeRows(await DB.fetchView(name,limit))}
   catch(e){console.warn('View unavailable:',name,e);return []}
 }
 async function load(){
-  $('#app').innerHTML='<div class="loader">Loading live Supabase Command Center…</div>';
-  const [leadSummary,leads,source,rank,pipe,stuck,periods,reps,trend,stageMix]=await Promise.all([
-    view('vw_acquisition_lead_summary',1),
-    view('vw_acquisition_priority_leads',2500),
-    view('vw_acquisition_lead_source_performance',200),
-    view('vw_dash_acq_rank_fast',2500),
-    view('vw_acquisition_pipeline_details',2500),
-    view('vw_acquisition_stuck_deals',800),
-    view('vw_acquisition_rep_kpi_periods',10000),
-    view('vw_dash_acq_sidebar_fast',200),
-    view('vw_acquisition_daily_trend',120),
-    view('vw_acquisition_deal_stage_mix',120)
+  $('#app').innerHTML='<div class="loader">Loading live Supabase dashboard…</div>';
+  const [
+    acqPersonSummary,acqPersonDeals,acqRankCoverage,acqOverviewSummary,acqActivityDetails,
+    retentionPersonSummary,retentionPersonAccounts,retentionPersonDeals,retentionActivityDetails,retentionOverviewSummary,
+    pnlSummary,pnlMonthly,pnlCosts
+  ]=await Promise.all([
+    view(SOURCES.acqPersonSummary,200),
+    view(SOURCES.acqPersonDeals,5000),
+    view(SOURCES.acqRankCoverage,5000),
+    view(SOURCES.acqOverviewSummary,1000),
+    view(SOURCES.acqActivityDetails,8000),
+    view(SOURCES.retentionPersonSummary,200),
+    view(SOURCES.retentionPersonAccounts,5000),
+    view(SOURCES.retentionPersonDeals,5000),
+    view(SOURCES.retentionActivityDetails,10000),
+    view(SOURCES.retentionOverviewSummary,2000),
+    view(SOURCES.pnlSummary,200),
+    view(SOURCES.pnlMonthly,2000),
+    view(SOURCES.pnlCosts,500)
   ]);
-  state.data={leadSummary:leadSummary[0]||{},leads,source,rank,pipe,stuck,periods,reps,trend,stageMix};
+  state.data={acqPersonSummary,acqPersonDeals,acqRankCoverage,acqOverviewSummary,acqActivityDetails,retentionPersonSummary,retentionPersonAccounts,retentionPersonDeals,retentionActivityDetails,retentionOverviewSummary,pnlSummary,pnlMonthly,pnlCosts};
   render();
 }
-function ownerList(){
-  const set=new Set(['All']);
-  for(const r of [...(state.data?.pipe||[]),...(state.data?.leads||[]),...(state.data?.rank||[])]) set.add(ownerOf(r));
-  return [...set].filter(Boolean).sort((a,b)=>a==='All'?-1:b==='All'?1:a.localeCompare(b));
+function setRail(){
+  const rails=$$('.rail-btn');
+  const map=['acquisition','retention','retention','pnl','marketing'];
+  rails.forEach((btn,i)=>{
+    btn.classList.toggle('active',map[i]===state.area);
+    btn.onclick=()=>{
+      const next=map[i]||'acquisition';
+      state.area=next==='marketing'?'acquisition':next;
+      state.page='overview';
+      render();
+    };
+  });
 }
-function filtered(){
-  const d=state.data,q=state.search.toLowerCase();
-  const match=r=>!q||Object.values(r||{}).join(' ').toLowerCase().includes(q);
-  const own=r=>state.owner==='All'||ownerOf(r)===state.owner;
-  return {leads:d.leads.filter(r=>own(r)&&match(r)),source:d.source.filter(match),rank:d.rank.filter(r=>own(r)&&match(r)),pipe:d.pipe.filter(r=>own(r)&&match(r)),stuck:d.stuck.filter(r=>own(r)&&match(r)),periods:state.owner==='All'?d.periods:d.periods.filter(r=>own(r)),trend:d.trend,stageMix:d.stageMix};
+function resetFilters(){
+  state.filters={country:'All',rank:'All',tier:'All',year:'All',month:'All',product:'All',status:'All'};
+  state.search='';
 }
-function group(rows,key,valueKey='amount'){
+function matchSearch(r){
+  const q=state.search.trim().toLowerCase();
+  return !q||Object.values(r||{}).join(' ').toLowerCase().includes(q);
+}
+function setPage(area,page){
+  state.area=area;
+  state.page=page;
+  state.search='';
+  render();
+}
+function currentTitle(){
+  if(state.area==='acquisition') return state.page==='overview'?'Acquisition Command Center':`Acquisition · ${displayPageName(state.page)}`;
+  if(state.area==='retention') return state.page==='overview'?'Retention Command Center':`Retention · ${displayPageName(state.page)}`;
+  if(state.area==='pnl') return 'P&L Command Center';
+  return 'Talentera Command Center';
+}
+function displayPageName(key){
+  const all=[...(state.data?.acqPersonSummary||[]),...(state.data?.retentionPersonSummary||[])];
+  return all.find(r=>r.person_key===key)?.display_name||key;
+}
+function topbar(){
+  return `<div class="topbar">
+    <div>
+      <div class="eyebrow">Talentera · Live Supabase Dashboard</div>
+      <h1 class="title">${esc(currentTitle())}</h1>
+      <div class="subtitle">Fixed person pages, clean card mapping, live SQL views, mint glass light UI. Touched = same owner connected call or completed meeting.</div>
+    </div>
+    <div class="top-actions">
+      <div class="live"><i></i> LIVE · SUPABASE</div>
+      <input id="searchBox" class="select search" placeholder="Search visible data…" value="${esc(state.search)}" />
+      <button id="resetBtn" class="btn">Reset</button>
+      <button id="refreshBtn" class="btn primary">Refresh</button>
+    </div>
+  </div>`;
+}
+function mainTabs(){
+  const tabs=[['acquisition','Acquisition'],['retention','Retention'],['pnl','P&L']];
+  return `<div class="viewbar main-tabs"><span class="view-label">Main</span>${tabs.map(([id,label])=>`<button class="chip ${state.area===id?'active':''}" data-area="${id}"><i></i>${label}</button>`).join('')}</div>`;
+}
+function pageTabs(){
+  const d=state.data||{};
+  if(state.area==='acquisition'){
+    const rows=[{person_key:'overview',display_name:'Overview'},...d.acqPersonSummary.sort((a,b)=>n(a.sort_order)-n(b.sort_order))];
+    return `<div class="viewbar sub-tabs"><span class="view-label">Pages</span>${rows.map(r=>`<button class="chip ${state.page===r.person_key?'active':''}" data-page="${esc(r.person_key)}">${esc(firstName(r.display_name))}</button>`).join('')}</div>`;
+  }
+  if(state.area==='retention'){
+    const rows=[{person_key:'overview',display_name:'Overview'},...d.retentionPersonSummary.sort((a,b)=>n(a.sort_order)-n(b.sort_order))];
+    return `<div class="viewbar sub-tabs"><span class="view-label">Pages</span>${rows.map(r=>`<button class="chip ${state.page===r.person_key?'active':''}" data-page="${esc(r.person_key)}">${esc(firstName(r.display_name))}</button>`).join('')}</div>`;
+  }
+  return `<div class="viewbar sub-tabs"><span class="view-label">Views</span>${['Overview','Monthly','Cost','Product'].map((x,i)=>`<button class="chip ${i===0?'active':''}">${x}</button>`).join('')}</div>`;
+}
+function firstName(name){return String(name||'').split(/\s+/)[0]||name}
+function filterSelect(id,label,options,current){
+  return `<label class="filter"><span>${esc(label)}</span><select id="${id}" class="select">${['All',...options.filter(o=>String(o)!=='All')].map(o=>`<option value="${esc(o)}" ${String(current)===String(o)?'selected':''}>${o===''?'Empty Tier':esc(o)}</option>`).join('')}</select></label>`;
+}
+function filtersBar(){
+  const d=state.data||{};
+  if(state.area==='acquisition'){
+    return `<div class="filters">
+      ${filterSelect('filterCountry','Country',uniq(d.acqRankCoverage.map(r=>r.country||'Unknown')),state.filters.country)}
+      ${filterSelect('filterRank','Rank',['A','B'],state.filters.rank)}
+    </div>`;
+  }
+  if(state.area==='retention'){
+    return `<div class="filters">
+      ${filterSelect('filterYear','Year',uniq(d.retentionOverviewSummary.map(r=>r.year)),state.filters.year)}
+      ${filterSelect('filterMonth','Month',uniq(d.retentionOverviewSummary.map(r=>r.month)),state.filters.month)}
+      ${filterSelect('filterProduct','Product',uniq(d.retentionOverviewSummary.map(r=>r.product)),state.filters.product)}
+      ${filterSelect('filterTier','Tier',['A','B','C',''],state.filters.tier)}
+      ${filterSelect('filterStatus','Status',uniq(d.retentionOverviewSummary.map(r=>r.account_status)),state.filters.status)}
+    </div>`;
+  }
+  if(state.area==='pnl'){
+    return `<div class="filters">
+      ${filterSelect('filterYear','Year',uniq(d.pnlMonthly.map(r=>r.year)),state.filters.year)}
+      ${filterSelect('filterMonth','Month',uniq(d.pnlMonthly.map(r=>r.month)),state.filters.month)}
+      ${filterSelect('filterProduct','Product',uniq(d.pnlMonthly.map(r=>r.product)),state.filters.product)}
+    </div>`;
+  }
+  return '';
+}
+function metric(label,value,sub,key,tone='mint'){
+  return `<button class="metric tone-${tone}" data-modal="${esc(key)}">
+    <div class="metric-value">${value}</div>
+    <div class="metric-label">${esc(label)}</div>
+    <div class="metric-sub">${esc(sub||'')}</div>
+  </button>`;
+}
+function kpi(label,value,sub,key,tone='mint'){
+  return `<button class="kpi tone-${tone}" data-modal="${esc(key)}">
+    <div class="kpi-head"><div><div class="kpi-label">${esc(label)}</div><div class="kpi-value">${value}</div><div class="kpi-sub">${esc(sub||'')}</div></div><span class="pill">${esc(tone)}</span></div>
+  </button>`;
+}
+function section(title,sub,icon,body,extra=''){
+  return `<section class="section"><div class="section-head"><div><div class="section-title"><span class="section-icon">${icon}</span>${esc(title)}</div><div class="section-sub">${esc(sub||'')}</div></div>${extra}</div><div class="body">${body}</div></section>`;
+}
+function table(rows,cols,limit=80){
+  rows=safeRows(rows).filter(matchSearch);
+  if(!rows.length)return '<div class="empty">No rows for this selection.</div>';
+  return `<div class="table-wrap"><table class="table"><thead><tr>${cols.map(c=>`<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${rows.slice(0,limit).map(r=>`<tr>${cols.map(c=>`<td>${c.render?c.render(r):esc(r[c.key]??'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function byFiltersAcq(rows){
+  return rows.filter(r=>
+    (state.filters.country==='All'||String(r.country||'Unknown')===String(state.filters.country)) &&
+    (state.filters.rank==='All'||String(r.acquisition_rank)===String(state.filters.rank)) &&
+    matchSearch(r)
+  );
+}
+function byFiltersRetentionOverview(rows){
+  return rows.filter(r=>
+    (state.filters.year==='All'||String(r.year)===String(state.filters.year)) &&
+    (state.filters.month==='All'||String(r.month)===String(state.filters.month)) &&
+    (state.filters.product==='All'||String(r.product)===String(state.filters.product)) &&
+    (state.filters.tier==='All'||String(r.retention_tier??'')===String(state.filters.tier)) &&
+    (state.filters.status==='All'||String(r.account_status||'Unknown')===String(state.filters.status)) &&
+    matchSearch(r)
+  );
+}
+function byFiltersRetentionRows(rows){
+  return rows.filter(r=>
+    (state.filters.year==='All'||String(r.year)===String(state.filters.year)) &&
+    (state.filters.month==='All'||String(r.month)===String(state.filters.month)) &&
+    (state.filters.product==='All'||String(r.product)===String(state.filters.product)) &&
+    (state.filters.tier==='All'||String(r.retention_tier??'')===String(state.filters.tier)) &&
+    (state.filters.status==='All'||String(r.account_status||r.status_normalized||r.status||'Unknown')===String(state.filters.status)) &&
+    matchSearch(r)
+  );
+}
+function byFiltersPnl(rows){
+  return rows.filter(r=>
+    (state.filters.year==='All'||String(r.year)===String(state.filters.year)) &&
+    (state.filters.month==='All'||String(r.month)===String(state.filters.month)) &&
+    (state.filters.product==='All'||String(r.product)===String(state.filters.product)) &&
+    matchSearch(r)
+  );
+}
+function group(rows,key,valueKey){
   const m=new Map();
-  rows.forEach(r=>{const k=String(r[key]||'Unknown'); if(!m.has(k))m.set(k,{name:k,count:0,value:0,risk:0,riskValue:0,rows:[]}); const o=m.get(k); o.count++; o.value+=n(r[valueKey]); if(isRiskDeal(r)){o.risk++;o.riskValue+=n(r[valueKey])} o.rows.push(r);});
+  rows.forEach(r=>{const k=String(r[key]??'Unknown')||'Unknown'; if(!m.has(k))m.set(k,{name:k,count:0,value:0,rows:[]}); const o=m.get(k);o.count++;o.value+=valueKey?n(r[valueKey]):1;o.rows.push(r)});
   return [...m.values()].sort((a,b)=>b.value-a.value||b.count-a.count);
 }
-function groupRank(rows){
-  const m=new Map();
-  rows.forEach(r=>{const k=r.country||'Unknown'; if(!m.has(k))m.set(k,{name:k,count:0,touched:0,untouched:0,calls:0,meetings:0,rows:[]}); const o=m.get(k); o.count+=n(r.companies); o.touched+=n(r.touched_companies); o.untouched+=n(r.no_touch_companies); o.calls+=n(r.connected_calls); o.meetings+=n(r.completed_meetings); o.rows.push(r);});
-  return [...m.values()].sort((a,b)=>b.count-a.count);
+
+const acqCompanyCols=[
+  {label:'Company',key:'company_name'},
+  {label:'Country',key:'country'},
+  {label:'Rank',key:'acquisition_rank',render:r=>badge(r.acquisition_rank,'rank')},
+  {label:'Touch',key:'touch_status',render:r=>badge(r.touch_status,r.is_touched?'ok':'warn')},
+  {label:'Quality Touches',key:'quality_touch_count',render:r=>num(r.quality_touch_count)},
+  {label:'Connected Calls',key:'connected_calls_count',render:r=>num(r.connected_calls_count)},
+  {label:'Completed Meetings',key:'completed_meetings_count',render:r=>num(r.completed_meetings_count)},
+  {label:'Open Deals',key:'open_deals_count',render:r=>num(r.open_deals_count)}
+];
+const activityCols=[
+  {label:'Type',key:'activity_type',render:r=>badge(r.activity_type,'rank')},
+  {label:'Company / Account',key:'company_name',render:r=>esc(r.company_name||r.account_name||'—')},
+  {label:'Owner',key:'display_name'},
+  {label:'Date',key:'activity_at',render:r=>date(r.activity_at)},
+  {label:'Outcome',key:'outcome'},
+  {label:'Connected',key:'is_connected_call',render:r=>r.is_connected_call?'<span class="ok">Yes</span>':'—'},
+  {label:'Completed',key:'is_completed_meeting',render:r=>r.is_completed_meeting?'<span class="ok">Yes</span>':'—'}
+];
+const acqDealCols=[
+  {label:'Deal',key:'deal_name'},
+  {label:'Company',key:'company_name'},
+  {label:'Rank',key:'acquisition_rank',render:r=>r.acquisition_rank?badge(r.acquisition_rank,'rank'):'—'},
+  {label:'Stage',key:'stage_label',render:r=>badge(r.stage_label||'Open','stage')},
+  {label:'Status',key:'deal_status',render:r=>badge(r.deal_status,r.deal_status==='open'?'rank':r.deal_status==='won'?'ok':'warn')},
+  {label:'Amount',key:'amount',render:r=>money(r.amount)},
+  {label:'Created',key:'created_at',render:r=>date(r.created_at)},
+  {label:'Close',key:'close_date',render:r=>date(r.close_date)}
+];
+const retAccountCols=[
+  {label:'Account',key:'company_name'},
+  {label:'Tier',key:'retention_tier',render:r=>badge(r.retention_tier===''?'Empty':r.retention_tier,'tier')},
+  {label:'Product',key:'product'},
+  {label:'Status',key:'status_normalized',render:r=>badge(r.status_normalized||r.status||r.account_status||'Unknown','stage')},
+  {label:'Budget',key:'budget_value',render:r=>money(r.budget_value)},
+  {label:'Booked',key:'booked_value',render:r=>money(r.booked_value)},
+  {label:'Collected',key:'collected_value',render:r=>money(r.collected_value)},
+  {label:'Remaining',key:'remaining_value',render:r=>money(r.remaining_value)}
+];
+const retDealCols=[
+  {label:'Deal',key:'deal_name'},
+  {label:'Account',key:'account_name'},
+  {label:'Tier',key:'retention_tier',render:r=>badge(r.retention_tier===''?'Empty':r.retention_tier,'tier')},
+  {label:'Stage',key:'stage_label',render:r=>badge(r.stage_label||'Open','stage')},
+  {label:'Status',key:'deal_status',render:r=>badge(r.deal_status,r.deal_status==='open'?'rank':r.deal_status==='won'?'ok':'warn')},
+  {label:'Amount',key:'amount',render:r=>money(r.amount)},
+  {label:'Created',key:'created_at',render:r=>date(r.created_at)},
+  {label:'Close',key:'close_date',render:r=>date(r.close_date)}
+];
+function badge(v,tone='rank'){return `<span class="badge ${tone}">${esc(v??'—')}</span>`}
+
+function acquisitionOverview(){
+  const d=state.data;
+  const rows=byFiltersAcq(d.acqRankCoverage);
+  const summary=group(rows,'acquisition_rank');
+  const rankA=rows.filter(r=>r.acquisition_rank==='A');
+  const rankB=rows.filter(r=>r.acquisition_rank==='B');
+  const touched=rows.filter(r=>r.is_touched);
+  const untouched=rows.filter(r=>!r.is_touched);
+  const deals=d.acqPersonDeals.filter(matchSearch);
+  const open=deals.filter(r=>r.deal_status==='open'), won=deals.filter(r=>r.deal_status==='won'), lost=deals.filter(r=>r.deal_status==='lost');
+  return `<div class="metrics">
+    ${metric('Rank A Companies',num(rankA.length),`${num(rankA.filter(r=>r.is_touched).length)} touched · ${num(rankA.filter(r=>!r.is_touched).length)} untouched`,'acqRankA','mint')}
+    ${metric('Rank B Companies',num(rankB.length),`${num(rankB.filter(r=>r.is_touched).length)} touched · ${num(rankB.filter(r=>!r.is_touched).length)} untouched`,'acqRankB','mint')}
+    ${metric('Touched Companies',num(touched.length),'quality touch by same owner','acqTouched','green')}
+    ${metric('Untouched Companies',num(untouched.length),'no connected call or completed meeting','acqUntouched','orange')}
+    ${metric('Completed Meetings',num(sum(rows,'completed_meetings_count')),'all-time completed by same owner','acqMeetings','purple')}
+    ${metric('Open Deals',num(open.length),money(sum(open,'amount')),'acqOpenDeals','blue')}
+  </div>
+  <div class="kpi-grid">
+    ${kpi('Quality Touches',num(sum(rows,'quality_touch_count')),'connected calls + completed meetings, all-time','acqQuality','green')}
+    ${kpi('Connected Calls',num(sum(rows,'connected_calls_count')),'same owner only, all-time','acqConnected','mint')}
+    ${kpi('Won / Lost Deals',`${num(won.length)} / ${num(lost.length)}`,`${money(sum(won,'amount'))} won · ${money(sum(lost,'amount'))} lost`,'acqWonLost','blue')}
+  </div>
+  <div class="layout-2">
+    ${section('Country Coverage','Touched and untouched Rank A/B companies by selected country','⌁','<canvas id="acqCountryChart" class="chart-lg"></canvas>')}
+    ${section('Rank A/B Details','Only Rank A and Rank B. Touched requires same-owner connected call or completed meeting.','▰',table(rows,acqCompanyCols,80),'<button class="tab" data-modal="acqCoverage">Open all</button>')}
+  </div>
+  <div class="layout-2 mt">
+    ${section('Open Acquisition Deals','Current open acquisition opportunities','●',table(open,acqDealCols,80),'<button class="tab" data-modal="acqOpenDeals">Open all</button>')}
+    ${section('Acquisition Activity Details','Connected calls and completed meetings are quality touches; regular activity remains visible separately.','✓',table(d.acqActivityDetails.filter(matchSearch),activityCols,80),'<button class="tab" data-modal="acqActivities">Open all</button>')}
+  </div>`;
 }
-function sourceRollup(rows){
-  const m=new Map();
-  rows.forEach(r=>{const k=r.source_bucket||'Unknown'; if(!m.has(k))m.set(k,{name:k,count:0,total:0,eligible:0,contacted:0,need:0,calls:0,meetings:0,rows:[]}); const o=m.get(k); o.count++; o.total+=n(r.total_contacts)||1; o.eligible+=n(r.eligible_leads); o.contacted+=n(r.contacted_leads); o.need+=n(r.needs_contact); o.calls+=n(r.connected_calls); o.meetings+=n(r.completed_meetings); o.rows.push(r);});
-  return [...m.values()].sort((a,b)=>(b.need||b.count)-(a.need||a.count));
+function acquisitionPerson(){
+  const d=state.data;
+  const p=d.acqPersonSummary.find(r=>r.person_key===state.page)||{};
+  const coverage=byFiltersAcq(d.acqRankCoverage.filter(r=>r.person_key===state.page));
+  const deals=d.acqPersonDeals.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const acts=d.acqActivityDetails.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const open=deals.filter(r=>r.deal_status==='open'), won=deals.filter(r=>r.deal_status==='won'), lost=deals.filter(r=>r.deal_status==='lost');
+  const dealsOnly=p.page_type==='deals_only';
+  return `<div class="person-head"><div><h2>${esc(p.display_name)}</h2><p>${dealsOnly?'Deals-only acquisition page':'Full acquisition activity page'} · Rank cards use Rank A/B only.</p></div><span class="badge ${dealsOnly?'warn':'ok'}">${esc(p.page_type)}</span></div>
+  <div class="metrics">
+    ${metric('Assigned Companies',num(p.assigned_companies),'all assigned companies','personCompanies','mint')}
+    ${metric('Rank A',num(p.rank_a_companies),'Rank A only','acqRankA','mint')}
+    ${metric('Rank B',num(p.rank_b_companies),'Rank B only','acqRankB','mint')}
+    ${metric('Open Deals',num(p.open_deals_count),money(p.open_deals_amount),'personOpenDeals','blue')}
+    ${metric('Won Deals',num(p.won_deals_count),money(p.won_deals_amount),'personWonDeals','green')}
+    ${metric('Lost Deals',num(p.lost_deals_count),money(p.lost_deals_amount),'personLostDeals','orange')}
+  </div>
+  ${dealsOnly?'':`<div class="kpi-grid">
+    ${kpi('Calls MTD / YTD',`${num(p.calls_mtd)} / ${num(p.calls_ytd)}`,`${num(p.connected_calls_mtd)} MTD connected`,'personActivities','mint')}
+    ${kpi('Meetings MTD / YTD',`${num(p.meetings_mtd)} / ${num(p.meetings_ytd)}`,`${num(p.completed_meetings_mtd)} MTD completed`,'personActivities','purple')}
+    ${kpi('Touched / Untouched',`${num(coverage.filter(r=>r.is_touched).length)} / ${num(coverage.filter(r=>!r.is_touched).length)}`,'quality touch by same owner','personCoverage','green')}
+  </div>`}
+  <div class="layout-2">
+    ${section('Company Rank Coverage','Rank A/B only. Touched = same owner connected call or completed meeting.','▰',table(coverage,acqCompanyCols,80),'<button class="tab" data-modal="personCoverage">Open all</button>')}
+    ${section('Open Deals','Deals owned by this person','●',table(open,acqDealCols,80),'<button class="tab" data-modal="personOpenDeals">Open all</button>')}
+  </div>
+  <div class="layout-2 mt">
+    ${section('Won Deals','Closed/won acquisition deals','✓',table(won,acqDealCols,80),'<button class="tab" data-modal="personWonDeals">Open all</button>')}
+    ${section('Lost Deals','Closed/lost acquisition deals','!',table(lost,acqDealCols,80),'<button class="tab" data-modal="personLostDeals">Open all</button>')}
+  </div>
+  ${dealsOnly?'':`<div class="mt">${section('Activity Details','Same-owner calls and meetings for this page','⌁',table(acts,activityCols,120),'<button class="tab" data-modal="personActivities">Open all</button>')}</div>`}`;
 }
-function topbar(){return `<div class="topbar"><div><div class="eyebrow">Talentera · CRM Performance Dashboard</div><h1 class="title">Acquisition Command Center</h1><div class="subtitle">Full acquisition view: leads, outreach, rank coverage, pipeline risk and rep execution — live Supabase only.</div></div><div class="top-actions"><div class="live"><i></i> LIVE · SUPABASE</div><select id="ownerFilter" class="select">${ownerList().map(o=>`<option ${state.owner===o?'selected':''}>${esc(o)}</option>`).join('')}</select><input id="searchBox" class="select" placeholder="Search all visible data…" value="${esc(state.search)}"><button id="refreshBtn" class="btn primary">Refresh</button></div></div>`}
-function viewbar(){const items=[['overview','Overview'],['leads','Leads & Source'],['coverage','Rank A/B'],['pipeline','Pipeline'],['reps','Rep Details']];return `<div class="viewbar"><span class="view-label">Views</span>${items.map(([id,label])=>`<button class="chip ${state.view===id?'active':''}" data-view="${id}"><i></i>${label}</button>`).join('')}</div>`}
-function metric(label,value,sub,key){return `<div class="metric" data-modal="${key}"><div class="metric-value">${value}</div><div class="metric-label">${esc(label)}</div><div class="metric-sub">${esc(sub||'')}</div></div>`}
-function kpi(label,value,sub,key,color='blue',spark=''){return `<div class="kpi" data-modal="${key}"><div class="kpi-head"><div><div class="kpi-label">${esc(label)}</div><div class="kpi-value" style="color:var(--${color})">${value}</div><div class="kpi-sub">${esc(sub||'')}</div></div><span class="pill ${color}">Live</span></div>${spark?`<canvas class="spark" id="${spark}"></canvas>`:''}</div>`}
-function section(title,sub,icon,body,extra=''){return `<section class="section"><div class="section-head"><div><div class="section-title"><span class="section-icon">${icon}</span>${esc(title)}</div><div class="section-sub">${esc(sub||'')}</div></div>${extra}</div><div class="body">${body}</div></section>`}
-function table(rows,cols,limit=80){if(!rows.length)return '<div class="empty">No rows for this selection.</div>';return `<div class="table-wrap"><table class="table"><thead><tr>${cols.map(c=>`<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>${rows.slice(0,limit).map(r=>`<tr>${cols.map(c=>`<td>${c.render?c.render(r):esc(r[c.key]??'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
-const dealCols=[{label:'Deal',key:'dealname',render:r=>r.hubspot_url?`<a class="link" href="${esc(r.hubspot_url)}" target="_blank">${esc(r.dealname||'Open')}</a>`:esc(r.dealname||'—')},{label:'Company',key:'company_name'},{label:'Owner',key:'owner_name'},{label:'Stage',key:'dealstage',render:r=>`<span class="stage">${esc(stageOf(r))}</span>`},{label:'Amount',key:'amount',render:r=>`<span class="amount">${money(r.amount)}</span>`},{label:'Days',key:'days_in_stage',render:r=>`<span class="${n(r.days_in_stage)>=21?'risk':'ok'}">${num(r.days_in_stage)}</span>`},{label:'Next Activity',key:'next_activity_date',render:r=>r.next_activity_date?esc(String(r.next_activity_date).slice(0,10)):'<span class="risk">None</span>'}];
-const leadCols=[{label:'Contact',key:'contact_name',render:r=>r.hubspot_url?`<a class="link" href="${esc(r.hubspot_url)}" target="_blank">${esc(r.contact_name||r.email||r.contact_id)}</a>`:esc(r.contact_name||r.email||r.contact_id||'—')},{label:'Company',key:'company_name'},{label:'Owner',key:'owner_name'},{label:'Source',key:'source_bucket',render:r=>`<span class="stage">${esc(sourceOf(r))}</span>`},{label:'Status',key:'lead_status'},{label:'Days',key:'days_since_created'},{label:'Calls',key:'connected_calls'},{label:'Meetings',key:'completed_meetings'}];
-const rankCols=[{label:'Rank',key:'rank_group'},{label:'Country',key:'country'},{label:'Owner',key:'owner_name'},{label:'Companies',key:'companies'},{label:'Touched',key:'touched_companies'},{label:'Untouched',key:'no_touch_companies',render:r=>`<span class="${n(r.no_touch_companies)>0?'risk':'ok'}">${num(r.no_touch_companies)}</span>`},{label:'Touch Rate',key:'touch_rate_pct',render:r=>pct(r.touch_rate_pct||0)},{label:'Calls',key:'connected_calls'},{label:'Meetings',key:'completed_meetings'}];
-function priorityActions(fd){
-  const risk=fd.pipe.filter(isRiskDeal), noNext=fd.pipe.filter(r=>!r.next_activity_date), stuck=fd.pipe.filter(r=>n(r.days_in_stage)>=21), untouched=sum(fd.rank,'no_touch_companies');
-  const actions=[['Contact lead backlog',fd.leads.length,'Start with online leads, then offline backlog.','leads'],['Fix no-next-activity deals',noNext.length,'Every open deal needs a next activity.','noNext'],['Recover stuck pipeline',stuck.length,'Update stage movement or close stale deals.','stuck'],['Clean Rank A/B untouched companies',untouched,'Company coverage must stay separate from contact SLA.','rank'],['Review risk exposure',risk.length,`${money(sum(risk,'amount'))} open value is exposed.`,'risk']].filter(x=>n(x[1])>0);
-  return `<div class="action-list">${actions.map((a,i)=>`<div class="action" data-modal="${a[3]}"><div class="action-ic">${i+1}</div><div><div class="action-title">${esc(a[0])}</div><div class="action-sub">${esc(a[2])}</div></div><div class="action-count">${num(a[1])}</div></div>`).join('')}</div>`
+function retentionOverview(){
+  const d=state.data;
+  const rows=byFiltersRetentionOverview(d.retentionOverviewSummary);
+  const acc=byFiltersRetentionRows(d.retentionPersonAccounts);
+  const acts=d.retentionActivityDetails.filter(matchSearch);
+  const accounts=sum(rows,'accounts_count'), touched=sum(d.retentionPersonSummary,'touched_accounts'), untouched=sum(d.retentionPersonSummary,'untouched_accounts');
+  return `<div class="metrics">
+    ${metric('Applicable Accounts',num(accounts),'deduped overview by filters','retAccounts','mint')}
+    ${metric('Tier A / B / C',`${num(sum(rows.filter(r=>r.retention_tier==='A'),'accounts_count'))} / ${num(sum(rows.filter(r=>r.retention_tier==='B'),'accounts_count'))} / ${num(sum(rows.filter(r=>r.retention_tier==='C'),'accounts_count'))}`,'retention tiers only','retAccounts','mint')}
+    ${metric('Empty Tier',num(sum(rows.filter(r=>String(r.retention_tier||'')===''),'accounts_count')),'blank/null tier field','retAccounts','orange')}
+    ${metric('Booked',money(sum(rows,'booked_value')),'sheet financial snapshot','retAccounts','green')}
+    ${metric('Collected',money(sum(rows,'collected_value')),'cash collection','retAccounts','blue')}
+    ${metric('Remaining',money(sum(rows,'remaining_value')),'remaining collection','retAccounts','orange')}
+  </div>
+  <div class="kpi-grid">
+    ${kpi('Calls / Connected MTD',`${num(sum(rows,'calls_mtd'))} / ${num(sum(rows,'connected_calls_mtd'))}`,'same-owner activity where applicable','retActivities','mint')}
+    ${kpi('Meetings / Completed MTD',`${num(sum(rows,'meetings_mtd'))} / ${num(sum(rows,'completed_meetings_mtd'))}`,'completed meetings from selected scope','retActivities','purple')}
+    ${kpi('Open Deals',num(sum(rows,'open_deals_count')),money(sum(rows,'open_deals_amount')),'retDeals','blue')}
+  </div>
+  <div class="layout-2">
+    ${section('Retention Overview by Product / Tier','Financial + activity summary from deduped overview view','▰',table(rows,[
+      {label:'Year',key:'year'},{label:'Month',key:'month'},{label:'Product',key:'product'},{label:'Tier',key:'retention_tier',render:r=>badge(r.retention_tier===''?'Empty':r.retention_tier,'tier')},{label:'Accounts',key:'accounts_count',render:r=>num(r.accounts_count)},{label:'Booked',key:'booked_value',render:r=>money(r.booked_value)},{label:'Collected',key:'collected_value',render:r=>money(r.collected_value)}
+    ],100),'<button class="tab" data-modal="retOverview">Open all</button>')}
+    ${section('RM / CSM Touch Coverage','Touched = same RM/CSM connected call or completed meeting, all-time','✓',table(d.retentionPersonSummary,[
+      {label:'Person',key:'display_name'},{label:'Role',key:'role_type',render:r=>badge(r.role_type,'rank')},{label:'Accounts',key:'applicable_accounts',render:r=>num(r.applicable_accounts)},{label:'Touched',key:'touched_accounts',render:r=>num(r.touched_accounts)},{label:'Untouched',key:'untouched_accounts',render:r=>num(r.untouched_accounts)}
+    ],80))}
+  </div>
+  <div class="layout-2 mt">
+    ${section('Applicable Accounts','Filtered account financial table','●',table(acc,retAccountCols,100),'<button class="tab" data-modal="retAccounts">Open all</button>')}
+    ${section('Retention Activity Details','Same-owner activity only for RM/CSM pages','⌁',table(acts,activityCols,100),'<button class="tab" data-modal="retActivities">Open all</button>')}
+  </div>`;
 }
-function bars(rows,kind){const max=Math.max(1,...rows.map(r=>n(r.value||r.count)));return `<div class="bar-list">${rows.slice(0,12).map(r=>`<div class="bar-row" data-filter-kind="${kind}" data-filter-name="${esc(r.name)}"><div><div class="bar-name">${esc(r.name)}</div><div class="bar-meta">${num(r.count)} records · ${r.risk?num(r.risk)+' risk':''}</div><div class="bar-track"><span class="bar-fill" style="width:${Math.max(3,n(r.value||r.count)/max*100)}%"></span></div></div><div class="bar-value">${r.value?money(r.value):num(r.count)}</div></div>`).join('')}</div>`}
-function overview(fd,d){
-  const risk=fd.pipe.filter(isRiskDeal), online=fd.leads.filter(r=>sourceOf(r)==='online'), offline=fd.leads.filter(r=>sourceOf(r)!=='online');
-  const rankCompanies=sum(fd.rank,'companies'), touched=sum(fd.rank,'touched_companies');
-  return `<div class="metrics">${metric('Leads Need Contact',num(fd.leads.length),`${num(online.length)} online · ${num(offline.length)} offline`,'leads')}${metric('Rank A/B Companies',num(rankCompanies),`Untouched ${num(sum(fd.rank,'no_touch_companies'))}`,'rank')}${metric('Open Pipeline',money(sum(fd.pipe,'amount')),`${num(fd.pipe.length)} deals`,'pipeline')}${metric('Deals at Risk',num(risk.length),`${money(sum(risk,'amount'))} exposed`,'risk')}${metric('Lead Contact Rate',pct(d.leadSummary.lead_contact_rate_pct||0),'live contact coverage','source')}${metric('Company Touch Rate',pct(rankCompanies?touched/rankCompanies*100:0),`${num(touched)} touched`,'rank')}</div><div class="kpi-grid">${kpi('Outreach Backlog',num(fd.leads.length),`${num(online.length)} online · ${num(offline.length)} offline`,'leads','orange','sparkLeads')}${kpi('Pipeline Health',money(sum(fd.pipe,'amount')),`${num(fd.pipe.length)} open deals`,'pipeline','green','sparkPipe')}${kpi('Risk Exposure',money(sum(risk,'amount')),`${num(risk.length)} deals at risk`,'risk','red','sparkRisk')}</div><div class="layout-2">${section('Lifecycle / Activity Funnel','Calls, leads, meetings and pipeline movement','⌁','<canvas id="activityChart" class="chart-lg"></canvas>')}${section('Priority Actions','Calculated from live leads, companies and deals','! ',priorityActions(fd))}</div><div class="layout-3 mt">${section('Lead Source Mix','Backlog distribution by acquisition source','◌','<canvas id="sourceChart" class="chart-md"></canvas>')}${section('Pipeline by Owner','Open deal ownership and exposure','●','<canvas id="ownerChart" class="chart-md"></canvas>')}${section('Rank A/B Coverage','Touched vs untouched companies','▰','<canvas id="coverageChart" class="chart-md"></canvas>')}</div><div class="layout-2 mt">${section('Priority Leads & SLA Breaches','Real contacts requiring outreach','↗',table(fd.leads,leadCols,10),'<button class="tab" data-modal="leads">Open all</button>')}${section('Open Pipeline','Active acquisition opportunities','▰',table(fd.pipe,dealCols,10),'<button class="tab" data-modal="pipeline">Open all</button>')}</div>`
+function retentionPerson(){
+  const d=state.data;
+  const p=d.retentionPersonSummary.find(r=>r.person_key===state.page)||{};
+  const accounts=byFiltersRetentionRows(d.retentionPersonAccounts.filter(r=>r.person_key===state.page));
+  const deals=d.retentionPersonDeals.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const acts=d.retentionActivityDetails.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const open=deals.filter(r=>r.deal_status==='open'), won=deals.filter(r=>r.deal_status==='won'), lost=deals.filter(r=>r.deal_status==='lost');
+  return `<div class="person-head"><div><h2>${esc(p.display_name)}</h2><p>${String(p.role_type||'').toUpperCase()} fixed page · Tier A/B/C/Empty · touched uses same-owner quality touch.</p></div><span class="badge tier">${esc(p.role_type)}</span></div>
+  <div class="metrics">
+    ${metric('Applicable Accounts',num(p.applicable_accounts),'sheet ownership scope','retPersonAccounts','mint')}
+    ${metric('Tier A / B / C',`${num(p.tier_a_accounts)} / ${num(p.tier_b_accounts)} / ${num(p.tier_c_accounts)}`,'retention tiers','retPersonAccounts','mint')}
+    ${metric('Empty Tier',num(p.empty_tier_accounts),'blank tier field','retPersonAccounts','orange')}
+    ${metric('Touched / Untouched',`${num(p.touched_accounts)} / ${num(p.untouched_accounts)}`,'quality touch all-time','retPersonActivities','green')}
+    ${metric('Booked',money(p.booked_value),'sheet booked value','retPersonAccounts','blue')}
+    ${metric('Remaining',money(p.remaining_value),'sheet remaining value','retPersonAccounts','orange')}
+  </div>
+  <div class="kpi-grid">
+    ${kpi('Calls MTD / YTD',`${num(p.calls_mtd)} / ${num(p.calls_ytd)}`,`${num(p.connected_calls_mtd)} MTD connected`,'retPersonActivities','mint')}
+    ${kpi('Meetings MTD / YTD',`${num(p.meetings_mtd)} / ${num(p.meetings_ytd)}`,`${num(p.completed_meetings_mtd)} MTD completed`,'retPersonActivities','purple')}
+    ${kpi('Deals Created MTD / YTD',`${num(p.deals_created_mtd)} / ${num(p.deals_created_ytd)}`,'retention pipeline','retPersonDeals','blue')}
+  </div>
+  <div class="layout-2">
+    ${section('Applicable Accounts','Accounts assigned by RM/CSM sheet scope','▰',table(accounts,retAccountCols,100),'<button class="tab" data-modal="retPersonAccounts">Open all</button>')}
+    ${section('Open Deals','Retention open deals connected to applicable accounts','●',table(open,retDealCols,100),'<button class="tab" data-modal="retPersonOpenDeals">Open all</button>')}
+  </div>
+  <div class="layout-2 mt">
+    ${section('Won Deals','Retention won deals','✓',table(won,retDealCols,100),'<button class="tab" data-modal="retPersonWonDeals">Open all</button>')}
+    ${section('Lost Deals','Retention lost deals','!',table(lost,retDealCols,100),'<button class="tab" data-modal="retPersonLostDeals">Open all</button>')}
+  </div>
+  <div class="mt">${section('Activity Details','Only same-owner calls/meetings for this RM/CSM','⌁',table(acts,activityCols,160),'<button class="tab" data-modal="retPersonActivities">Open all</button>')}</div>`;
 }
-function leadsView(fd){return `<div class="layout-2">${section('Online / Inbound Needs Contact','Contacts from online sources','↗',table(fd.leads.filter(r=>sourceOf(r)==='online'),leadCols,60),'<button class="tab" data-modal="online">Open all</button>')}${section('Offline / Outbound Needs Contact','Contacts from offline/import/outbound sources','↘',table(fd.leads.filter(r=>sourceOf(r)!=='online'),leadCols,60),'<button class="tab" data-modal="offline">Open all</button>')}</div><div class="layout-2 mt">${section('Lead Source Performance','Eligible vs contacted vs need contact','▰','<canvas id="sourcePerfChart" class="chart-lg"></canvas>')}${section('Source Details','Live source breakdown','≡',table(fd.source,sourceCols(),80),'<button class="tab" data-modal="source">Open all</button>')}</div>`}
-function sourceCols(){return[{label:'Bucket',key:'source_bucket'},{label:'Source',key:'analytics_source'},{label:'Total',key:'total_contacts'},{label:'Eligible',key:'eligible_leads'},{label:'Contacted',key:'contacted_leads'},{label:'Need Contact',key:'needs_contact',render:r=>`<span class="risk">${num(r.needs_contact)}</span>`},{label:'Contact Rate',key:'contact_rate_pct',render:r=>pct(r.contact_rate_pct||0)}]}
-function coverageView(fd){return `<div class="layout-2">${section('Geographic Coverage','Rank A/B company coverage by country','▰','<canvas id="countryChart" class="chart-lg"></canvas>')}${section('Top Coverage Gaps','Touched vs untouched companies','!',bars(groupRank(fd.rank).map(r=>({name:r.name,count:r.count,value:r.untouched,rows:r.rows})),'country'))}</div><div class="mt">${section('Rank A/B Coverage Details','Company coverage is separate from contact backlog','≡',table(fd.rank,rankCols,180),'<button class="tab" data-modal="rank">Open all</button>')}</div>`}
-function pipelineView(fd){const stage=group(fd.pipe,'dealstage'), risk=fd.pipe.filter(isRiskDeal); return `<div class="kpi-grid">${kpi('Open Pipeline',money(sum(fd.pipe,'amount')),`${num(fd.pipe.length)} open deals`,'pipeline','green','sparkPipe')}${kpi('Deals at Risk',num(risk.length),`${money(sum(risk,'amount'))} exposed`,'risk','red','sparkRisk')}${kpi('No Next Activity',num(fd.pipe.filter(r=>!r.next_activity_date).length),'follow-up required','noNext','orange','sparkNoNext')}</div><div class="layout-2">${section('Pipeline by Stage','Open value and risk distribution','▰','<canvas id="stageChart" class="chart-lg"></canvas>')}${section('Stage Value Leaders','Click stage rows to drill down','↗',bars(stage,'stage'))}</div><div class="layout-3 mt">${section('Pipeline by Owner','Open deal ownership','●','<canvas id="pipeOwnerChart" class="chart-md"></canvas>')}${section('Risk by Owner','Who needs follow-up cleanup','!','<canvas id="riskOwnerChart" class="chart-md"></canvas>')}${section('Pipeline Mix','Stage distribution','◌','<canvas id="mixChart" class="chart-md"></canvas>')}</div><div class="mt">${section('Open Pipeline Details','Every deal row can open HubSpot','≡',table(fd.pipe,dealCols,180),'<button class="tab" data-modal="pipeline">Open all</button>')}</div>`}
-function repsView(fd,d){const owners=ownerList().filter(o=>o!=='All'), selected=state.owner==='All'?owners[0]:state.owner, periods=d.periods.filter(r=>ownerOf(r)===selected), own={leads:d.leads.filter(r=>ownerOf(r)===selected),pipe:d.pipe.filter(r=>ownerOf(r)===selected),rank:d.rank.filter(r=>ownerOf(r)===selected)}; const y=periods.find(r=>r.period==='Yesterday')||{},m=periods.find(r=>r.period==='MTD')||{},yt=periods.find(r=>r.period==='YTD')||{}; return `<div class="viewbar"><span class="view-label">Rep Details</span>${owners.map(o=>`<button class="chip ${selected===o?'active':''}" data-owner-chip="${esc(o)}"><i></i>${esc(first(o))}</button>`).join('')}</div><div class="metrics">${metric('Yesterday Calls',num(y.calls_logged||0),`${num(y.connected_calls||0)} connected`,'repCalls')}${metric('MTD Meetings',num(m.meetings_completed||0),`${num(m.meetings_logged||0)} logged`,'repMeetings')}${metric('YTD Deals Won',num(yt.deals_won||0),money(yt.won_amount||0),'repWon')}${metric('Rep Lead Backlog',num(own.leads.length),'contacts need outreach','repLeads')}${metric('Rep Pipeline',money(sum(own.pipe,'amount')),`${num(own.pipe.length)} deals`,'repPipe')}${metric('Rank A/B Coverage',num(sum(own.rank,'companies')),`${num(sum(own.rank,'no_touch_companies'))} untouched`,'repRank')}</div><div class="layout-2">${section('Rep Needs Contact','Online and offline contacts assigned to this rep','↗',table(own.leads,leadCols,70),'<button class="tab" data-modal="repLeads">Open all</button>')}${section('Rep Open Deals','Pipeline owned by this rep','▰',table(own.pipe,dealCols,70),'<button class="tab" data-modal="repPipe">Open all</button>')}</div><div class="layout-2 mt">${section('Rep Rank A/B Coverage','Company coverage by country and rank','●',table(own.rank,rankCols,70),'<button class="tab" data-modal="repRank">Open all</button>')}${section('Rep Priority Actions','Calculated from this rep data only','!',priorityActions(own))}</div>`}
+function pnlView(){
+  const d=state.data;
+  const rows=byFiltersPnl(d.pnlMonthly);
+  const exec=state.filters.year==='All'?d.pnlSummary:d.pnlSummary.filter(r=>String(r.year)===String(state.filters.year));
+  const costs=byFiltersPnl(d.pnlCosts);
+  return `<div class="metrics">
+    ${metric('Booking',money(sum(rows,'booking')||sum(exec,'booking')),'revenue booking','pnlMonthly','green')}
+    ${metric('Cashing',money(sum(rows,'cashing')||sum(exec,'cashing')),'cash collected','pnlMonthly','blue')}
+    ${metric('Total Cost',money(sum(rows,'total_cost')||sum(exec,'total_cost')),'COGS + overheads + support allocation','pnlCosts','orange')}
+    ${metric('Net Cash Position',money(sum(rows,'net_cash_position')||sum(exec,'net_cash_position')),'cash minus cost','pnlMonthly','mint')}
+    ${metric('COGS',money(sum(rows,'cogs')||sum(costs,'cogs')),'cost component','pnlCosts','orange')}
+    ${metric('Overheads',money(sum(rows,'overheads')||sum(costs,'overheads')),'cost component','pnlCosts','orange')}
+  </div>
+  <div class="layout-2">
+    ${section('Monthly P&L','Booking, cashing, costs and net position','▰','<canvas id="pnlMonthlyChart" class="chart-lg"></canvas>')}
+    ${section('Cost Breakdown','COGS, overheads and support allocation','⌁',table(costs,[
+      {label:'Year',key:'year'},{label:'Product',key:'product'},{label:'COGS',key:'cogs',render:r=>money(r.cogs)},{label:'Overheads',key:'overheads',render:r=>money(r.overheads)},{label:'Support Allocation',key:'support_allocation',render:r=>money(r.support_allocation)},{label:'Total Cost',key:'total_cost',render:r=>money(r.total_cost)}
+    ],100),'<button class="tab" data-modal="pnlCosts">Open all</button>')}
+  </div>
+  <div class="mt">${section('P&L Monthly Details','Filtered monthly rows','≡',table(rows,[
+    {label:'Year',key:'year'},{label:'Month',key:'month'},{label:'Product',key:'product'},{label:'Booking',key:'booking',render:r=>money(r.booking)},{label:'Cashing',key:'cashing',render:r=>money(r.cashing)},{label:'Total Cost',key:'total_cost',render:r=>money(r.total_cost)},{label:'Net Cash',key:'net_cash_position',render:r=>money(r.net_cash_position)}
+  ],140),'<button class="tab" data-modal="pnlMonthly">Open all</button>')}</div>`;
+}
 function render(){
-  const d=state.data, fd=filtered(); cleanCharts(); let body='';
-  if(state.view==='leads')body=leadsView(fd,d); else if(state.view==='coverage')body=coverageView(fd,d); else if(state.view==='pipeline')body=pipelineView(fd,d); else if(state.view==='reps')body=repsView(fd,d); else body=overview(fd,d);
-  $('#app').innerHTML=topbar()+viewbar()+body; bind(); draw(fd,d);
+  destroyCharts();
+  let body='';
+  if(state.area==='acquisition') body=state.page==='overview'?acquisitionOverview():acquisitionPerson();
+  else if(state.area==='retention') body=state.page==='overview'?retentionOverview():retentionPerson();
+  else body=pnlView();
+  $('#app').innerHTML=topbar()+mainTabs()+pageTabs()+filtersBar()+body;
+  bind();
+  setRail();
+  draw();
 }
 function bind(){
-  $('#ownerFilter').onchange=e=>{state.owner=e.target.value;render()}; $('#searchBox').oninput=e=>{state.search=e.target.value;render()}; $('#refreshBtn').onclick=load;
-  $$('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;render()}); $$('[data-modal]').forEach(el=>el.onclick=()=>openModal(el.dataset.modal)); $$('[data-owner-chip]').forEach(b=>b.onclick=()=>{state.owner=b.dataset.ownerChip;state.view='reps';render()}); $$('[data-filter-kind]').forEach(el=>{el.onclick=()=>{state.search=el.dataset.filterName||'';render()}});
-  $('#modalClose').onclick=()=>$('#modalBackdrop').classList.remove('open'); $('#modalBackdrop').onclick=e=>{if(e.target.id==='modalBackdrop')$('#modalBackdrop').classList.remove('open')};
+  $('#searchBox').oninput=e=>{state.search=e.target.value;render()};
+  $('#refreshBtn').onclick=load;
+  $('#resetBtn').onclick=()=>{resetFilters();render()};
+  $$('[data-area]').forEach(b=>b.onclick=()=>{state.area=b.dataset.area;state.page='overview';render()});
+  $$('[data-page]').forEach(b=>b.onclick=()=>setPage(state.area,b.dataset.page));
+  $$('[data-modal]').forEach(el=>el.onclick=()=>openModal(el.dataset.modal));
+  const bindFilter=(id,key)=>{const el=$('#'+id); if(el)el.onchange=e=>{state.filters[key]=e.target.value;render()}};
+  bindFilter('filterCountry','country');bindFilter('filterRank','rank');bindFilter('filterYear','year');bindFilter('filterMonth','month');bindFilter('filterProduct','product');bindFilter('filterTier','tier');bindFilter('filterStatus','status');
+  $('#modalClose').onclick=()=>$('#modalBackdrop').classList.remove('open');
+  $('#modalBackdrop').onclick=e=>{if(e.target.id==='modalBackdrop')$('#modalBackdrop').classList.remove('open')};
 }
-function openModal(key){const fd=filtered(), d=state.data; if(key==='leads')return modal('Priority Leads Need Contact',fd.leads,leadCols); if(key==='online')return modal('Online Leads Need Contact',fd.leads.filter(r=>sourceOf(r)==='online'),leadCols); if(key==='offline')return modal('Offline Leads Need Contact',fd.leads.filter(r=>sourceOf(r)!=='online'),leadCols); if(key==='source')return modal('Lead Source Performance',fd.source,sourceCols()); if(key==='rank')return modal('Rank A/B Coverage',fd.rank,rankCols); if(key==='pipeline')return modal('Open Pipeline',fd.pipe,dealCols); if(key==='risk')return modal('Deals at Risk',fd.pipe.filter(isRiskDeal),dealCols); if(key==='noNext')return modal('Deals with No Next Activity',fd.pipe.filter(r=>!r.next_activity_date),dealCols); if(key==='stuck')return modal('Stuck Deals 21+ Days',fd.pipe.filter(r=>n(r.days_in_stage)>=21),dealCols); if(key==='repLeads')return modal('Rep Leads Need Contact',d.leads.filter(r=>ownerOf(r)===state.owner),leadCols); if(key==='repPipe')return modal('Rep Open Pipeline',d.pipe.filter(r=>ownerOf(r)===state.owner),dealCols); if(key==='repRank')return modal('Rep Rank A/B Coverage',d.rank.filter(r=>ownerOf(r)===state.owner),rankCols); return modal('Details',fd.pipe,dealCols)}
-function modal(title,rows,cols){$('#modalTitle').textContent=title;$('#modalSub').textContent=`${num(rows.length)} rows`;$('#modalBody').innerHTML=`<div class="modal-tools"><input id="modalSearch" class="modal-search" placeholder="Search rows…"><button id="csvBtn" class="csv">Export CSV</button></div><div id="modalTable">${table(rows,cols,400)}</div>`;$('#modalBackdrop').classList.add('open');$('#modalSearch').oninput=e=>{const q=e.target.value.toLowerCase();const r=rows.filter(x=>Object.values(x||{}).join(' ').toLowerCase().includes(q));$('#modalSub').textContent=`${num(r.length)} rows`;$('#modalTable').innerHTML=table(r,cols,400)};$('#csvBtn').onclick=()=>exportCsv(title,rows,cols)}
-function exportCsv(title,rows,cols){const csv=[cols.map(c=>`"${c.label}"`).join(',')].concat(rows.map(r=>cols.map(c=>`"${String(r[c.key]??'').replace(/"/g,'""')}"`).join(','))).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=title.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.csv';a.click()}
-function draw(fd,d){if(!window.Chart)return;const trend=d.trend||[],labels=trend.map(r=>String(r.day||'').slice(5));spark('sparkLeads',labels,trend.map(r=>n(r.leads_created)), '#f59e0b');spark('sparkPipe',labels,trend.map(r=>n(r.pipeline_created_amount)), '#22c55e');spark('sparkRisk',labels,trend.map(r=>n(r.deals_created)), '#ef4444');spark('sparkNoNext',labels,trend.map(r=>n(r.deals_created)), '#f59e0b');if($('#activityChart'))charts.push(new Chart($('#activityChart'),{type:'line',data:{labels,datasets:[{label:'Calls',data:trend.map(r=>n(r.calls_logged)),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.12)',fill:true,tension:.35,pointRadius:0},{label:'Leads',data:trend.map(r=>n(r.leads_created)),borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.10)',fill:true,tension:.35,pointRadius:0},{label:'Meetings',data:trend.map(r=>n(r.completed_meetings)),borderColor:'#8b5cf6',tension:.35,pointRadius:0}]},options:chartOpts()}));if($('#sourceChart'))donut('sourceChart',sourceRollup(fd.leads).map(x=>x.name),sourceRollup(fd.leads).map(x=>x.count));if($('#ownerChart'))bar('ownerChart',group(fd.pipe,'owner_name').slice(0,8),'value',true,'#16a34a');if($('#coverageChart'))bar('coverageChart',groupRank(fd.rank).slice(0,8).map(x=>({name:x.name,value:x.count,count:x.count})), 'value', true, '#2563eb');if($('#sourcePerfChart'))bar('sourcePerfChart',(fd.source||[]).map(r=>({name:r.analytics_source||r.source_bucket,value:n(r.needs_contact),count:n(r.eligible_leads)})).sort((a,b)=>b.value-a.value).slice(0,10),'value',false,'#f59e0b');if($('#countryChart'))bar('countryChart',groupRank(fd.rank).slice(0,12).map(x=>({name:x.name,value:x.count,count:x.count})),'value',true,'#2563eb');if($('#stageChart'))bar('stageChart',group(fd.pipe,'dealstage').slice(0,10),'value',false,'#2563eb');if($('#pipeOwnerChart'))bar('pipeOwnerChart',group(fd.pipe,'owner_name').slice(0,8),'value',true,'#16a34a');if($('#riskOwnerChart'))bar('riskOwnerChart',group(fd.pipe.filter(isRiskDeal),'owner_name').slice(0,8),'riskValue',true,'#ef4444');if($('#mixChart'))donut('mixChart',group(fd.pipe,'dealstage').slice(0,7).map(x=>x.name),group(fd.pipe,'dealstage').slice(0,7).map(x=>x.value))}
-function spark(id,labels,data,color){const el=$('#'+id);if(!el)return;charts.push(new Chart(el,{type:'line',data:{labels,datasets:[{data,borderColor:color,tension:.35,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}}))}
-function chartOpts(){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:8}},y:{grid:{color:'#eef2f7'},ticks:{font:{size:10}}}}}}
-function bar(id,rows,key,horizontal,color){const el=$('#'+id);if(!el)return;charts.push(new Chart(el,{type:'bar',data:{labels:rows.map(x=>x.name),datasets:[{label:'Value',data:rows.map(x=>n(x[key])),backgroundColor:color,borderRadius:8}]},options:{...chartOpts(),indexAxis:horizontal?'y':'x'}}))}
-function donut(id,labels,data){const el=$('#'+id);if(!el)return;charts.push(new Chart(el,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:['#2563eb','#f59e0b','#16a34a','#8b5cf6','#06b6d4','#ef4444','#64748b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10}}}}}}))}
-function init(){load()} if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+function modal(title,rows,cols){
+  rows=safeRows(rows).filter(matchSearch);
+  $('#modalTitle').textContent=title;
+  $('#modalSub').textContent=`${num(rows.length)} rows`;
+  $('#modalBody').innerHTML=`<div class="modal-tools"><input id="modalSearch" class="modal-search" placeholder="Search rows…"><button id="csvBtn" class="csv">Export CSV</button></div><div id="modalTable">${table(rows,cols,500)}</div>`;
+  $('#modalBackdrop').classList.add('open');
+  $('#modalSearch').oninput=e=>{const q=e.target.value.toLowerCase();const r=rows.filter(x=>Object.values(x||{}).join(' ').toLowerCase().includes(q));$('#modalSub').textContent=`${num(r.length)} rows`;$('#modalTable').innerHTML=table(r,cols,500)};
+  $('#csvBtn').onclick=()=>exportCsv(title,rows,cols);
+}
+function openModal(key){
+  const d=state.data;
+  const acqCov=byFiltersAcq(d.acqRankCoverage);
+  const acqDeals=d.acqPersonDeals.filter(matchSearch);
+  const retAcc=byFiltersRetentionRows(d.retentionPersonAccounts);
+  const retDeals=d.retentionPersonDeals.filter(matchSearch);
+  const pnlRows=byFiltersPnl(d.pnlMonthly);
+  const pnlCosts=byFiltersPnl(d.pnlCosts);
+  const personAcqCov=acqCov.filter(r=>r.person_key===state.page);
+  const personAcqDeals=acqDeals.filter(r=>r.person_key===state.page);
+  const personRetAcc=retAcc.filter(r=>r.person_key===state.page);
+  const personRetDeals=retDeals.filter(r=>r.person_key===state.page);
+  const personRetActs=d.retentionActivityDetails.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const personAcqActs=d.acqActivityDetails.filter(r=>r.person_key===state.page&&matchSearch(r));
+  const map={
+    acqCoverage:['Acquisition Rank A/B Coverage',acqCov,acqCompanyCols],
+    acqRankA:['Rank A Companies',acqCov.filter(r=>r.acquisition_rank==='A'),acqCompanyCols],
+    acqRankB:['Rank B Companies',acqCov.filter(r=>r.acquisition_rank==='B'),acqCompanyCols],
+    acqTouched:['Touched Companies',acqCov.filter(r=>r.is_touched),acqCompanyCols],
+    acqUntouched:['Untouched Companies',acqCov.filter(r=>!r.is_touched),acqCompanyCols],
+    acqMeetings:['Acquisition Completed Meetings',d.acqActivityDetails.filter(r=>r.is_completed_meeting&&matchSearch(r)),activityCols],
+    acqConnected:['Acquisition Connected Calls',d.acqActivityDetails.filter(r=>r.is_connected_call&&matchSearch(r)),activityCols],
+    acqQuality:['Acquisition Quality Touch Details',d.acqActivityDetails.filter(r=>(r.is_connected_call||r.is_completed_meeting)&&matchSearch(r)),activityCols],
+    acqActivities:['Acquisition Activity Details',d.acqActivityDetails.filter(matchSearch),activityCols],
+    acqOpenDeals:['Acquisition Open Deals',acqDeals.filter(r=>r.deal_status==='open'),acqDealCols],
+    acqWonLost:['Acquisition Won/Lost Deals',acqDeals.filter(r=>r.deal_status!=='open'),acqDealCols],
+    personCoverage:['Person Rank Coverage',personAcqCov,acqCompanyCols],
+    personOpenDeals:['Person Open Deals',personAcqDeals.filter(r=>r.deal_status==='open'),acqDealCols],
+    personWonDeals:['Person Won Deals',personAcqDeals.filter(r=>r.deal_status==='won'),acqDealCols],
+    personLostDeals:['Person Lost Deals',personAcqDeals.filter(r=>r.deal_status==='lost'),acqDealCols],
+    personActivities:['Person Activity Details',personAcqActs,activityCols],
+    retOverview:['Retention Overview Summary',byFiltersRetentionOverview(d.retentionOverviewSummary),[
+      {label:'Year',key:'year'},{label:'Month',key:'month'},{label:'Product',key:'product'},{label:'Tier',key:'retention_tier',render:r=>badge(r.retention_tier===''?'Empty':r.retention_tier,'tier')},{label:'Accounts',key:'accounts_count',render:r=>num(r.accounts_count)},{label:'Booked',key:'booked_value',render:r=>money(r.booked_value)}
+    ]],
+    retAccounts:['Retention Applicable Accounts',retAcc,retAccountCols],
+    retActivities:['Retention Activity Details',d.retentionActivityDetails.filter(matchSearch),activityCols],
+    retDeals:['Retention Deals',retDeals,retDealCols],
+    retPersonAccounts:['Person Applicable Accounts',personRetAcc,retAccountCols],
+    retPersonDeals:['Person Retention Deals',personRetDeals,retDealCols],
+    retPersonOpenDeals:['Person Open Deals',personRetDeals.filter(r=>r.deal_status==='open'),retDealCols],
+    retPersonWonDeals:['Person Won Deals',personRetDeals.filter(r=>r.deal_status==='won'),retDealCols],
+    retPersonLostDeals:['Person Lost Deals',personRetDeals.filter(r=>r.deal_status==='lost'),retDealCols],
+    retPersonActivities:['Person Retention Activities',personRetActs,activityCols],
+    pnlMonthly:['P&L Monthly Details',pnlRows,[
+      {label:'Year',key:'year'},{label:'Month',key:'month'},{label:'Product',key:'product'},{label:'Booking',key:'booking',render:r=>money(r.booking)},{label:'Cashing',key:'cashing',render:r=>money(r.cashing)},{label:'Cost',key:'total_cost',render:r=>money(r.total_cost)},{label:'Net',key:'net_cash_position',render:r=>money(r.net_cash_position)}
+    ]],
+    pnlCosts:['P&L Cost Breakdown',pnlCosts,[
+      {label:'Year',key:'year'},{label:'Product',key:'product'},{label:'COGS',key:'cogs',render:r=>money(r.cogs)},{label:'Overheads',key:'overheads',render:r=>money(r.overheads)},{label:'Support Allocation',key:'support_allocation',render:r=>money(r.support_allocation)},{label:'Total Cost',key:'total_cost',render:r=>money(r.total_cost)}
+    ]]
+  };
+  const m=map[key]||map.acqCoverage;
+  return modal(m[0],m[1],m[2]);
+}
+function exportCsv(title,rows,cols){
+  const csv=[cols.map(c=>`"${c.label}"`).join(',')].concat(rows.map(r=>cols.map(c=>`"${String(r[c.key]??'').replace(/"/g,'""')}"`).join(','))).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=title.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.csv';
+  a.click();
+}
+function draw(){
+  if(!window.Chart)return;
+  if(state.area==='acquisition'){
+    const rows=byFiltersAcq(state.data.acqRankCoverage);
+    const byCountry=group(rows,'country');
+    bar('acqCountryChart',byCountry.map(x=>({name:x.name,value:x.rows.filter(r=>r.is_touched).length,count:x.rows.length})), 'count', true);
+  }
+  if(state.area==='pnl'){
+    const rows=byFiltersPnl(state.data.pnlMonthly).sort((a,b)=>n(a.year)-n(b.year)||n(a.month_index)-n(b.month_index));
+    const labels=rows.map(r=>`${r.month||''} ${r.year||''}`);
+    const el=$('#pnlMonthlyChart');
+    if(el)charts.push(new Chart(el,{type:'line',data:{labels,datasets:[
+      {label:'Booking',data:rows.map(r=>n(r.booking)),borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.12)',fill:true,tension:.35,pointRadius:2},
+      {label:'Cashing',data:rows.map(r=>n(r.cashing)),borderColor:'#0ea5e9',backgroundColor:'rgba(14,165,233,.10)',fill:true,tension:.35,pointRadius:2},
+      {label:'Total Cost',data:rows.map(r=>n(r.total_cost)),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.10)',fill:true,tension:.35,pointRadius:2},
+      {label:'Net Cash',data:rows.map(r=>n(r.net_cash_position)),borderColor:'#64748b',tension:.35,pointRadius:2}
+    ]},options:chartOpts()}));
+  }
+}
+function bar(id,rows,key='value',horizontal=false){
+  const el=$('#'+id);if(!el)return;
+  charts.push(new Chart(el,{type:'bar',data:{labels:rows.map(x=>x.name),datasets:[
+    {label:'Total',data:rows.map(x=>n(x.count)),backgroundColor:'rgba(20,184,166,.28)',borderColor:'#14b8a6',borderWidth:1,borderRadius:10},
+    {label:'Touched',data:rows.map(x=>n(x.value)),backgroundColor:'rgba(16,185,129,.60)',borderColor:'#10b981',borderWidth:1,borderRadius:10}
+  ]},options:{...chartOpts(),indexAxis:horizontal?'y':'x'} }))
+}
+function chartOpts(){
+  return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:10}},y:{grid:{color:'rgba(15,118,110,.08)'},ticks:{font:{size:10}}}}}
+}
+function init(){load()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+
 })();

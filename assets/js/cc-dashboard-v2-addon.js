@@ -1,0 +1,51 @@
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const fmt=new Intl.NumberFormat('en-US'),usd=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+const n=v=>Number(v||0),num=v=>fmt.format(n(v)),money=v=>usd.format(n(v)),pct=v=>`${Math.round(n(v)*10)/10}%`;
+const sum=(a,k)=>(a||[]).reduce((x,r)=>x+n(r[k]),0),esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let data=null,lastTitle='';
+async function view(name,limit=7000){try{return await DB.fetchView(name,limit)}catch(e){console.warn('addon view missing',name,e);return[]}}
+async function load(){
+ data={
+  aps:await view('vw_acq_person_summary_v3',300), rps:await view('vw_retention_person_summary_v3',300),
+  arc:await view('vw_acq_rank_coverage_v1',9000), apd:await view('vw_acq_person_deals_v3',9000), aad:await view('vw_acq_activity_details_v1',12000),
+  rpa:await view('vw_retention_person_accounts_v3',9000), rpd:await view('vw_retention_person_deals_v3',9000), rad:await view('vw_retention_activity_details_v1',12000),
+  pnl:await view('vw_pnl_monthly_summary_v2',4000), pnc:await view('vw_pnl_cost_breakdown_v2',1000),
+  lead:(await view('vw_acquisition_lead_summary',5))[0]||{}, leads:await view('vw_acquisition_priority_leads',7000), src:await view('vw_acquisition_lead_source_performance',1000)
+ };
+ paint();
+}
+function first(s){return String(s||'').split(/\s+/)[0]||''}
+function renderSidebar(){
+ if(!data||$('.side-brand'))return;
+ const rep=(r,area)=>`<button class='side-rep' data-addon-area='${area}' data-addon-page='${esc(r.person_key)}'><span class='dot ${area}'></span><span>${esc(first(r.display_name))}</span>${r.page_type==='deals_only'?'<em>VIEW</em>':r.role_type?`<em>${esc(String(r.role_type).toUpperCase())}</em>`:''}</button>`;
+ $('.rail').innerHTML=`<div class='side-brand'><div class='brand-mark'>T</div><div><strong>Talentera</strong><small>Sales Command Center</small></div></div><div class='side-scroll'><div class='side-label'>Main</div><button class='side-main' data-addon-area='acquisition'>📊 <span>Acquisition</span></button><button class='side-main' data-addon-area='retention'>🛡️ <span>Retention</span></button><button class='side-main' data-addon-area='pnl'>📈 <span>P&L</span></button><div class='side-label'>Acquisition Reps</div>${data.aps.map(r=>rep(r,'acquisition')).join('')}<div class='side-label'>Retention Team</div>${data.rps.map(r=>rep(r,'retention')).join('')}</div><div class='side-bottom'><div class='avatar'>SM</div><span>Live Supabase</span></div>`;
+ $$('[data-addon-area]').forEach(b=>b.onclick=()=>go(b.dataset.addonArea,b.dataset.addonPage));
+}
+function go(area,page){
+ const main=[...$$('[data-area]')].find(b=>b.dataset.area===area||b.textContent.toLowerCase().includes(area==='pnl'?'p&l':area));
+ if(main)main.click();
+ if(page){setTimeout(()=>{const tab=[...$$('[data-page]')].find(b=>b.dataset.page===page);if(tab)tab.click()},120)}
+}
+function card(label,value,sub,tone,key){return `<button class='metric tone-${tone||'mint'}' data-addon-modal='${key||''}'><div class='metric-value'>${value}</div><div class='metric-label'>${esc(label)}</div><div class='metric-sub'>${esc(sub||'')}</div></button>`}
+function health(label,value,sub,tone){return `<div class='health tone-${tone||'mint'}'><div class='health-dot'></div><div class='health-label'>${esc(label)}</div><div class='health-value'>${value}</div><div class='health-sub'>${esc(sub||'')}</div></div>`}
+function actions(items){return `<div class='action-list'>${items.filter(i=>n(i.count)>0).map((i,x)=>`<button class='action'><span>${x+1}</span><div><strong>${esc(i.title)}</strong><small>${esc(i.sub)}</small></div><em>${num(i.count)}</em></button>`).join('')}</div>`}
+function section(t,s,b){return `<section class='section v2-block'><div class='section-head'><div><div class='section-title'><span class='section-icon'>⚡</span>${esc(t)}</div><div class='section-sub'>${esc(s)}</div></div></div><div class='body'>${b}</div></section>`}
+function acqAddon(){
+ const r=data.arc, A=r.filter(x=>x.acquisition_rank==='A'), B=r.filter(x=>x.acquisition_rank==='B'), T=r.filter(x=>x.is_touched), U=r.filter(x=>!x.is_touched), D=data.apd, O=D.filter(x=>x.deal_status==='open'), W=D.filter(x=>x.deal_status==='won'), L=D.filter(x=>x.deal_status==='lost'), R=O.filter(x=>n(x.days_in_stage)>=21), leads=data.leads, rate=n(data.lead.lead_contact_rate_pct)||0;
+ return `<div class='v2-addon'><div class='focus-card'><div class='focus-head'><div><h2>Today’s Focus</h2><p>The most important sales actions based on live HubSpot activity and outreach.</p></div><div class='snap'>Live Snapshot</div></div><div class='focus-grid'>${card('Leads Need Contact',num(leads.length),'priority lead backlog','red')}${card('Rank A/B Untouched',num(U.length),`A: ${num(A.filter(x=>!x.is_touched).length)} · B: ${num(B.filter(x=>!x.is_touched).length)}`,'orange')}${card('Deals at Risk',num(R.length),`${money(sum(R,'amount'))} exposed`,'red')}${card('Lead Contact Rate',pct(rate),'live lead summary','green')}</div></div><div class='health-grid'>${health('Revenue Health',money(sum(O,'amount')),`${num(O.length)} open · ${num(W.length)} won · ${num(L.length)} lost`,'green')}${health('Outreach Health',pct(r.length?T.length/r.length*100:0),`${num(T.length)} touched · ${num(U.length)} untouched`,'mint')}${health('Rep Execution',num(data.aps.filter(x=>x.page_type!=='deals_only').length),`${num(sum(r,'calls_count'))} calls · ${num(sum(r,'meetings_count'))} meetings`,'blue')}</div><div class='layout-2 mt'>${section('Priority Actions','Calculated from live leads, companies and deals',actions([{title:'Contact lead backlog',count:leads.length,sub:'Prioritize online/inbound first.'},{title:'Review untouched Rank A/B companies',count:U.length,sub:'Same-owner connected call or completed meeting required.'},{title:'Recover stuck pipeline',count:R.length,sub:'Open deals with 21+ days in stage.'}]))}${section('Lead Source Performance','Source-level coverage where available',miniSource())}</div></div>`
+}
+function miniSource(){const rows=data.src.slice(0,8);if(!rows.length)return `<div class='empty'>No source rows found.</div>`;return `<div class='mini-table'>${rows.map(r=>`<div><strong>${esc(r.source_bucket||r.analytics_source||'Unknown')}</strong><span>${num(r.eligible_leads||0)} eligible · ${num(r.needs_contact||0)} need contact</span></div>`).join('')}</div>`}
+function retAddon(){
+ const a=data.rpa, d=data.rpd, act=data.rad, O=d.filter(x=>x.deal_status==='open'), W=d.filter(x=>x.deal_status==='won'), L=d.filter(x=>x.deal_status==='lost'), E=a.filter(x=>String(x.retention_tier||'')==='');
+ return `<div class='v2-addon'><div class='focus-card'><div class='focus-head'><div><h2>Retention Focus</h2><p>Account scope, tier coverage, financial snapshot and RM/CSM execution.</p></div><div class='snap'>Live Snapshot</div></div><div class='focus-grid'>${card('Applicable Accounts',num(new Set(a.map(x=>x.company_id||x.company_name_key)).size),'deduped account scope','mint')}${card('Tier A / B / C',`${num(a.filter(x=>x.retention_tier==='A').length)} / ${num(a.filter(x=>x.retention_tier==='B').length)} / ${num(a.filter(x=>x.retention_tier==='C').length)}`,'retention tiers only','mint')}${card('Empty Tier',num(E.length),'blank/null tier field','orange')}${card('Remaining Collection',money(sum(a,'remaining_value')),'sheet financial snapshot','red')}</div></div><div class='health-grid'>${health('Financial Health',money(sum(a,'booked_value')),`${money(sum(a,'collected_value'))} collected · ${money(sum(a,'remaining_value'))} remaining`,'green')}${health('Activity Health',`${num(act.filter(x=>x.activity_type==='call').length)} / ${num(act.filter(x=>x.activity_type==='meeting').length)}`,'calls / meetings same-owner details','mint')}${health('Deal Health',`${num(O.length)} open`,`${num(W.length)} won · ${num(L.length)} lost`,'blue')}</div><div class='layout-2 mt'>${section('Priority Actions','Retention actions by account and activity status',actions([{title:'Review empty-tier accounts',count:E.length,sub:'Tier field blank/null should be cleaned.'},{title:'Follow remaining collection',count:a.filter(x=>n(x.remaining_value)>0).length,sub:'Accounts with remaining value.'},{title:'Review open retention deals',count:O.length,sub:'Open deals connected to applicable accounts.'}]))}${section('RM / CSM Touch Coverage','Touched = same RM/CSM connected call or completed meeting, all-time',miniTouch())}</div></div>`
+}
+function miniTouch(){return `<div class='mini-table'>${data.rps.map(r=>`<div><strong>${esc(r.display_name)}</strong><span>${num(r.touched_accounts)} touched · ${num(r.untouched_accounts)} untouched</span></div>`).join('')}</div>`}
+function pnlAddon(){const r=data.pnl,Y25=r.filter(x=>String(x.year)==='2025'),Y26=r.filter(x=>String(x.year)==='2026'),book=sum(r,'booking'),cash=sum(r,'cashing'),cost=sum(r,'total_cost'),net=sum(r,'net_cash_position');return `<div class='v2-addon'><div class='health-grid'>${health('2025 Booking',money(sum(Y25,'booking')),`${money(sum(Y25,'net_cash_position'))} net`,'mint')}${health('2026 Booking',money(sum(Y26,'booking')),`${money(sum(Y26,'net_cash_position'))} net`,'green')}${health('Net Margin',pct(book?net/book*100:0),`${money(cash)} cash · ${money(cost)} cost`,'blue')}${health('Break-even Gap',money(Math.max(0,cost-cash)),'cost minus cashing if positive','orange')}</div></div>`}
+function paint(){
+ if(!data)return;renderSidebar();let title=($('.title')?.textContent||'').toLowerCase();if(title===lastTitle&&$('.v2-addon'))return;lastTitle=title;$$('.v2-addon').forEach(x=>x.remove());let anchor=$('.metrics')||$('.kpi-grid')||$('.section');if(!anchor)return;if(title.includes('acquisition')&&title.includes('team'))anchor.insertAdjacentHTML('beforebegin',acqAddon());else if(title.includes('retention')&&title.includes('team'))anchor.insertAdjacentHTML('beforebegin',retAddon());else if(title.includes('p&l'))anchor.insertAdjacentHTML('beforebegin',pnlAddon());$$('[data-addon-modal]').forEach(b=>b.onclick=()=>{});
+}
+function start(){load();new MutationObserver(()=>setTimeout(paint,60)).observe(document.body,{childList:true,subtree:true})}
+document.readyState==='loading'?document.addEventListener('DOMContentLoaded',start):start();
+})();

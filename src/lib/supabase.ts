@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 type RuntimeConfig = {
   appName?: string;
@@ -23,7 +23,7 @@ export function getRuntimeConfig(): Required<RuntimeConfig> {
   };
 }
 
-let client: SupabaseClient | null = null;
+let client: ReturnType<typeof createClient> | null = null;
 
 export function getSupabaseClient() {
   const config = getRuntimeConfig();

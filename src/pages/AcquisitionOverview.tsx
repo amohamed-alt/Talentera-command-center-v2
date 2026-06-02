@@ -40,14 +40,14 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
   useEffect(() => {
     let alive = true;
     Promise.all([
-      fetchView('v_acq_today_focus'),
-      fetchView('v_acq_period_kpis'),
-      fetchView('v_acq_rep_execution'),
-      fetchView('v_acq_priority_actions'),
-      fetchView('v_acq_rank_coverage'),
-      fetchView('v_acq_country_rank_summary'),
-      fetchView('v_acq_deals'),
-      fetchView('v_acq_ai_coaching')
+      fetchView('acq_team_cards_cache'),
+      fetchView('acq_period_kpis_cache'),
+      fetchView('acq_rep_execution_cache'),
+      fetchView('acq_priority_actions_cache'),
+      fetchView('acq_rank_coverage_cache'),
+      fetchView('acq_country_rank_summary_cache'),
+      fetchView('acq_deals_cache'),
+      fetchView('acq_ai_coaching_cache')
     ]).then(([focus, periodKpis, repExecution, priorityActions, rankCoverage, countrySummary, deals, aiCoaching]) => {
       if (alive) setData({ focus, periodKpis, repExecution, priorityActions, rankCoverage, countrySummary, deals, aiCoaching });
     });
@@ -61,7 +61,7 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
     const yesterday = byPeriod('yesterday');
     const mtd = byPeriod('mtd');
     const ytd = byPeriod('ytd');
-    const rankRows = filterRows(data.rankCoverage.rows.filter((row) => row.person_key !== 'team'), filters);
+    const rankRows = filterRows(data.rankCoverage.rows, filters);
     const untouched = rankRows.filter((row) => row.touched === false);
     const openDeals = data.deals.rows.filter((row) => row.deal_status === 'open');
     const wonDeals = data.deals.rows.filter((row) => row.deal_status === 'won');
@@ -80,9 +80,9 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
 
   return (
     <>
-      <Header badge="Acquisition" title="Acquisition · Team Overview" subtitle="Live Supabase SQL views · no fallback data" />
+      <Header badge="Acquisition" title="Acquisition · Team Overview" subtitle="Ready cache tables · refreshed every 6 hours · no live calculation" />
 
-      <SectionPanel title="Today's Focus" subtitle="Canonical SQL cards based on HubSpot objects and acquisition logic.">
+      <SectionPanel title="Today's Focus" subtitle="Precomputed cards from Supabase cache tables.">
         <div className="kpiGrid inlineGrid">
           {data.focus.rows.map((card) => (
             <KpiCard key={String(card.card_key)} title={String(card.title)} value={card.card_key === 'lead_contact_rate' ? formatPercent(card.value) : formatNumber(card.value)} subtitle={String(card.subtitle || '')} tone={asTone(card.tone)} />
@@ -91,12 +91,12 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
       </SectionPanel>
 
       <div className="kpiGrid">
-        <KpiCard title="Calls Yesterday" value={formatNumber(prepared.yesterday.calls)} subtitle={`${formatNumber(prepared.yesterday.connected_calls)} connected · ${formatPercent(prepared.yesterday.connection_rate)}`} tone="blue" />
-        <KpiCard title="Meetings Yesterday" value={formatNumber(prepared.yesterday.meetings)} tone="green" />
-        <KpiCard title="Leads Yesterday" value={formatNumber(prepared.yesterday.leads)} tone="orange" />
+        <KpiCard title="Calls Yesterday" value={formatNumber(prepared.yesterday.calls_logged)} subtitle={`${formatNumber(prepared.yesterday.connected_calls)} connected · ${formatPercent(prepared.yesterday.connection_rate)}`} tone="blue" />
+        <KpiCard title="Meetings Yesterday" value={formatNumber(prepared.yesterday.meetings_completed)} tone="green" />
+        <KpiCard title="Leads Yesterday" value={formatNumber(prepared.yesterday.leads_created)} tone="orange" />
         <KpiCard title="Open Pipeline" value={formatMoney(prepared.ytd.open_pipeline)} subtitle={`${formatNumber(prepared.ytd.open_deals)} open deals`} tone="blue" />
-        <KpiCard title="Calls MTD" value={formatNumber(prepared.mtd.calls)} subtitle={`${formatNumber(prepared.mtd.connected_calls)} connected · ${formatPercent(prepared.mtd.connection_rate)}`} tone="blue" />
-        <KpiCard title="Leads MTD" value={formatNumber(prepared.mtd.leads)} tone="orange" />
+        <KpiCard title="Calls MTD" value={formatNumber(prepared.mtd.calls_logged)} subtitle={`${formatNumber(prepared.mtd.connected_calls)} connected · ${formatPercent(prepared.mtd.connection_rate)}`} tone="blue" />
+        <KpiCard title="Leads MTD" value={formatNumber(prepared.mtd.leads_created)} tone="orange" />
         <KpiCard title="Won YTD" value={formatMoney(prepared.ytd.won_amount)} subtitle={`${formatNumber(prepared.ytd.won_deals)} deals`} tone="green" />
         <KpiCard title="Lost YTD" value={formatMoney(prepared.ytd.lost_amount)} subtitle={`${formatNumber(prepared.ytd.lost_deals)} deals`} tone="red" />
       </div>
@@ -106,13 +106,13 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
           <ShowMoreTable rows={data.priorityActions.rows} columns={[{ key: 'title', label: 'Action' }, { key: 'description', label: 'Description' }, { key: 'value', label: 'Count', render: (row) => formatNumber(row.value) }, { key: 'tone', label: 'Tone' }]} />
         </SectionPanel>
         <SectionPanel title="Yesterday / MTD / YTD Performance">
-          <ShowMoreTable rows={periodRows} columns={[{ key: 'label', label: 'Period' }, { key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) }, { key: 'connected_calls', label: 'Connected', render: (row) => formatNumber(row.connected_calls) }, { key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) }, { key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) }, { key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) }, { key: 'open_pipeline', label: 'Pipeline', render: (row) => formatMoney(row.open_pipeline) }]} />
+          <ShowMoreTable rows={periodRows} columns={[{ key: 'label', label: 'Period' }, { key: 'calls_logged', label: 'Calls', render: (row) => formatNumber(row.calls_logged) }, { key: 'connected_calls', label: 'Connected', render: (row) => formatNumber(row.connected_calls) }, { key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) }, { key: 'meetings_completed', label: 'Meetings', render: (row) => formatNumber(row.meetings_completed) }, { key: 'leads_created', label: 'Leads', render: (row) => formatNumber(row.leads_created) }, { key: 'open_pipeline', label: 'Pipeline', render: (row) => formatMoney(row.open_pipeline) }]} />
         </SectionPanel>
       </div>
 
       <div className="panelGrid">
         <SectionPanel title="Rep Execution">
-          <ShowMoreTable rows={data.repExecution.rows} columns={[{ key: 'display_name', label: 'Rep' }, { key: 'calls', label: 'Calls' }, { key: 'connected_calls', label: 'Connected' }, { key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) }, { key: 'meetings', label: 'Meetings' }, { key: 'open_deals', label: 'Open Deals' }, { key: 'open_pipeline', label: 'Pipeline', render: (row) => formatMoney(row.open_pipeline) }, { key: 'status', label: 'Status' }]} />
+          <ShowMoreTable rows={data.repExecution.rows} columns={[{ key: 'display_name', label: 'Rep' }, { key: 'calls_logged', label: 'Calls' }, { key: 'connected_calls', label: 'Connected' }, { key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) }, { key: 'meetings_completed', label: 'Meetings' }, { key: 'open_deals', label: 'Open Deals' }, { key: 'open_pipeline', label: 'Pipeline', render: (row) => formatMoney(row.open_pipeline) }, { key: 'status', label: 'Status' }]} />
         </SectionPanel>
         <SectionPanel title="ANP / Rank A-B Coverage">
           <ShowMoreTable rows={prepared.untouched} columns={[{ key: 'company_name', label: 'Company' }, { key: 'display_name', label: 'Owner' }, { key: 'country', label: 'Country' }, { key: 'rank', label: 'Rank' }, { key: 'connected_calls', label: 'Connected Calls' }, { key: 'completed_meetings', label: 'Meetings' }]} />

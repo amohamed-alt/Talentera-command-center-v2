@@ -32,11 +32,11 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
   useEffect(() => {
     let alive = true;
     Promise.all([
-      fetchView('v_acq_period_kpis'),
-      fetchView('v_acq_rank_coverage'),
-      fetchView('v_acq_country_rank_summary'),
-      fetchView('v_acq_deals'),
-      fetchView('v_acq_ai_coaching')
+      fetchView('acq_period_kpis_cache'),
+      fetchView('acq_rank_coverage_cache'),
+      fetchView('acq_country_rank_summary_cache'),
+      fetchView('acq_deals_cache'),
+      fetchView('acq_ai_coaching_cache')
     ]).then(([periodKpis, rankCoverage, countrySummary, deals, aiCoaching]) => {
       if (alive) setData({ periodKpis, rankCoverage, countrySummary, deals, aiCoaching });
     });
@@ -74,7 +74,7 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
   if (person.dealsOnly) {
     return (
       <>
-        <Header badge="Acquisition Deals View" title={`Acquisition · ${person.displayName}`} subtitle="Deals-only SQL view: Open, Won, Lost, Pipeline, Stuck and Cold deals." />
+        <Header badge="Acquisition Deals View" title={`Acquisition · ${person.displayName}`} subtitle="Ready cache tables: Open, Won, Lost, Pipeline, Stuck and Cold deals." />
         <div className="kpiGrid">
           <KpiCard title="Open Deals" value={formatNumber(prepared.ytd.open_deals)} subtitle={formatMoney(prepared.ytd.open_pipeline)} tone="orange" />
           <KpiCard title="Won YTD" value={formatMoney(prepared.ytd.won_amount)} subtitle={`${formatNumber(prepared.ytd.won_deals)} deals`} tone="green" />
@@ -93,19 +93,19 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
 
   return (
     <>
-      <Header badge="Acquisition Rep" title={`Acquisition · ${person.displayName}`} subtitle="Live Supabase SQL views scoped to this representative." />
+      <Header badge="Acquisition Rep" title={`Acquisition · ${person.displayName}`} subtitle="Ready cache tables scoped to this representative." />
       <div className="kpiGrid">
-        <KpiCard title="Calls Yesterday" value={formatNumber(prepared.yesterday.calls)} subtitle={`${formatNumber(prepared.yesterday.connected_calls)} connected · ${formatPercent(prepared.yesterday.connection_rate)}`} tone="blue" />
-        <KpiCard title="Calls MTD" value={formatNumber(prepared.mtd.calls)} subtitle={`${formatNumber(prepared.mtd.connected_calls)} connected · ${formatPercent(prepared.mtd.connection_rate)}`} tone="blue" />
-        <KpiCard title="Calls YTD" value={formatNumber(prepared.ytd.calls)} subtitle={`${formatNumber(prepared.ytd.connected_calls)} connected · ${formatPercent(prepared.ytd.connection_rate)}`} tone="green" />
-        <KpiCard title="Meetings YTD" value={formatNumber(prepared.ytd.meetings)} tone="green" />
+        <KpiCard title="Calls Yesterday" value={formatNumber(prepared.yesterday.calls_logged)} subtitle={`${formatNumber(prepared.yesterday.connected_calls)} connected · ${formatPercent(prepared.yesterday.connection_rate)}`} tone="blue" />
+        <KpiCard title="Calls MTD" value={formatNumber(prepared.mtd.calls_logged)} subtitle={`${formatNumber(prepared.mtd.connected_calls)} connected · ${formatPercent(prepared.mtd.connection_rate)}`} tone="blue" />
+        <KpiCard title="Calls YTD" value={formatNumber(prepared.ytd.calls_logged)} subtitle={`${formatNumber(prepared.ytd.connected_calls)} connected · ${formatPercent(prepared.ytd.connection_rate)}`} tone="green" />
+        <KpiCard title="Meetings YTD" value={formatNumber(prepared.ytd.meetings_completed)} tone="green" />
         <KpiCard title="Open Deals" value={formatNumber(prepared.ytd.open_deals)} subtitle={formatMoney(prepared.ytd.open_pipeline)} tone="orange" />
         <KpiCard title="Won YTD" value={formatMoney(prepared.ytd.won_amount)} subtitle={`${formatNumber(prepared.ytd.won_deals)} deals`} tone="green" />
         <KpiCard title="Lost YTD" value={formatMoney(prepared.ytd.lost_amount)} subtitle={`${formatNumber(prepared.ytd.lost_deals)} deals`} tone="red" />
         <KpiCard title="Needs Attention" value={formatNumber(prepared.coaching.length)} tone="orange" />
       </div>
       <div className="panelGrid two">
-        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={periodRows} columns={[{ key: 'label', label: 'Period' },{ key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) },{ key: 'connected_calls', label: 'Connected', render: (row) => formatNumber(row.connected_calls) },{ key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) },{ key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) },{ key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) }]} /></SectionPanel>
+        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={periodRows} columns={[{ key: 'label', label: 'Period' },{ key: 'calls_logged', label: 'Calls', render: (row) => formatNumber(row.calls_logged) },{ key: 'connected_calls', label: 'Connected', render: (row) => formatNumber(row.connected_calls) },{ key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) },{ key: 'meetings_completed', label: 'Meetings', render: (row) => formatNumber(row.meetings_completed) },{ key: 'leads_created', label: 'Leads', render: (row) => formatNumber(row.leads_created) }]} /></SectionPanel>
         <SectionPanel title="Country Coverage"><ShowMoreTable rows={prepared.countryRows} columns={[{ key: 'country', label: 'Country' },{ key: 'rank_a', label: 'Rank A' },{ key: 'rank_b', label: 'Rank B' },{ key: 'touched', label: 'Touched' },{ key: 'untouched', label: 'Untouched' },{ key: 'total', label: 'Total' }]} /></SectionPanel>
       </div>
       <div className="panelGrid">

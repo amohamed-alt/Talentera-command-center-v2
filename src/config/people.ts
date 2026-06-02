@@ -5,7 +5,6 @@ export const acquisitionPeople: PersonConfig[] = [
   { key: 'acq_ursula', displayName: 'Ursula Waked', aliases: ['ursula waked', 'ursula', 'orsla', 'orslo'], role: 'Sales', section: 'acquisition', route: '/acquisition/ursula', showActivities: true },
   { key: 'acq_ahmad_khawajah', displayName: 'Ahmad Khawajah', aliases: ['ahmad khawajah', 'ahmed khawaja', 'ahmed khawajah'], role: 'Sales', section: 'acquisition', route: '/acquisition/ahmad-khawajah', showActivities: true },
   { key: 'acq_zein_fares', displayName: 'Zein Fares', aliases: ['zein fares', 'zain fares'], role: 'Sales', section: 'acquisition', route: '/acquisition/zein-fares', showActivities: true },
-  { key: 'acq_mohamed_ashraf', displayName: 'Mohamed Ashraf', aliases: ['mohamed ashraf'], role: 'Sales', section: 'acquisition', route: '/acquisition/mohamed-ashraf', showActivities: true },
   { key: 'acq_jihad', displayName: 'Mohammad Jehad Al-Barqawi', aliases: ['mohammad jehad al-barqawi', 'mohammad jehad', 'jihad', 'jehad'], role: 'Sales', section: 'acquisition', route: '/acquisition/jihad', showActivities: true },
   { key: 'acq_fadi', displayName: 'Fadi Zanona', aliases: ['fadi zanona', 'fadi'], role: 'VIEW', section: 'acquisition', route: '/acquisition/fadi', showActivities: false, dealsOnly: true },
   { key: 'acq_faizan', displayName: 'Mohammed Faizan', aliases: ['mohammed faizan', 'faizan'], role: 'VIEW', section: 'acquisition', route: '/acquisition/faizan', showActivities: false, dealsOnly: true }

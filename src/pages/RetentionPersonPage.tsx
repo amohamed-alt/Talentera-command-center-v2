@@ -1,0 +1,19 @@
+import { useEffect, useState } from 'react';
+import { Header } from '../components/layout/Header';
+import { DataTable } from '../components/ui/DataTable';
+import { KpiCard } from '../components/ui/KpiCard';
+import { LoadingState } from '../components/ui/LoadingState';
+import { SectionPanel } from '../components/ui/SectionPanel';
+import { loadRetentionPerson } from '../data/retention';
+import { formatMoney, formatNumber } from '../lib/formatters';
+import { numberFrom, sumRows } from '../lib/metrics';
+import type { AnyRow, DashboardFilters, PersonConfig } from '../types';
+
+export function RetentionPersonPage({ filters, person }: { filters: DashboardFilters; person: PersonConfig }) {
+  const [data, setData] = useState<Awaited<ReturnType<typeof loadRetentionPerson>> | null>(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => { let alive = true; setLoading(true); loadRetentionPerson(filters, person.key).then((next) => alive && setData(next)).finally(() => alive && setLoading(false)); return () => { alive = false; }; }, [filters, person.key]);
+  if (loading || !data) return <LoadingState />;
+  const summary = data.summary.rows[0];
+  return <><Header badge="Retention Person" title={`Retention · ${person.displayName}`} subtitle="Fixed retention person page for tier, activity, deals and financial coverage." /><div className="kpiGrid"><KpiCard title="Accounts" value={formatNumber(numberFrom(summary, ['accounts', 'applicable_accounts']))} tone="blue" /><KpiCard title="Tier A" value={formatNumber(numberFrom(summary, ['tier_a_accounts', 'tier_a']))} tone="green" /><KpiCard title="Tier B" value={formatNumber(numberFrom(summary, ['tier_b_accounts', 'tier_b']))} tone="green" /><KpiCard title="Tier C" value={formatNumber(numberFrom(summary, ['tier_c_accounts', 'tier_c']))} tone="orange" /><KpiCard title="Empty Tier" value={formatNumber(numberFrom(summary, ['empty_tier_accounts', 'empty_tier']))} tone="red" /><KpiCard title="Open Deals" value={formatNumber(sumRows(data.deals.rows, ['open_deals', 'open_deal_count']))} tone="orange" /><KpiCard title="Collected This Year" value={formatMoney(sumRows(data.financialSummary.rows, ['collected_amount', 'cashed_this_year']))} tone="green" /><KpiCard title="Remaining" value={formatMoney(sumRows(data.financialSummary.rows, ['remaining_amount']))} tone="orange" /></div><div className="panelGrid"><SectionPanel title="Applicable Accounts"><DataTable rows={data.accounts.rows} columns={[{ key: 'account_name', label: 'Account' }, { key: 'tier', label: 'Tier' }, { key: 'product', label: 'Product' }, { key: 'account_status', label: 'Status' }, { key: 'budget_amount', label: 'Budget', render: (row: AnyRow) => formatMoney(row.budget_amount) }, { key: 'booked_amount', label: 'Booked', render: (row: AnyRow) => formatMoney(row.booked_amount) }, { key: 'collected_amount', label: 'Collected', render: (row: AnyRow) => formatMoney(row.collected_amount) }, { key: 'remaining_amount', label: 'Remaining', render: (row: AnyRow) => formatMoney(row.remaining_amount) }]} /></SectionPanel><SectionPanel title="No Next / Stale Accounts"><DataTable rows={data.noNextActivity.rows} columns={[{ key: 'account_name', label: 'Account' }, { key: 'tier', label: 'Tier' }, { key: 'product', label: 'Product' }, { key: 'remaining_amount', label: 'Remaining', render: (row: AnyRow) => formatMoney(row.remaining_amount) }, { key: 'last_activity_date', label: 'Last Activity' }, { key: 'next_activity_date', label: 'Next Activity' }, { key: 'risk_status', label: 'Risk Status' }]} /></SectionPanel><SectionPanel title="Open / Won / Lost Deals"><DataTable rows={data.deals.rows} columns={[{ key: 'deal_name', label: 'Deal' }, { key: 'account_name', label: 'Account' }, { key: 'deal_status', label: 'Status' }, { key: 'stage', label: 'Stage' }, { key: 'amount', label: 'Amount', render: (row: AnyRow) => formatMoney(row.amount) }]} /></SectionPanel></div></>;
+}

@@ -1,70 +1,44 @@
-# Talentera Command Center
+# Talentera Sales Command Center
 
-React/Vite rebuild for the Talentera dashboard.
+React/Vite dashboard rebuilt around the Supabase view contract.
 
-## Structure
-
-- `src/main.jsx` — React dashboard shell, pages, filters, Supabase adapter, and demo fallback data.
-- `src/styles.css` — clean CRM-style dashboard UI.
-- `public/config.js` — runtime dashboard config.
-- `supabase/dashboard_views_contract.sql` — expected Supabase view contract.
-- `.github/workflows/deploy.yml` — GitHub Pages deployment workflow.
-
-## Local setup
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Production build
+## Build
 
 ```bash
 npm run build
 ```
 
-## GitHub Pages
+## Deploy
 
-This project is configured for:
+GitHub Pages is configured through `.github/workflows/deploy.yml`.
 
-```txt
-/Talentera-command-center-v2/
-```
-
-The included GitHub Actions workflow builds `dist` and deploys it to GitHub Pages.
-
-In GitHub, set:
+Set GitHub Pages source to:
 
 ```txt
 Settings → Pages → Source → GitHub Actions
 ```
 
-## Supabase connection
+## Supabase
 
-Edit `public/config.js`:
+Edit `public/config.js` or use Vite env vars:
 
 ```js
 window.TALENTERA_CONFIG = {
   supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
   supabaseAnonKey: 'YOUR_PUBLIC_ANON_KEY',
-  useDemoData: false
+  schema: 'public'
 };
 ```
 
-Never put a Supabase `service_role` key, HubSpot private app token, or Google credentials in the frontend.
+Never place service role keys, HubSpot private app tokens, or Google credentials in the frontend.
 
-## Required dashboard views
+## Data behavior
 
-The app expects these views by default:
-
-```txt
-v_acquisition_summary
-v_acquisition_people
-v_acquisition_priority
-v_retention_summary
-v_retention_people
-v_retention_accounts
-v_pnl_monthly
-```
-
-You can rename them in `public/config.js`.
+No fake KPI numbers are generated. Missing or unconnected Supabase views render empty states until the backend view is ready.

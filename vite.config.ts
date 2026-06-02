@@ -4,8 +4,5 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/Talentera-command-center-v2/',
-  build: {
-    sourcemap: false,
-    outDir: 'dist'
-  }
+  build: { sourcemap: false, outDir: 'dist' }
 });

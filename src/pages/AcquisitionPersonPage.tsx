@@ -11,8 +11,11 @@ import type { AnyRow, DashboardFilters, PersonConfig } from '../types';
 function rows(value: unknown): AnyRow[] { return Array.isArray(value) ? value as AnyRow[] : []; }
 function obj(value: unknown): AnyRow { return value && typeof value === 'object' ? value as AnyRow : {}; }
 function repId(name: string) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
-function reasonText(row: AnyRow) { const reasonList = rows(row.reasons).map(String); return reasonList.length ? reasonList.join(' · ') : String(row.reason || row.status || row.nextStep || '—'); }
-function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters) {
+function reasonText(row: AnyRow) {
+  const reasonList = rows(row.reasons).map(String);
+  return reasonList.length ? reasonList.join(' · ') : String(row.reason || row.status || row.nextStep || '—');
+}
+function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters): AnyRow[] {
   return list.filter((row) => {
     const country = String(row.country || '').toLowerCase();
     const rank = String(row.rank || '').toUpperCase();
@@ -21,7 +24,9 @@ function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters) {
     return countryOk && rankOk;
   });
 }
-function countryRows(value: unknown) { return Object.entries(obj(value)).map(([country, row]) => ({ country, ...obj(row) })); }
+function countryRows(value: unknown): AnyRow[] {
+  return Object.entries(obj(value)).map(([country, row]) => ({ country, ...obj(row) })) as AnyRow[];
+}
 
 export function AcquisitionPersonPage({ filters, person }: { filters: DashboardFilters; person: PersonConfig }) {
   const [data, setData] = useState<AnyRow | null>(null);
@@ -48,14 +53,36 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
   const leadActivities = obj(rep.leadActivities);
   const leadQuality = obj(rep.leadQuality);
   const leadFunnel = obj(rep.leadFunnel);
-  const rankA = rows(rep.rankAUntouched).map((item) => ({ ...item, rank: 'A', ownerName: rep.name }));
-  const rankB = rows(rep.rankBUntouched).map((item) => ({ ...item, rank: 'B', ownerName: rep.name }));
+  const rankA = rows(rep.rankAUntouched).map((item) => ({ ...item, rank: 'A', ownerName: rep.name })) as AnyRow[];
+  const rankB = rows(rep.rankBUntouched).map((item) => ({ ...item, rank: 'B', ownerName: rep.name })) as AnyRow[];
   const untouched = filterByCountryAndRank([...rankA, ...rankB], filters);
   const topDeals = rows(rep.topDeals);
   const stuck = rows(rep.stuck);
   const cold = rows(rep.cold);
   const needsAttention = rows(rep.needsAttention);
   const countryBreakdown = countryRows(rep.countryBreakdown);
+  const periodRows: AnyRow[] = [
+    { period: 'Yesterday', calls: calls.yest, connected: calls.yestConn, connRate: rep.connRateYest, meetings: meetings.yest, leads: rep.leadsYest },
+    { period: 'MTD', calls: calls.mtd, connected: calls.mtdConn, connRate: rep.connRateMTD, meetings: meetings.mtd, leads: rep.leadsMTD },
+    { period: 'YTD', calls: calls.ytd, connected: calls.ytdConn, connRate: rep.connRateYTD, meetings: meetings.ytd, leads: rep.leadsYTD }
+  ];
+  const leadQualityRows: AnyRow[] = [
+    { metric: 'Existing Client', value: leadQuality.statusExistingClient },
+    { metric: 'Other', value: leadQuality.statusOther },
+    { metric: 'Inbound', value: leadQuality.sourceInbound },
+    { metric: 'Outbound', value: leadQuality.sourceOutbound },
+    { metric: 'Created', value: leadFunnel.created },
+    { metric: 'Converted', value: leadFunnel.converted },
+    { metric: 'Conversion Rate', value: `${leadFunnel.conversionRate || 0}%` }
+  ];
+  const leadActivityRows: AnyRow[] = [
+    { metric: 'Calls Yesterday', value: leadActivities.callsYest },
+    { metric: 'Calls MTD', value: leadActivities.callsMTD },
+    { metric: 'Calls YTD', value: leadActivities.callsYTD },
+    { metric: 'Meetings Yesterday', value: leadActivities.meetingsYest },
+    { metric: 'Meetings MTD', value: leadActivities.meetingsMTD },
+    { metric: 'Meetings YTD', value: leadActivities.meetingsYTD }
+  ];
 
   if (person.dealsOnly) {
     return (
@@ -91,8 +118,8 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
         <KpiCard title="Needs Attention" value={formatNumber(needsAttention.length)} tone="orange" />
       </div>
       <div className="panelGrid two">
-        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={[{ period: 'Yesterday', calls: calls.yest, connected: calls.yestConn, connRate: rep.connRateYest, meetings: meetings.yest, leads: rep.leadsYest },{ period: 'MTD', calls: calls.mtd, connected: calls.mtdConn, connRate: rep.connRateMTD, meetings: meetings.mtd, leads: rep.leadsMTD },{ period: 'YTD', calls: calls.ytd, connected: calls.ytdConn, connRate: rep.connRateYTD, meetings: meetings.ytd, leads: rep.leadsYTD }]} columns={[{ key: 'period', label: 'Period' },{ key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) },{ key: 'connected', label: 'Connected', render: (row) => formatNumber(row.connected) },{ key: 'connRate', label: 'Conn Rate', render: (row) => formatPercent(row.connRate) },{ key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) },{ key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) }]} /></SectionPanel>
-        <SectionPanel title="Lead Quality"><ShowMoreTable rows={[{ metric: 'Existing Client', value: leadQuality.statusExistingClient },{ metric: 'Other', value: leadQuality.statusOther },{ metric: 'Inbound', value: leadQuality.sourceInbound },{ metric: 'Outbound', value: leadQuality.sourceOutbound },{ metric: 'Created', value: leadFunnel.created },{ metric: 'Converted', value: leadFunnel.converted },{ metric: 'Conversion Rate', value: `${leadFunnel.conversionRate || 0}%` }]} columns={[{ key: 'metric', label: 'Metric' },{ key: 'value', label: 'Value' }]} /></SectionPanel>
+        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={periodRows} columns={[{ key: 'period', label: 'Period' },{ key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) },{ key: 'connected', label: 'Connected', render: (row) => formatNumber(row.connected) },{ key: 'connRate', label: 'Conn Rate', render: (row) => formatPercent(row.connRate) },{ key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) },{ key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) }]} /></SectionPanel>
+        <SectionPanel title="Lead Quality"><ShowMoreTable rows={leadQualityRows} columns={[{ key: 'metric', label: 'Metric' },{ key: 'value', label: 'Value' }]} /></SectionPanel>
       </div>
       <div className="panelGrid">
         <SectionPanel title="ANP / Rank A-B Coverage"><ShowMoreTable rows={untouched} columns={[{ key: 'name', label: 'Company' },{ key: 'country', label: 'Country' },{ key: 'rank', label: 'Rank' }]} /></SectionPanel>
@@ -101,7 +128,7 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
         <SectionPanel title="AI Coaching / Needs Attention"><ShowMoreTable rows={needsAttention} columns={[{ key: 'name', label: 'Deal' },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) },{ key: 'reasons', label: 'Reason', render: reasonText }]} /></SectionPanel>
         <SectionPanel title="Stuck Deals"><ShowMoreTable rows={stuck} columns={[{ key: 'name', label: 'Deal' },{ key: 'days', label: 'Days', render: (row) => formatNumber(row.days) },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
         <SectionPanel title="Cold Deals"><ShowMoreTable rows={cold} columns={[{ key: 'name', label: 'Deal' },{ key: 'days', label: 'Days', render: (row) => formatNumber(row.days) },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
-        <SectionPanel title="Lead Activities"><ShowMoreTable rows={[{ metric: 'Calls Yesterday', value: leadActivities.callsYest },{ metric: 'Calls MTD', value: leadActivities.callsMTD },{ metric: 'Calls YTD', value: leadActivities.callsYTD },{ metric: 'Meetings Yesterday', value: leadActivities.meetingsYest },{ metric: 'Meetings MTD', value: leadActivities.meetingsMTD },{ metric: 'Meetings YTD', value: leadActivities.meetingsYTD }]} columns={[{ key: 'metric', label: 'Metric' },{ key: 'value', label: 'Value', render: (row) => formatNumber(row.value) }]} /></SectionPanel>
+        <SectionPanel title="Lead Activities"><ShowMoreTable rows={leadActivityRows} columns={[{ key: 'metric', label: 'Metric' },{ key: 'value', label: 'Value', render: (row) => formatNumber(row.value) }]} /></SectionPanel>
       </div>
     </>
   );

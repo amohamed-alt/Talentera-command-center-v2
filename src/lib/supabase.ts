@@ -29,10 +29,7 @@ export function getSupabaseClient() {
   const config = getRuntimeConfig();
   if (!config.supabaseUrl || !config.supabaseAnonKey) return null;
   if (!client) {
-    client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-      db: { schema: config.schema },
-      auth: { persistSession: false, autoRefreshToken: false }
-    });
+    client = createClient(config.supabaseUrl, config.supabaseAnonKey);
   }
   return client;
 }

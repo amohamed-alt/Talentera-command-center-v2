@@ -1,6 +1,9 @@
 import { getSupabaseClient } from './supabase';
 import type { AnyRow, DashboardFilters, ViewResult } from '../types';
 
+const TTL = 300000;
+const store = new Map<string, { until: number; result: ViewResult<AnyRow> }>();
+
 const filterColumnMap: Record<keyof DashboardFilters, string[]> = {
   year: ['year'],
   month: ['month'],
@@ -36,19 +39,30 @@ function applyClientFilters<T extends AnyRow>(rows: T[], filters?: Partial<Dashb
   return nextRows;
 }
 
-export async function fetchView<T extends AnyRow = AnyRow>(view: string, filters?: Partial<DashboardFilters>, extraFilters?: Record<string, string | number | boolean | null>): Promise<ViewResult<T>> {
+async function loadBaseView(view: string): Promise<ViewResult<AnyRow>> {
+  const item = store.get(view);
+  if (item && item.until > Date.now()) return item.result;
+
   const supabase = getSupabaseClient();
   if (!supabase) return { view, rows: [], status: 'not-configured', message: 'Data source not connected yet' };
+
   try {
     const { data, error } = await supabase.from(view).select('*').limit(5000);
     if (error) {
       const missing = error.message?.toLowerCase().includes('does not exist') || error.code === '42P01';
       return { view, rows: [], status: missing ? 'missing-view' : 'error', message: error.message };
     }
-    return { view, rows: applyClientFilters((data || []) as T[], filters, extraFilters), status: 'ready' };
+    const result: ViewResult<AnyRow> = { view, rows: (data || []) as AnyRow[], status: 'ready' };
+    store.set(view, { until: Date.now() + TTL, result });
+    return result;
   } catch (error) {
     return { view, rows: [], status: 'error', message: error instanceof Error ? error.message : 'Unknown data error' };
   }
+}
+
+export async function fetchView<T extends AnyRow = AnyRow>(view: string, filters?: Partial<DashboardFilters>, extraFilters?: Record<string, string | number | boolean | null>): Promise<ViewResult<T>> {
+  const base = await loadBaseView(view);
+  return { ...base, rows: applyClientFilters(base.rows as T[], filters, extraFilters) };
 }
 
 export async function fetchViews<T extends Record<string, string>>(viewMap: T, filters?: Partial<DashboardFilters>) {

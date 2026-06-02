@@ -4,15 +4,50 @@ import { DataTable } from '../components/ui/DataTable';
 import { KpiCard } from '../components/ui/KpiCard';
 import { LoadingState } from '../components/ui/LoadingState';
 import { SectionPanel } from '../components/ui/SectionPanel';
-import { loadRetentionOverview } from '../data/retention';
-import { formatMoney, formatNumber, formatPercent } from '../lib/formatters';
-import { countRows, sumRows } from '../lib/metrics';
+import { loadLegacyRetention } from '../data/legacyDashboard';
+import { formatMoney, formatNumber } from '../lib/formatters';
 import type { AnyRow, DashboardFilters } from '../types';
 
+function asRows(value: unknown): AnyRow[] { return Array.isArray(value) ? value as AnyRow[] : []; }
+function amountTotal(list: AnyRow[]) { return list.reduce((sum, row) => sum + Number(row.amount || 0), 0); }
+
 export function RetentionOverview({ filters }: { filters: DashboardFilters }) {
-  const [data, setData] = useState<Awaited<ReturnType<typeof loadRetentionOverview>> | null>(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => { let alive = true; setLoading(true); loadRetentionOverview(filters).then((next) => alive && setData(next)).finally(() => alive && setLoading(false)); return () => { alive = false; }; }, [filters]);
-  if (loading || !data) return <LoadingState />;
-  return <><Header badge="Retention" title="Retention Command Center" subtitle="RM and CSM account coverage, tier health, financials, next activity and stale accounts." /><div className="kpiGrid"><KpiCard title="Applicable Accounts" value={formatNumber(countRows(data.personAccounts.rows))} tone="blue" /><KpiCard title="No Next Activity" value={formatNumber(countRows(data.noNextActivity.rows.filter((row) => row.no_next_activity === true)))} tone="orange" /><KpiCard title="Stale Accounts" value={formatNumber(countRows(data.noNextActivity.rows.filter((row) => row.is_stale_21d === true)))} tone="red" /><KpiCard title="Remaining Collection" value={formatMoney(sumRows(data.financialSummary.rows, ['remaining_amount', 'remaining_collection']))} tone="orange" /><KpiCard title="Budget This Year" value={formatMoney(sumRows(data.financialSummary.rows, ['budget_amount', 'budget_this_year']))} tone="blue" /><KpiCard title="Booked This Year" value={formatMoney(sumRows(data.financialSummary.rows, ['booked_amount', 'booked_this_year']))} tone="green" /><KpiCard title="Collected This Year" value={formatMoney(sumRows(data.financialSummary.rows, ['collected_amount', 'cashed_this_year']))} tone="green" /><KpiCard title="Collection Rate" value={formatPercent(sumRows(data.financialSummary.rows, ['collection_rate']))} tone="green" /></div><div className="panelGrid"><SectionPanel title="RM Coverage"><DataTable rows={data.roleCoverage.rows.filter((row) => row.role_type === 'RM')} columns={[{ key: 'person_name', label: 'RM' }, { key: 'accounts', label: 'Accounts' }, { key: 'touched', label: 'Touched' }, { key: 'untouched', label: 'Untouched' }, { key: 'connected_calls', label: 'Connected Calls' }, { key: 'completed_meetings', label: 'Completed Meetings' }, { key: 'remaining_collection', label: 'Remaining', render: (row: AnyRow) => formatMoney(row.remaining_collection) }]} /></SectionPanel><SectionPanel title="CSM Coverage"><DataTable rows={data.roleCoverage.rows.filter((row) => row.role_type === 'CSM')} columns={[{ key: 'person_name', label: 'CSM' }, { key: 'accounts', label: 'Accounts' }, { key: 'tier_a', label: 'Tier A' }, { key: 'tier_b', label: 'Tier B' }, { key: 'tier_c', label: 'Tier C' }, { key: 'empty_tier', label: 'Empty' }, { key: 'remaining_collection', label: 'Remaining', render: (row: AnyRow) => formatMoney(row.remaining_collection) }]} /></SectionPanel><SectionPanel title="Retention No Next Activity"><DataTable rows={data.noNextActivity.rows.filter((row) => row.no_next_activity === true)} columns={[{ key: 'account_name', label: 'Account' }, { key: 'person_name', label: 'Person' }, { key: 'role_type', label: 'Role' }, { key: 'tier', label: 'Tier' }, { key: 'product', label: 'Product' }, { key: 'remaining_amount', label: 'Remaining', render: (row: AnyRow) => formatMoney(row.remaining_amount) }, { key: 'next_activity_date', label: 'Next Activity' }]} /></SectionPanel></div></>;
+  const [data, setData] = useState<AnyRow | null>(null);
+  useEffect(() => { let ok = true; loadLegacyRetention().then((next) => { if (ok) setData(next); }); return () => { ok = false; }; }, [filters]);
+  if (!data) return <LoadingState />;
+
+  const summary = (data.summary || {}) as AnyRow;
+  const kpis = (data.kpis || data.kpi || {}) as AnyRow;
+  const ytd = (kpis.ytd || {}) as AnyRow;
+  const yest = (kpis.yesterday || kpis.yest || {}) as AnyRow;
+  const mtd = (kpis.mtd || {}) as AnyRow;
+  const owners = asRows(data.ownerMatrix || data.repData);
+  const rms = asRows(data.rmMatrix);
+  const csms = asRows(data.csmMatrix);
+  const split = (data.dealsSplit || {}) as AnyRow;
+  const tierFollowup = (data.tierFollowup || {}) as AnyRow;
+
+  return <>
+    <Header badge="Retention" title="Retention Command Center" subtitle={`${String(data.yesterdayLabel || '')} · exact n8n JSON output`} />
+    <div className="kpiGrid">
+      <KpiCard title="Active Accounts" value={formatNumber(summary.activeAccounts)} tone="blue" />
+      <KpiCard title="Churned Accounts" value={formatNumber(summary.churnedAccounts)} tone="red" />
+      <KpiCard title="Delayed Renewals" value={formatNumber(summary.delayedRenewals)} subtitle={formatMoney(ytd.delayedAmt)} tone="orange" />
+      <KpiCard title="Renewed Deals" value={formatNumber(summary.renewedDeals)} subtitle={formatMoney(ytd.renewedAmt)} tone="green" />
+      <KpiCard title="Booked YTD" value={formatMoney(ytd.bookedAmt)} subtitle={`${formatNumber(ytd.booked)} deals`} tone="green" />
+      <KpiCard title="Cashed YTD" value={formatMoney(ytd.cashedAmt)} subtitle={`${formatNumber(ytd.cashed)} deals`} tone="blue" />
+      <KpiCard title="Calls YTD" value={formatNumber(ytd.calls)} tone="blue" />
+      <KpiCard title="Meetings YTD" value={formatNumber(ytd.meetings)} tone="green" />
+    </div>
+    <div className="panelGrid two">
+      <SectionPanel title="Retention Period KPIs"><DataTable rows={[yest, mtd, ytd].map((row, i) => ({ period: ['Yesterday','MTD','YTD'][i], ...row }))} columns={[{ key:'period', label:'Period' },{ key:'calls', label:'Calls', render: row => formatNumber(row.calls) },{ key:'meetings', label:'Meetings', render: row => formatNumber(row.meetings) },{ key:'renewedAmt', label:'Renewed', render: row => formatMoney(row.renewedAmt) },{ key:'bookedAmt', label:'Booked', render: row => formatMoney(row.bookedAmt) },{ key:'cashedAmt', label:'Cashed', render: row => formatMoney(row.cashedAmt) },{ key:'delayedAmt', label:'Delayed', render: row => formatMoney(row.delayedAmt) }]} /></SectionPanel>
+      <SectionPanel title="Owner Matrix"><DataTable rows={owners} columns={[{ key:'name', label:'Owner' },{ key:'role', label:'Role' },{ key:'accounts', label:'Accounts', render: row => formatNumber(row.accounts) },{ key:'activeAccounts', label:'Active', render: row => formatNumber(row.activeAccounts) },{ key:'renewedAmt', label:'Renewed', render: row => formatMoney(row.renewedAmt) },{ key:'bookedAmt', label:'Booked', render: row => formatMoney(row.bookedAmt) },{ key:'cashedAmt', label:'Cashed', render: row => formatMoney(row.cashedAmt) },{ key:'delayedAmt', label:'Delayed', render: row => formatMoney(row.delayedAmt) }]} /></SectionPanel>
+    </div>
+    <div className="panelGrid">
+      <SectionPanel title="RM Matrix"><DataTable rows={rms} columns={[{ key:'name', label:'RM' },{ key:'accounts', label:'Accounts', render: row => formatNumber(row.accounts) },{ key:'noContact', label:'No Contact', render: row => formatNumber(row.noContact) },{ key:'noMeeting', label:'No Meeting', render: row => formatNumber(row.noMeeting) },{ key:'tierFollowupDue', label:'Tier Followup', render: row => formatNumber(row.tierFollowupDue) }]} /></SectionPanel>
+      <SectionPanel title="CSM Matrix"><DataTable rows={csms} columns={[{ key:'name', label:'CSM' },{ key:'accounts', label:'Accounts', render: row => formatNumber(row.accounts) },{ key:'noContact', label:'No Contact', render: row => formatNumber(row.noContact) },{ key:'noMeeting', label:'No Meeting', render: row => formatNumber(row.noMeeting) },{ key:'tierFollowupDue', label:'Tier Followup', render: row => formatNumber(row.tierFollowupDue) }]} /></SectionPanel>
+      <SectionPanel title="Deal Splits"><DataTable rows={[{ type:'Renewed', count:asRows(split.renewed).length, amount:amountTotal(asRows(split.renewed)) },{ type:'Booked', count:asRows(split.booked).length, amount:amountTotal(asRows(split.booked)) },{ type:'Cashed', count:asRows(split.cashed).length, amount:amountTotal(asRows(split.cashed)) },{ type:'Churn', count:asRows(split.churn).length, amount:amountTotal(asRows(split.churn)) },{ type:'Delayed', count:asRows(data.delayedRenewals).length, amount:amountTotal(asRows(data.delayedRenewals)) }]} columns={[{ key:'type', label:'Type' },{ key:'count', label:'Count', render: row => formatNumber(row.count) },{ key:'amount', label:'Amount', render: row => formatMoney(row.amount) }]} /></SectionPanel>
+      <SectionPanel title="Tier Follow-Up Summary"><DataTable rows={asRows(tierFollowup.summary)} columns={[{ key:'tier', label:'Tier' },{ key:'accounts', label:'Accounts', render: row => formatNumber(row.accounts) },{ key:'rmDue', label:'RM Due', render: row => formatNumber(row.rmDue) },{ key:'csmDue', label:'CSM Due', render: row => formatNumber(row.csmDue) },{ key:'totalDue', label:'Total Due', render: row => formatNumber(row.totalDue) },{ key:'rmCadence', label:'RM Cadence' },{ key:'csmCadence', label:'CSM Cadence' }]} /></SectionPanel>
+    </div>
+  </>;
 }

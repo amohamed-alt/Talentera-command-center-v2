@@ -10,7 +10,7 @@ import type { AnyRow, DashboardFilters } from '../types';
 
 function rows(value: unknown): AnyRow[] { return Array.isArray(value) ? value as AnyRow[] : []; }
 function obj(value: unknown): AnyRow { return value && typeof value === 'object' ? value as AnyRow : {}; }
-function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters) {
+function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters): AnyRow[] {
   return list.filter((row) => {
     const country = String(row.country || row.companyCountry || '').toLowerCase();
     const rank = String(row.rank || row.companyRank || '').replace(/^Rank\s+/i, '').toUpperCase();
@@ -19,8 +19,8 @@ function filterByCountryAndRank(list: AnyRow[], filters: DashboardFilters) {
     return countryOk && rankOk;
   });
 }
-function countryRows(countryBreakdown: unknown) {
-  return Object.entries(obj(countryBreakdown)).map(([country, value]) => ({ country, ...obj(value) }));
+function countryRows(countryBreakdown: unknown): AnyRow[] {
+  return Object.entries(obj(countryBreakdown)).map(([country, value]) => ({ country, ...obj(value) })) as AnyRow[];
 }
 function reasonText(row: AnyRow) {
   const reasonList = rows(row.reasons).map(String);
@@ -50,11 +50,11 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
     const allUntouched = repData.flatMap((rep) => [
       ...rows(rep.rankAUntouched).map((item) => ({ ...item, rank: 'A', ownerName: rep.name })),
       ...rows(rep.rankBUntouched).map((item) => ({ ...item, rank: 'B', ownerName: rep.name }))
-    ]);
+    ]) as AnyRow[];
     const filteredUntouched = filterByCountryAndRank(allUntouched, filters);
-    const allNeedsAttention = repData.flatMap((rep) => rows(rep.needsAttention).map((item) => ({ ...item, ownerName: item.ownerName || rep.name })));
-    const allCold = repData.flatMap((rep) => rows(rep.cold).map((item) => ({ ...item, ownerName: item.ownerName || rep.name })));
-    const allStuck = repData.flatMap((rep) => rows(rep.stuck).map((item) => ({ ...item, ownerName: item.ownerName || rep.name })));
+    const allNeedsAttention = repData.flatMap((rep) => rows(rep.needsAttention).map((item) => ({ ...item, ownerName: item.ownerName || rep.name }))) as AnyRow[];
+    const allCold = repData.flatMap((rep) => rows(rep.cold).map((item) => ({ ...item, ownerName: item.ownerName || rep.name }))) as AnyRow[];
+    const allStuck = repData.flatMap((rep) => rows(rep.stuck).map((item) => ({ ...item, ownerName: item.ownerName || rep.name }))) as AnyRow[];
     return { y, mtd, ytd, team, activeReps, filteredUntouched, allNeedsAttention, allCold, allStuck };
   }, [data, filters]);
 
@@ -69,6 +69,8 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
   const closedLost = rows(data.closedLost);
   const autoRecs = rows(data.autoRecs || data.aiRecommendations || data.managerActions);
   const countryBreakdown = countryRows(data.teamCountryBreakdown || data.countryBreakdown);
+  const periodRows: AnyRow[] = [prepared.y, prepared.mtd, prepared.ytd].map((row, index) => ({ period: ['Yesterday', 'MTD', 'YTD'][index], ...row }));
+  const aiRows: AnyRow[] = autoRecs.length ? autoRecs : prepared.allNeedsAttention;
 
   return (
     <>
@@ -96,7 +98,7 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
 
       <div className="panelGrid two">
         <SectionPanel title="Yesterday / MTD / YTD Performance">
-          <ShowMoreTable rows={[prepared.y, prepared.mtd, prepared.ytd].map((row, index) => ({ period: ['Yesterday', 'MTD', 'YTD'][index], ...row }))} columns={[{ key: 'period', label: 'Period' },{ key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) },{ key: 'connected', label: 'Connected', render: (row) => formatNumber(row.connected) },{ key: 'connRate', label: 'Conn Rate', render: (row) => formatPercent(row.connRate) },{ key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) },{ key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) },{ key: 'pipeline', label: 'Pipeline', render: (row) => formatMoney(row.pipeline) },{ key: 'wonAmt', label: 'Won', render: (row) => formatMoney(row.wonAmt) },{ key: 'lostAmt', label: 'Lost', render: (row) => formatMoney(row.lostAmt) }]} />
+          <ShowMoreTable rows={periodRows} columns={[{ key: 'period', label: 'Period' },{ key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) },{ key: 'connected', label: 'Connected', render: (row) => formatNumber(row.connected) },{ key: 'connRate', label: 'Conn Rate', render: (row) => formatPercent(row.connRate) },{ key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) },{ key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) },{ key: 'pipeline', label: 'Pipeline', render: (row) => formatMoney(row.pipeline) },{ key: 'wonAmt', label: 'Won', render: (row) => formatMoney(row.wonAmt) },{ key: 'lostAmt', label: 'Lost', render: (row) => formatMoney(row.lostAmt) }]} />
         </SectionPanel>
         <SectionPanel title="Rep Execution">
           <ShowMoreTable rows={prepared.activeReps} columns={[{ key: 'name', label: 'Rep' },{ key: 'calls', label: 'Calls YTD', render: (row) => formatNumber(obj(row.calls).ytd) },{ key: 'connected', label: 'Connected YTD', render: (row) => formatNumber(obj(row.calls).ytdConn) },{ key: 'connRateYTD', label: 'Conn Rate', render: (row) => formatPercent(row.connRateYTD) },{ key: 'meetings', label: 'Meetings YTD', render: (row) => formatNumber(obj(row.meetings).ytd) },{ key: 'openDeals', label: 'Open Deals', render: (row) => formatNumber(row.openDeals) },{ key: 'pipeAmt', label: 'Pipeline', render: (row) => formatMoney(row.pipeAmt) }]} />
@@ -108,7 +110,7 @@ export function AcquisitionOverview({ filters }: { filters: DashboardFilters }) 
         <SectionPanel title="ANP / Rank A-B Coverage"><ShowMoreTable rows={prepared.filteredUntouched} columns={[{ key: 'name', label: 'Company' },{ key: 'ownerName', label: 'Owner' },{ key: 'country', label: 'Country' },{ key: 'rank', label: 'Rank' }]} /></SectionPanel>
         <SectionPanel title="Coverage by Country"><ShowMoreTable rows={countryBreakdown} columns={[{ key: 'country', label: 'Country' },{ key: 'rankA', label: 'Rank A', render: (row) => formatNumber(row.rankA) },{ key: 'rankB', label: 'Rank B', render: (row) => formatNumber(row.rankB) },{ key: 'total', label: 'Total', render: (row) => formatNumber(row.total) }]} /></SectionPanel>
         <SectionPanel title="Open Deals / Pipeline"><ShowMoreTable rows={stageData} columns={[{ key: 'name', label: 'Stage' },{ key: 'count', label: 'Deals', render: (row) => formatNumber(row.count) },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
-        <SectionPanel title="AI Coaching"><ShowMoreTable rows={autoRecs.length ? autoRecs : prepared.allNeedsAttention} columns={[{ key: 'name', label: 'Item' },{ key: 'ownerName', label: 'Owner' },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) },{ key: 'reasons', label: 'Reason', render: reasonText }]} /></SectionPanel>
+        <SectionPanel title="AI Coaching"><ShowMoreTable rows={aiRows} columns={[{ key: 'name', label: 'Item' },{ key: 'ownerName', label: 'Owner' },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) },{ key: 'reasons', label: 'Reason', render: reasonText }]} /></SectionPanel>
         <SectionPanel title="Lead Source Performance"><ShowMoreTable rows={sourcePerformance} columns={[{ key: 'source', label: 'Source' },{ key: 'created', label: 'Created', render: (row) => formatNumber(row.created) },{ key: 'contacted', label: 'Contacted', render: (row) => formatNumber(row.contacted) },{ key: 'converted', label: 'Converted', render: (row) => formatNumber(row.converted) },{ key: 'conversionRate', label: 'Conversion', render: (row) => formatPercent(row.conversionRate) }]} /></SectionPanel>
         <SectionPanel title="Closed Won"><ShowMoreTable rows={closedWon} columns={[{ key: 'name', label: 'Deal' },{ key: 'ownerName', label: 'Owner' },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) },{ key: 'closedate', label: 'Close Date' }]} /></SectionPanel>
         <SectionPanel title="Closed Lost"><ShowMoreTable rows={closedLost} columns={[{ key: 'name', label: 'Deal' },{ key: 'ownerName', label: 'Owner' },{ key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) },{ key: 'closedate', label: 'Close Date' },{ key: 'lostReason', label: 'Reason' }]} /></SectionPanel>

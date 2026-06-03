@@ -4,88 +4,102 @@ import { KpiCard } from '../components/ui/KpiCard';
 import { LoadingState } from '../components/ui/LoadingState';
 import { SectionPanel } from '../components/ui/SectionPanel';
 import { ShowMoreTable } from '../components/ui/ShowMoreTable';
-import { fetchView } from '../lib/fetchView';
+import { loadLegacyAcquisition } from '../data/legacyDashboard';
 import { formatMoney, formatNumber, formatPercent } from '../lib/formatters';
-import type { AnyRow, DashboardFilters, PersonConfig, ViewResult } from '../types';
+import type { AnyRow, DashboardFilters, PersonConfig } from '../types';
 
-type PersonData = {
-  periodKpis: ViewResult;
-  rankCoverage: ViewResult;
-  countrySummary: ViewResult;
-  deals: ViewResult;
-  aiCoaching: ViewResult;
-};
-
-function filterRows(rows: AnyRow[], filters: DashboardFilters) {
-  return rows.filter((row) => {
+function rows(value: unknown): AnyRow[] { return Array.isArray(value) ? value as AnyRow[] : []; }
+function obj(value: unknown): AnyRow { return value && typeof value === 'object' ? value as AnyRow : {}; }
+function slug(value: string) { return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+function rate(value: unknown) { return formatPercent(Number(value || 0)); }
+function compactReason(row: AnyRow) {
+  const reasonList = rows(row.reasons).map(String);
+  return reasonList.length ? reasonList.join(' · ') : String(row.reason || row.nextStep || row.status || '—');
+}
+function filterRankCountry(list: AnyRow[], filters: DashboardFilters) {
+  return list.filter((row) => {
+    const rank = String(row.rank || '').replace(/^Rank\s+/i, '').toUpperCase();
     const country = String(row.country || '').toLowerCase();
-    const rank = String(row.rank || '').toUpperCase();
-    const countryOk = filters.country === 'All' || country === filters.country.toLowerCase();
     const rankOk = filters.rank === 'All' || rank === filters.rank.toUpperCase();
-    return countryOk && rankOk;
+    const countryOk = filters.country === 'All' || country === filters.country.toLowerCase();
+    return rankOk && countryOk;
   });
+}
+function countryRows(value: unknown) {
+  return Object.entries(obj(value)).map(([country, row]) => ({ country, ...obj(row) }));
 }
 
 export function AcquisitionPersonPage({ filters, person }: { filters: DashboardFilters; person: PersonConfig }) {
-  const [data, setData] = useState<PersonData | null>(null);
+  const [data, setData] = useState<AnyRow | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
-    Promise.all([
-      fetchView('acq_period_kpis_cache'),
-      fetchView('acq_rank_coverage_cache'),
-      fetchView('acq_country_rank_summary_cache'),
-      fetchView('acq_deals_cache'),
-      fetchView('acq_ai_coaching_cache')
-    ]).then(([periodKpis, rankCoverage, countrySummary, deals, aiCoaching]) => {
-      if (alive) setData({ periodKpis, rankCoverage, countrySummary, deals, aiCoaching });
-    });
+    setError(null);
+    loadLegacyAcquisition().then((next) => alive && setData(next)).catch((err: Error) => alive && setError(err.message));
     return () => { alive = false; };
   }, []);
 
-  const prepared = useMemo(() => {
-    if (!data) return null;
-    const periods = data.periodKpis.rows.filter((row) => row.person_key === person.key);
-    const byPeriod = (period: string) => periods.find((row) => row.period === period) || {};
-    const yesterday = byPeriod('yesterday');
-    const mtd = byPeriod('mtd');
-    const ytd = byPeriod('ytd');
-    const rankRows = filterRows(data.rankCoverage.rows.filter((row) => row.person_key === person.key), filters);
-    const untouched = rankRows.filter((row) => row.touched === false);
-    const countryRows = data.countrySummary.rows.filter((row) => row.person_key === person.key);
-    const personDeals = data.deals.rows.filter((row) => row.person_key === person.key);
-    const openDeals = personDeals.filter((row) => row.deal_status === 'open');
-    const wonDeals = personDeals.filter((row) => row.deal_status === 'won');
-    const lostDeals = personDeals.filter((row) => row.deal_status === 'lost');
-    const stuckDeals = openDeals.filter((row) => row.is_stuck === true);
-    const coldDeals = openDeals.filter((row) => row.is_cold === true);
-    const coaching = data.aiCoaching.rows.filter((row) => row.person_key === person.key);
-    return { yesterday, mtd, ytd, rankRows, untouched, countryRows, openDeals, wonDeals, lostDeals, stuckDeals, coldDeals, coaching };
-  }, [data, filters, person.key]);
+  const rep = useMemo(() => {
+    const reps = rows(data?.repData);
+    return reps.find((row) => slug(String(row.name || '')) === person.key || person.aliases.some((alias) => String(row.name || '').toLowerCase() === alias.toLowerCase()));
+  }, [data, person]);
 
-  if (!data || !prepared) return <LoadingState />;
+  if (error) return <div className="loadingState">Acquisition data failed: {error}</div>;
+  if (!data) return <LoadingState />;
+  if (!rep) return <div className="loadingState">No acquisition data found for {person.displayName} in data.json</div>;
 
+  const calls = obj(rep.calls);
+  const meetings = obj(rep.meetings);
+  const leadActivities = obj(rep.leadActivities);
+  const leadQuality = obj(rep.leadQuality);
+  const leadFunnel = obj(rep.leadFunnel);
+  const rankA = rows(rep.rankAUntouched).map((item) => ({ ...item, rank: 'A', ownerName: rep.name }));
+  const rankB = rows(rep.rankBUntouched).map((item) => ({ ...item, rank: 'B', ownerName: rep.name }));
+  const untouched = filterRankCountry([...rankA, ...rankB], filters);
+  const topDeals = rows(rep.topDeals);
+  const stuck = rows(rep.stuck);
+  const cold = rows(rep.cold);
+  const needsAttention = rows(rep.needsAttention);
+  const countryBreakdown = countryRows(rep.countryBreakdown);
   const periodRows: AnyRow[] = [
-    { label: 'Yesterday', ...prepared.yesterday },
-    { label: 'MTD', ...prepared.mtd },
-    { label: 'YTD', ...prepared.ytd }
+    { period: 'Yesterday', calls: calls.yest, connected: calls.yestConn, connRate: rep.connRateYest, meetings: meetings.yest, leads: rep.leadsYest, won: rep.wonYest, lost: rep.lostYest },
+    { period: 'MTD', calls: calls.mtd, connected: calls.mtdConn, connRate: rep.connRateMTD, meetings: meetings.mtd, leads: rep.leadsMTD, won: rep.won, lost: rep.lost },
+    { period: 'YTD', calls: calls.ytd, connected: calls.ytdConn, connRate: rep.connRateYTD, meetings: meetings.ytd, leads: rep.leadsYTD, won: rep.wonYTD, lost: rep.lostYTD }
+  ];
+  const leadQualityRows: AnyRow[] = [
+    { metric: 'Existing Client', value: leadQuality.statusExistingClient },
+    { metric: 'Other', value: leadQuality.statusOther },
+    { metric: 'Inbound', value: leadQuality.sourceInbound },
+    { metric: 'Outbound', value: leadQuality.sourceOutbound },
+    { metric: 'Created', value: leadFunnel.created },
+    { metric: 'Converted', value: leadFunnel.converted },
+    { metric: 'Conversion Rate', value: `${leadFunnel.conversionRate || 0}%` }
+  ];
+  const leadActivityRows: AnyRow[] = [
+    { metric: 'Calls Yesterday', value: leadActivities.callsYest },
+    { metric: 'Calls MTD', value: leadActivities.callsMTD },
+    { metric: 'Calls YTD', value: leadActivities.callsYTD },
+    { metric: 'Meetings Yesterday', value: leadActivities.meetingsYest },
+    { metric: 'Meetings MTD', value: leadActivities.meetingsMTD },
+    { metric: 'Meetings YTD', value: leadActivities.meetingsYTD }
   ];
 
   if (person.dealsOnly) {
     return (
       <>
-        <Header badge="Acquisition Deals View" title={`Acquisition · ${person.displayName}`} subtitle="Ready cache tables: Open, Won, Lost, Pipeline, Stuck and Cold deals." />
+        <Header badge="Acquisition Deals View" title={`Acquisition · ${String(rep.name)}`} subtitle="Deals-only page from n8n legacy output." />
         <div className="kpiGrid">
-          <KpiCard title="Open Deals" value={formatNumber(prepared.ytd.open_deals)} subtitle={formatMoney(prepared.ytd.open_pipeline)} tone="orange" />
-          <KpiCard title="Won YTD" value={formatMoney(prepared.ytd.won_amount)} subtitle={`${formatNumber(prepared.ytd.won_deals)} deals`} tone="green" />
-          <KpiCard title="Lost YTD" value={formatMoney(prepared.ytd.lost_amount)} subtitle={`${formatNumber(prepared.ytd.lost_deals)} deals`} tone="red" />
-          <KpiCard title="Needs Attention" value={formatNumber(prepared.coaching.length)} tone="orange" />
+          <KpiCard title="Open Deals" value={formatNumber(rep.openDeals)} subtitle={formatMoney(rep.pipeAmt)} tone="orange" />
+          <KpiCard title="Won YTD" value={formatMoney(rep.wonAmtYTD)} subtitle={`${formatNumber(rep.wonYTD)} deals`} tone="green" />
+          <KpiCard title="Lost YTD" value={formatMoney(rep.lostAmtYTD)} subtitle={`${formatNumber(rep.lostYTD)} deals`} tone="red" />
+          <KpiCard title="Needs Attention" value={formatNumber(needsAttention.length)} tone="orange" />
         </div>
         <div className="panelGrid">
-          <SectionPanel title="Open Deals"><ShowMoreTable rows={prepared.openDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'dealstage', label: 'Stage' },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) },{ key: 'next_activity_date', label: 'Next Activity' },{ key: 'is_stuck', label: 'Stuck' },{ key: 'is_cold', label: 'Cold' }]} /></SectionPanel>
-          <SectionPanel title="AI Coaching"><ShowMoreTable rows={prepared.coaching} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) },{ key: 'coaching_reason', label: 'Reason' },{ key: 'days_since_activity', label: 'Days Since Activity' }]} /></SectionPanel>
-          <SectionPanel title="Stuck Deals"><ShowMoreTable rows={prepared.stuckDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'days_in_stage', label: 'Days Stuck', render: (row) => formatNumber(row.days_in_stage) },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) }]} /></SectionPanel>
-          <SectionPanel title="Cold Deals"><ShowMoreTable rows={prepared.coldDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'days_since_activity', label: 'Days Cold', render: (row) => formatNumber(row.days_since_activity) },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) }]} /></SectionPanel>
+          <SectionPanel title="Open Deals"><ShowMoreTable rows={topDeals} columns={[{ key: 'name', label: 'Deal' }, { key: 'stage', label: 'Stage' }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }, { key: 'nextActivity', label: 'Next Activity' }, { key: 'isStuck', label: 'Stuck' }, { key: 'isCold', label: 'Cold' }]} /></SectionPanel>
+          <SectionPanel title="AI Coaching"><ShowMoreTable rows={needsAttention} columns={[{ key: 'name', label: 'Deal' }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }, { key: 'reasons', label: 'Reason', render: compactReason }]} /></SectionPanel>
+          <SectionPanel title="Stuck Deals"><ShowMoreTable rows={stuck} columns={[{ key: 'name', label: 'Deal' }, { key: 'days', label: 'Days', render: (row) => formatNumber(row.days) }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
+          <SectionPanel title="Cold Deals"><ShowMoreTable rows={cold} columns={[{ key: 'name', label: 'Deal' }, { key: 'days', label: 'Days', render: (row) => formatNumber(row.days) }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
         </div>
       </>
     );
@@ -93,27 +107,29 @@ export function AcquisitionPersonPage({ filters, person }: { filters: DashboardF
 
   return (
     <>
-      <Header badge="Acquisition Rep" title={`Acquisition · ${person.displayName}`} subtitle="Ready cache tables scoped to this representative." />
+      <Header badge="Acquisition Rep" title={`Acquisition · ${String(rep.name)}`} subtitle="Same n8n legacy output scoped to this representative." />
       <div className="kpiGrid">
-        <KpiCard title="Calls Yesterday" value={formatNumber(prepared.yesterday.calls_logged)} subtitle={`${formatNumber(prepared.yesterday.connected_calls)} connected · ${formatPercent(prepared.yesterday.connection_rate)}`} tone="blue" />
-        <KpiCard title="Calls MTD" value={formatNumber(prepared.mtd.calls_logged)} subtitle={`${formatNumber(prepared.mtd.connected_calls)} connected · ${formatPercent(prepared.mtd.connection_rate)}`} tone="blue" />
-        <KpiCard title="Calls YTD" value={formatNumber(prepared.ytd.calls_logged)} subtitle={`${formatNumber(prepared.ytd.connected_calls)} connected · ${formatPercent(prepared.ytd.connection_rate)}`} tone="green" />
-        <KpiCard title="Meetings YTD" value={formatNumber(prepared.ytd.meetings_completed)} tone="green" />
-        <KpiCard title="Open Deals" value={formatNumber(prepared.ytd.open_deals)} subtitle={formatMoney(prepared.ytd.open_pipeline)} tone="orange" />
-        <KpiCard title="Won YTD" value={formatMoney(prepared.ytd.won_amount)} subtitle={`${formatNumber(prepared.ytd.won_deals)} deals`} tone="green" />
-        <KpiCard title="Lost YTD" value={formatMoney(prepared.ytd.lost_amount)} subtitle={`${formatNumber(prepared.ytd.lost_deals)} deals`} tone="red" />
-        <KpiCard title="Needs Attention" value={formatNumber(prepared.coaching.length)} tone="orange" />
+        <KpiCard title="Calls Yesterday" value={formatNumber(calls.yest)} subtitle={`${formatNumber(calls.yestConn)} connected · ${rate(rep.connRateYest)}`} tone="blue" />
+        <KpiCard title="Calls MTD" value={formatNumber(calls.mtd)} subtitle={`${formatNumber(calls.mtdConn)} connected · ${rate(rep.connRateMTD)}`} tone="blue" />
+        <KpiCard title="Calls YTD" value={formatNumber(calls.ytd)} subtitle={`${formatNumber(calls.ytdConn)} connected · ${rate(rep.connRateYTD)}`} tone="green" />
+        <KpiCard title="Meetings YTD" value={formatNumber(meetings.ytd)} tone="green" />
+        <KpiCard title="Open Deals" value={formatNumber(rep.openDeals)} subtitle={formatMoney(rep.pipeAmt)} tone="orange" />
+        <KpiCard title="Won YTD" value={formatMoney(rep.wonAmtYTD)} subtitle={`${formatNumber(rep.wonYTD)} deals`} tone="green" />
+        <KpiCard title="Lost YTD" value={formatMoney(rep.lostAmtYTD)} subtitle={`${formatNumber(rep.lostYTD)} deals`} tone="red" />
+        <KpiCard title="Needs Attention" value={formatNumber(needsAttention.length)} tone="orange" />
       </div>
       <div className="panelGrid two">
-        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={periodRows} columns={[{ key: 'label', label: 'Period' },{ key: 'calls_logged', label: 'Calls', render: (row) => formatNumber(row.calls_logged) },{ key: 'connected_calls', label: 'Connected', render: (row) => formatNumber(row.connected_calls) },{ key: 'connection_rate', label: 'Rate', render: (row) => formatPercent(row.connection_rate) },{ key: 'meetings_completed', label: 'Meetings', render: (row) => formatNumber(row.meetings_completed) },{ key: 'leads_created', label: 'Leads', render: (row) => formatNumber(row.leads_created) }]} /></SectionPanel>
-        <SectionPanel title="Country Coverage"><ShowMoreTable rows={prepared.countryRows} columns={[{ key: 'country', label: 'Country' },{ key: 'rank_a', label: 'Rank A' },{ key: 'rank_b', label: 'Rank B' },{ key: 'touched', label: 'Touched' },{ key: 'untouched', label: 'Untouched' },{ key: 'total', label: 'Total' }]} /></SectionPanel>
+        <SectionPanel title="Yesterday / MTD / YTD"><ShowMoreTable rows={periodRows} columns={[{ key: 'period', label: 'Period' }, { key: 'calls', label: 'Calls', render: (row) => formatNumber(row.calls) }, { key: 'connected', label: 'Connected', render: (row) => formatNumber(row.connected) }, { key: 'connRate', label: 'Rate', render: (row) => rate(row.connRate) }, { key: 'meetings', label: 'Meetings', render: (row) => formatNumber(row.meetings) }, { key: 'leads', label: 'Leads', render: (row) => formatNumber(row.leads) }, { key: 'won', label: 'Won', render: (row) => formatNumber(row.won) }, { key: 'lost', label: 'Lost', render: (row) => formatNumber(row.lost) }]} /></SectionPanel>
+        <SectionPanel title="Lead Quality"><ShowMoreTable rows={leadQualityRows} columns={[{ key: 'metric', label: 'Metric' }, { key: 'value', label: 'Value' }]} /></SectionPanel>
       </div>
       <div className="panelGrid">
-        <SectionPanel title="Needs to Contact / Rank A-B Coverage"><ShowMoreTable rows={prepared.untouched} columns={[{ key: 'company_name', label: 'Company' },{ key: 'country', label: 'Country' },{ key: 'rank', label: 'Rank' },{ key: 'connected_calls', label: 'Connected Calls' },{ key: 'completed_meetings', label: 'Meetings' },{ key: 'next_activity_date', label: 'Next Activity' }]} /></SectionPanel>
-        <SectionPanel title="Open Deals"><ShowMoreTable rows={prepared.openDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'dealstage', label: 'Stage' },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) },{ key: 'next_activity_date', label: 'Next Activity' },{ key: 'days_since_activity', label: 'Days Since Activity' }]} /></SectionPanel>
-        <SectionPanel title="AI Coaching"><ShowMoreTable rows={prepared.coaching} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) },{ key: 'coaching_reason', label: 'Reason' },{ key: 'days_since_activity', label: 'Days Since Activity' }]} /></SectionPanel>
-        <SectionPanel title="Stuck Deals"><ShowMoreTable rows={prepared.stuckDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'days_in_stage', label: 'Days Stuck', render: (row) => formatNumber(row.days_in_stage) },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) }]} /></SectionPanel>
-        <SectionPanel title="Cold Deals"><ShowMoreTable rows={prepared.coldDeals} columns={[{ key: 'dealname', label: 'Deal' },{ key: 'days_since_activity', label: 'Days Cold', render: (row) => formatNumber(row.days_since_activity) },{ key: 'amount_home', label: 'Amount', render: (row) => formatMoney(row.amount_home) }]} /></SectionPanel>
+        <SectionPanel title="Needs to Contact / Rank A-B Coverage"><ShowMoreTable rows={untouched} columns={[{ key: 'name', label: 'Company' }, { key: 'country', label: 'Country' }, { key: 'rank', label: 'Rank' }]} /></SectionPanel>
+        <SectionPanel title="Country Breakdown"><ShowMoreTable rows={countryBreakdown} columns={[{ key: 'country', label: 'Country' }, { key: 'rankA', label: 'Rank A', render: (row) => formatNumber(row.rankA || row.A) }, { key: 'rankB', label: 'Rank B', render: (row) => formatNumber(row.rankB || row.B) }, { key: 'total', label: 'Total', render: (row) => formatNumber(row.total) }]} /></SectionPanel>
+        <SectionPanel title="Open Deals"><ShowMoreTable rows={topDeals} columns={[{ key: 'name', label: 'Deal' }, { key: 'stage', label: 'Stage' }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }, { key: 'nextActivity', label: 'Next Activity' }, { key: 'isStuck', label: 'Stuck' }, { key: 'isCold', label: 'Cold' }]} /></SectionPanel>
+        <SectionPanel title="AI Coaching"><ShowMoreTable rows={needsAttention} columns={[{ key: 'name', label: 'Deal' }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }, { key: 'reasons', label: 'Reason', render: compactReason }]} /></SectionPanel>
+        <SectionPanel title="Stuck Deals"><ShowMoreTable rows={stuck} columns={[{ key: 'name', label: 'Deal' }, { key: 'days', label: 'Days', render: (row) => formatNumber(row.days) }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
+        <SectionPanel title="Cold Deals"><ShowMoreTable rows={cold} columns={[{ key: 'name', label: 'Deal' }, { key: 'days', label: 'Days', render: (row) => formatNumber(row.days) }, { key: 'amount', label: 'Amount', render: (row) => formatMoney(row.amount) }]} /></SectionPanel>
+        <SectionPanel title="Lead Activities"><ShowMoreTable rows={leadActivityRows} columns={[{ key: 'metric', label: 'Metric' }, { key: 'value', label: 'Value', render: (row) => formatNumber(row.value) }]} /></SectionPanel>
       </div>
     </>
   );

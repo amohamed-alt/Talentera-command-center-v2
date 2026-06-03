@@ -1,13 +1,14 @@
 import type { PersonConfig } from '../types';
 
 export const acquisitionPeople: PersonConfig[] = [
-  { key: 'acq_marita', displayName: 'Marita Chedid', aliases: ['marita chedid'], role: 'Sales', section: 'acquisition', route: '/acquisition/marita', showActivities: true },
-  { key: 'acq_zein_fares', displayName: 'Zein Fares', aliases: ['zein fares'], role: 'Sales', section: 'acquisition', route: '/acquisition/zein-fares', showActivities: true },
-  { key: 'acq_ursula', displayName: 'Ursula Waked', aliases: ['ursula waked'], role: 'Sales', section: 'acquisition', route: '/acquisition/ursula', showActivities: true },
-  { key: 'acq_ahmad_khawajah', displayName: 'Ahmad Khawajah', aliases: ['ahmad khawajah'], role: 'Sales', section: 'acquisition', route: '/acquisition/ahmad-khawajah', showActivities: true },
-  { key: 'acq_jihad', displayName: 'Mohammad Jehad Al-Barqawi', aliases: ['mohammad jehad al-barqawi', 'jehad al-barqawi'], role: 'Sales', section: 'acquisition', route: '/acquisition/jehad', showActivities: true },
-  { key: 'acq_fadi', displayName: 'Fadi Zanona', aliases: ['fadi zanona'], role: 'VIEW', section: 'acquisition', route: '/acquisition/fadi', showActivities: false, dealsOnly: true },
-  { key: 'acq_faizan', displayName: 'Mohammed Faizan', aliases: ['mohammed faizan'], role: 'VIEW', section: 'acquisition', route: '/acquisition/faizan', showActivities: false, dealsOnly: true }
+  { key: 'marita-chedid', displayName: 'Marita Chedid', aliases: ['marita chedid'], role: 'Sales', section: 'acquisition', route: '/acquisition/marita', showActivities: true },
+  { key: 'zein-fares', displayName: 'Zein Fares', aliases: ['zein fares'], role: 'Sales', section: 'acquisition', route: '/acquisition/zein-fares', showActivities: true },
+  { key: 'ursula-waked', displayName: 'Ursula Waked', aliases: ['ursula waked'], role: 'Sales', section: 'acquisition', route: '/acquisition/ursula', showActivities: true },
+  { key: 'ahmad-khawajah', displayName: 'Ahmad Khawajah', aliases: ['ahmad khawajah'], role: 'Sales', section: 'acquisition', route: '/acquisition/ahmad-khawajah', showActivities: true },
+  { key: 'mohammed-khalid', displayName: 'Mohammed Khalid', aliases: ['mohammed khalid'], role: 'Sales', section: 'acquisition', route: '/acquisition/mohammed-khalid', showActivities: true },
+  { key: 'jehad-al-barqawi', displayName: 'Jehad Al-Barqawi', aliases: ['jehad al-barqawi', 'mohammad jehad al-barqawi'], role: 'Sales', section: 'acquisition', route: '/acquisition/jehad', showActivities: true },
+  { key: 'fadi-zanona', displayName: 'Fadi Zanona', aliases: ['fadi zanona'], role: 'VIEW', section: 'acquisition', route: '/acquisition/fadi', showActivities: false, dealsOnly: true },
+  { key: 'mohammed-faizan', displayName: 'Mohammed Faizan', aliases: ['mohammed faizan'], role: 'VIEW', section: 'acquisition', route: '/acquisition/faizan', showActivities: false, dealsOnly: true }
 ];
 
 export const retentionPeople: PersonConfig[] = [
